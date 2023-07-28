@@ -1,0 +1,37 @@
+#main {
+	margin: 40px auto;
+	max-width: 1200px;
+	line-height: 1.6;
+	font-size: 18px;
+	color: #444;
+	padding: 0 10px;
+}
+h1, h2, h3 { line-height: 1.2 }
+
+.tab {
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background-color: #f0f0f0;
+}
+.tab button {
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 15px;
+}
+.tab button:hover { background-color: #ddd; }
+.tab button.active { background-color: #ccc; }
+
+
+.tblCont {
+	height: 500px;
+	overflow: scroll;
+	resize: vertical;
+}
+
+.tblCont td:empty::before { content: "--"; }
+.tblCont tr > td, tr > th { text-align: center; white-space: nowrap; }
+.tblCont tr :nth-child(1) { text-align: left; font-family: monospace;  }
+.tblCont tbody tr:nth-child(odd) td { background-color: #f0f0f0; }
+
