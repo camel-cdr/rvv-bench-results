@@ -19,7 +19,7 @@ size_t utf8_count_scalar(char const *buf, size_t len)
 
 <h3>Navigation:</h3>
 <ul>
-	<li><a href="index.html">Return to main page</a></li>
+	<li><a href="index.html">Return to parent page</a></li>
 	<li><a href="https://github.com/camel-cdr/rvv-bench/blob/main/bench/utf8_count.S">View source code</a></li>
 </ul>
 </div>
