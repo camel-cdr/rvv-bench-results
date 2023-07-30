@@ -1,8 +1,4 @@
 let prefix = `
-<div id="main">
-
-<header><h1>MangoPi MQ Pro (Allwinner D1, C906) utf8 count benchmark</h1></header>
-
 <p>Implements a <code>size_t utf8_count_scalar(char const *str, size_t len)</code> function, which returns the number of characters (utf32 code points) in a utf8 string.</p>
 
 size_t utf8_count_scalar(char const *buf, size_t len)
@@ -22,7 +18,4 @@ size_t utf8_count_scalar(char const *buf, size_t len)
 	<li><a href="index.html">Return to parent page</a></li>
 	<li><a href="https://github.com/camel-cdr/rvv-bench/blob/main/bench/utf8_count.S">View source code</a></li>
 </ul>
-</div>
 `;
-
-let postfix = "";

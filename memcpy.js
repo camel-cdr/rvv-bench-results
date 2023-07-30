@@ -1,8 +1,4 @@
 let prefix = `
-<div id="main">
-
-<header><h1>MangoPi MQ Pro (Allwinner D1, C906) memcpy benchmark</h1></header>
-
 <p>Implements the <code>void *memcpy(void *dest, const void *src, size_t n)</code> standard library function.</p>
 
 <ul>
@@ -19,7 +15,4 @@ let prefix = `
 	<li><a href="index.html">Return to parent page</a></li>
 	<li><a href="https://github.com/camel-cdr/rvv-bench/blob/main/bench/memcpy.S">View source code</a></li>
 </ul>
-</div>
 `;
-
-let postfix = "";

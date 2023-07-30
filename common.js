@@ -169,3 +169,6 @@ function makeChart(info) {
 
 	return u;
 }
+
+
+document.getElementById("main").insertAdjacentHTML('beforeend', prefix);
