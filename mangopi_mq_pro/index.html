@@ -21,6 +21,8 @@
 
 <h2>Benchmarks</h2>
 
+<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/tree/0d3ddf89c19b1eda2878ce2a42ecc5938f7a6b23">0d3ddf89c19b1eda2878ce2a42ecc5938f7a6b23</a></p>
+
 <ul>
 	<li><a href="memcpy.html">memcpy</a></li>
 	<li><a href="memset.html">memset</a></li>
@@ -48,7 +50,7 @@
 <h2>Problems and unexpected things</h3>
 
 <ul>
-<li>There seems to be a problem with  <a href="https://bugs.launchpad.net/ubuntu/+source/linux-allwinner/+bug/2024935">some kernel builds</a>, reducing the clocks peed considerably.</li>
+<li>There seems to be a problem with  <a href="https://bugs.launchpad.net/ubuntu/+source/linux-allwinner/+bug/2024935">some kernel builds</a>, reducing the clocks speed considerably.</li>
 <li>Even though the C906 chip is supposed to support RVV 0.7.1, it dosn't implement the vdot/vfdot instructions.</li>
 <li><code>vmsgt.vx v8, v8, a3</code> gives an illegal instruction, even though it is supposed to work. This probably also includes other instructions, but <code>vmsgt.vx</code> with different source and result operands seems to work.</li>
 <li><code>sstatus.vs</code> is masked by <code>0x01800000</code> instead of <code>0x600</code>, as specified for RVV 1.0. (RVV 0.7.1 didn't specify a position)</li>
