@@ -39,6 +39,8 @@
 <h2>Instruction timings</h2>
 <p>The following are 20/80 percentile cycle averages when unrolling and looping over the given instruction, it doesn't include vsetvl and load/store instructions. The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range.</p>
 
+<p>Thanks <a href="https://github.com/brucehoult">Bruce Hoult</a> for contributing this.</p>
+
 <div class="tab">
 	<button class="tabSel active" onclick="switchTbl(event, 'tbl0')">vl=VLMAX</button>
 	<button class="tabSel" onclick="switchTbl(event, 'tbl1')">vl=1</button>
