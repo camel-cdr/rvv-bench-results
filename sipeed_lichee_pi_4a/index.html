@@ -12,7 +12,7 @@
 <header><h1>RVV benchmark Sipeed Lichee Pi 4A (TH1520, C910)</h1></header>
 
 
-<p>The <a href="https://wiki.sipeed.com/hardware/en/lichee/th1520/lp4a.html">Sipeed Lichee Pi 4A</a> has a quad core TH1520 with XuanTie C910 cores. It has a frequency 2GHz and implements rv64gc and the <a href="https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1">0.7.1 version</a> of the vector extension supporting SEW=8/16/32/64, single, half and double precision floating point instructions. The VLEN is 128 bits, but the ALU is 256 bits wide.</p>
+<p>The <a href="https://wiki.sipeed.com/hardware/en/lichee/th1520/lp4a.html">Sipeed Lichee Pi 4A</a> has a quad core TH1520 with XuanTie C910 cores. It has a frequency 2GHz and implements rv64gc and the <a href="https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1">0.7.1 version</a> of the vector extension supporting SEW=8/16/32/64, single, half and double precision floating point instructions, with a VLEN of 128 bits.</p>
 
 
 <ul>
@@ -40,16 +40,18 @@
 <ul>
 <li>Maximizing LMUL is a good strategy for computation, it looks like LMUL=4 is better when memory bottlenecked.</li>
 <li>The vl doesn't impact performance, so a vl=1 and a vl=VLMAX instruction with LMUL=8 will take the same amount of time to execute.</li>
-<li>Using the mask operand seems to slow down arithmetic operations with LMUL smaller then 8.</li>
 <li>The fault-only-first load instructions are quite slow compared to the regular load instructions, so one should try to page align the loads by hand when possible. (see <a href="strlen.html">strlen</a>)</li>
 <li>When not reading and doing much computation, SWAR implementations can be faster than RVV for large input sizes. (see <a href="strlen.html">strlen</a>)</li>
 <li>Manual tail handling and unrolling doesn't seem to be worth it in these benchmarks.</li>
 <li>Aligning the destination pointer in a streaming workload, like <a href="memcpy.html">memcpy</a> can make the runtime slightly faster for medium large sizes, but slows it down for smaller sizes.</li>
+<li> Using the mask operand seems to slow down arithmetic operations with LMUL smaller than 8 in the measurement. But this is likely because of the added dependency to the previous instruction, and won't be as visible in practice.</li>
 </ul>
 
 
 <h2>Instruction timings</h2>
 <p>The following are 20/80 percentile cycle averages when unrolling and looping over the given instruction, it doesn't include vsetvl and load/store instructions. The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range.</p>
+
+<p>This doesn't necessarily measure either latency or throughput, it just uses the methodology described above with the instructions in the table below.</p>
 
 <p>Thanks <a href="https://github.com/brucehoult">Bruce Hoult</a> for contributing this.</p>
 
