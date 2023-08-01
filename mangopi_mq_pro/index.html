@@ -16,12 +16,12 @@
 
 
 <ul>
-	<li><a href="https://camel-cdr.github.io/rvv-bench-results/">Return to parent page</a></li>
+	<li><a href="../index.html">Return to parent page</a></li>
 </ul>
 
 <h2>Benchmarks</h2>
 
-<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/tree/0d3ddf89c19b1eda2878ce2a42ecc5938f7a6b23">0d3ddf89c19b1eda2878ce2a42ecc5938f7a6b23</a></p>
+<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/tree/f6387c39540c9410d05c106cf14c72d7758220dd">f6387c39540c9410d05c106cf14c72d7758220dd</a></p>
 
 <ul>
 	<li><a href="memcpy.html">memcpy</a></li>
@@ -30,6 +30,8 @@
 	<li><a href="utf8_count.html">utf8 count</a></li>
 	<li><a href="mergelines.html">merge escaped lines</a></li>
 	<li><a href="mandelbrot.html">mandelbrot</a></li>
+	<li><a href="ascii_to_utf16.html">ascii to utf16 (zero extend 1->2 bytes)</a></li>
+	<li><a href="ascii_to_utf32.html">ascii to utf32 (zero extend 1->4 bytes)</a></li>
 	<li><a href="chacha20.html">chacha20</a></li>
 	<li><a href="poly1305.html">poly1305</a></li>
 </ul>
@@ -46,6 +48,8 @@
 <li>The fault-only-first load instructions are quite slow compared to the regular load instructions, so one should try to page align the loads by hand when possible. (see <a href="strlen.html">strlen</a>)</li>
 <li>Manual tail handling and unrolling can increase the performance for certain sizes (~20% in <a href="utf8_count.html">utf8 count</a>), when the operation isn't memory bound.</li>
 <li>Aligning the destination pointer in a streaming workload, like <a href="memcpy.html">memcpy</a> can make the runtime slightly faster/more stable.</li>
+<li>Uni-stride segmented stores are as fast, as regular uni-stride store at proportional LMUL, when the pointers are aligned. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
+<li>Strided stores are a lot slower than regular stores, especially when the memory isn't in cache. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
 </ul>
 
 

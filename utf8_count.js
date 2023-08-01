@@ -1,7 +1,5 @@
 let prefix = `
-<p>Implements a <code>size_t utf8_count_scalar(char const *str, size_t len)</code> function, which returns the number of characters (utf32 code points) in a utf8 string.</p>
-
-size_t utf8_count_scalar(char const *buf, size_t len)
+<p>Implements a <code>size_t utf8_count(char const *str, size_t len)</code> function, which returns the number of characters (utf32 code points) in a utf8 string.</p>
 
 <ul>
 	<li><b>SWARP_popc:</b> uses SWAR to process 8 bytes at a time and </code>__builtin_popcountll()</code>, which defers to a popcount instruction if one is available (bit extension)</li>
