@@ -48,7 +48,7 @@
 <li>The fault-only-first load instructions are quite slow compared to the regular load instructions, so one should try to page align the loads by hand when possible. (see <a href="strlen.html">strlen</a>)</li>
 <li>Manual tail handling and unrolling can increase the performance for certain sizes (~20% in <a href="utf8_count.html">utf8 count</a>), when the operation isn't memory bound.</li>
 <li>Aligning the destination pointer in a streaming workload, like <a href="memcpy.html">memcpy</a> can make the runtime slightly faster/more stable.</li>
-<li>Uni-stride segmented stores are almost as fast, as regular uni-stride store at proportional LMUL, when the pointers are aligned. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
+<li>Uni-stride segmented stores are almost as fast, as regular uni-stride store at proportional LMUL. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
 <li>Strided stores are a lot slower than regular stores, especially when the memory isn't in cache. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
 </ul>
 
