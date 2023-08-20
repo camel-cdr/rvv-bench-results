@@ -3,24 +3,24 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>RVV benchmark Sipeed Lichee Pi 4A</title>
+	<title>RVV benchmark Milk-V Pioneer</title>
 	<link rel="stylesheet" href="../base.css">
 	<script type="text/javascript" src="../base.js"></script>
 </head>
 <body class="base">
 
-<header><h1>RVV benchmark Sipeed Lichee Pi 4A (TH1520, C920)</h1></header>
+<header><h1>RVV benchmark Milk-V Pioneer (SG2042, C920)</h1></header>
 
 
-<p>The <a href="https://wiki.sipeed.com/hardware/en/lichee/th1520/lp4a.html">Sipeed Lichee Pi 4A</a> has a quad core TH1520 with XuanTie C920 cores. It has a frequency 1.848GHz and implements rv64gc and the <a href="https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1">0.7.1 version</a> of the vector extension supporting SEW=8/16/32/64, single, half and double precision floating point instructions, with a VLEN of 128 bits.</p>
+<p>The <a href="https://milkv.io/pioneer">Milk-V Pioneer</a> is based on SOPHON SG2042 with 64 XuanTie C920 cores. It has a frequency 2GHz and implements rv64gc and the <a href="https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1">0.7.1 version</a> of the vector extension supporting SEW=8/16/32/64, single, half and double precision floating point instructions, with a VLEN of 128 bits.</p>
 
 <ul>
 	<li><a href="../index.html">Return to parent page</a></li>
 </ul>
 
-<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/tree/0d3ddf89c19b1eda2878ce2a42ecc5938f7a6b23">this commit</a>.</p>
 
-<p>Thanks <a href="https://github.com/brucehoult">Bruce Hoult</a> for contributing this.</p>
+<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/tree/6e9dee7eaabb681837f97d22f3924f136691d4e7">this commit</a>.</p>
+<p>Thanks to <a href="https://perfxlab.com/">perfxlab</a> for granting me access to a Milk-V Pioneer server.</p>
 
 
 <h2>Benchmarks</h2>
@@ -32,6 +32,10 @@
 	<li><a href="utf8_count.html">utf8 count</a></li>
 	<li><a href="mergelines.html">merge escaped lines</a></li>
 	<li><a href="mandelbrot.html">mandelbrot</a></li>
+	<li><a href="ascii_to_utf16.html">ascii to utf16 (zero extend 1->2 bytes)</a></li>
+	<li><a href="ascii_to_utf32.html">ascii to utf32 (zero extend 1->4 bytes)</a></li>
+	<li><a href="chacha20.html">chacha20</a></li>
+	<li><a href="poly1305.html">poly1305</a></li>
 </ul>
 
 <h2>Performance observations</h2>
@@ -40,7 +44,7 @@
 
 
 <ul>
-<li>Maximizing LMUL is a good strategy for computation, it looks like LMUL=4 is better when memory bottlenecked. (I'd recommend aiming for LMUL=4 as a default)</li>
+<li>Maximizing LMUL is a good strategy for computation, it looks like LMUL=4 is better when memory bottlenecked (I'd recommend aiming for LMUL=4 as a default).</li>
 <li>The vl doesn't impact performance, so a vl=1 and a vl=VLMAX instruction with LMUL=8 will take the same amount of time to execute.</li>
 <li>The fault-only-first load instructions are quite slow compared to the regular load instructions, so one should try to page align the loads by hand when possible. (see <a href="strlen.html">strlen</a>)</li>
 <li>When not reading and doing much computation, SWAR implementations can be faster than RVV for large input sizes. (see <a href="strlen.html">strlen</a>)</li>
@@ -132,7 +136,7 @@
 <tr><td>vslidedown.vx v8,v16,t0,v0.t</td><td>2.4</td><td>3.4</td><td>6.2</td><td>23.0</td><td>2.4</td><td>3.4</td><td>6.2</td><td>23.0</td><td>2.4</td><td>3.4</td><td>6.2</td><td>23.0</td><td>2.4</td><td>3.4</td><td>6.2</td><td>23.0</td></tr>
 <tr><td>vslidedown.vi v8,v16,3</td><td>3.0</td><td>2.4</td><td>5.4</td><td>20.0</td><td>3.0</td><td>2.4</td><td>5.4</td><td>20.0</td><td>3.0</td><td>2.4</td><td>5.4</td><td>20.0</td><td>3.0</td><td>2.4</td><td>5.4</td><td>20.0</td></tr>
 <tr><td>vslidedown.vi v8,v16,3,v0.t</td><td>3.0</td><td>2.4</td><td>5.4</td><td>20.0</td><td>3.0</td><td>2.4</td><td>5.4</td><td>20.0</td><td>3.0</td><td>2.4</td><td>5.4</td><td>20.0</td><td>3.0</td><td>2.4</td><td>5.4</td><td>20.0</td></tr>
-<tr><td>vredsum.vs v8,v16,v24</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.1</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
+<tr><td>vredsum.vs v8,v16,v24</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vredsum.vs v8,v16,v24,v0.t</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vredand.vs v8,v16,v24</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vredand.vs v8,v16,v24,v0.t</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
@@ -302,7 +306,7 @@
 <tr><td>vdivu.vx v8,v16,t0,v0.t</td><td>7.0</td><td>12.1</td><td>24.0</td><td>48.0</td><td>7.0</td><td>12.1</td><td>28.0</td><td>48.0</td><td>8.0</td><td>12.1</td><td>24.0</td><td>56.0</td><td>8.0</td><td>12.1</td><td>24.0</td><td>48.0</td></tr>
 <tr><td>vdiv.vv v8,v16,v24</td><td>7.0</td><td>14.0</td><td>29.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>29.0</td><td>56.0</td><td>7.0</td><td>15.0</td><td>28.0</td><td>56.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td></tr>
 <tr><td>vdiv.vv v8,v16,v24,v0.t</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>29.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td></tr>
-<tr><td>vdiv.vx v8,v16,t0</td><td>6.1</td><td>12.1</td><td>28.0</td><td>48.0</td><td>7.0</td><td>12.0</td><td>28.0</td><td>48.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>48.0</td><td>6.1</td><td>12.1</td><td>24.0</td><td>56.0</td></tr>
+<tr><td>vdiv.vx v8,v16,t0</td><td>6.1</td><td>12.1</td><td>28.0</td><td>48.0</td><td>7.0</td><td>12.1</td><td>28.0</td><td>48.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>48.0</td><td>6.1</td><td>12.1</td><td>24.0</td><td>56.0</td></tr>
 <tr><td>vdiv.vx v8,v16,t0,v0.t</td><td>8.0</td><td>14.0</td><td>28.0</td><td>48.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>12.1</td><td>24.0</td><td>48.0</td><td>7.0</td><td>12.1</td><td>24.0</td><td>48.0</td></tr>
 <tr><td>vremu.vv v8,v16,v24</td><td>8.0</td><td>15.0</td><td>29.0</td><td>56.0</td><td>7.0</td><td>14.0</td><td>30.0</td><td>56.0</td><td>8.0</td><td>16.0</td><td>33.0</td><td>66.0</td><td>8.0</td><td>16.0</td><td>33.0</td><td>65.0</td></tr>
 <tr><td>vremu.vv v8,v16,v24,v0.t</td><td>8.0</td><td>14.0</td><td>28.0</td><td>57.0</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>9.0</td><td>15.0</td><td>31.0</td><td>63.0</td><td>9.0</td><td>14.0</td><td>32.0</td><td>60.0</td></tr>
@@ -315,10 +319,10 @@
 <tr><td>vmulhu.vv v8,v16,v24</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmulhu.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmulhu.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
-<tr><td>vmulhu.vx v8,v16,t0,v0.t</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.1</td></tr>
+<tr><td>vmulhu.vx v8,v16,t0,v0.t</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmul.vv v8,v16,v24</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmul.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
-<tr><td>vmul.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.1</td><td>8.0</td></tr>
+<tr><td>vmul.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmul.vx v8,v16,t0,v0.t</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmulhsu.vv v8,v16,v24</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmulhsu.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
@@ -331,7 +335,7 @@
 <tr><td>vmadd.vv v8,v16,v24</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmadd.vv v8,v16,v24,v0.t</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmadd.vx v8,t0,v16</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
-<tr><td>vmadd.vx v8,t0,v16,v0.t</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.1</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
+<tr><td>vmadd.vx v8,t0,v16,v0.t</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmacc.vv v8,v16,v24</td><td>2.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>2.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>2.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>2.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmacc.vv v8,v16,v24,v0.t</td><td>2.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>2.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>2.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>2.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmacc.vx v8,t0,v16</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
@@ -442,7 +446,7 @@
 <tr><td>vfmul.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>5.0</td><td>4.0</td><td>4.0</td><td>5.4</td><td>4.0</td><td>4.0</td><td>4.0</td><td>5.4</td></tr>
 <tr><td>vfdiv.vv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>9.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>19.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
 <tr><td>vfdiv.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>11.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>14.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>21.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
-<tr><td>vfdiv.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>6.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>6.0</td><td>12.0</td><td>48.0</td><td>96.0</td><td>19.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
+<tr><td>vfdiv.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>6.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>6.0</td><td>12.0</td><td>48.0</td><td>96.0</td><td>6.0</td><td>12.0</td><td>24.0</td><td>48.0</td></tr>
 <tr><td>vfdiv.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>8.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>8.0</td><td>24.0</td><td>48.0</td><td>48.0</td><td>8.0</td><td>12.0</td><td>24.0</td><td>48.0</td></tr>
 <tr><td>vfmin.vv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vfmin.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
@@ -514,8 +518,8 @@
 <tr><td>vfcvt.f.xu.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vfcvt.f.x.v v8,v16</td><td></td><td></td><td></td><td></td><td>1.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>3.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vfcvt.f.x.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td></tr>
-<tr><td>vfsqrt.v v8,v16</td><td></td><td></td><td></td><td></td><td>9.0</td><td>18.0</td><td>36.0</td><td>69.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>19.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
-<tr><td>vfsqrt.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>11.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>14.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>21.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
+<tr><td>vfsqrt.v v8,v16</td><td></td><td></td><td></td><td></td><td>9.0</td><td>18.0</td><td>36.0</td><td>69.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>19.0</td><td>38.0</td><td>76.0</td><td>126.0</td></tr>
+<tr><td>vfsqrt.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>11.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>14.0</td><td>18.0</td><td>48.0</td><td>96.0</td><td>8.0</td><td>38.0</td><td>63.0</td><td>152.0</td></tr>
 <tr><td>vfclass.v v8,v16</td><td></td><td></td><td></td><td></td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vfclass.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vfncvt.xu.f.v v8,v16</td><td></td><td></td><td></td><td></td><td>6.0</td><td>6.0</td><td>8.0</td><td></td><td>6.0</td><td>6.0</td><td>8.0</td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -605,7 +609,7 @@
 <tr><td>vmin.vv v8,v16,v24</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vmin.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vmin.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td></tr>
-<tr><td>vmin.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
+<tr><td>vmin.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
 <tr><td>vmaxu.vv v8,v16,v24</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vmaxu.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vmaxu.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td></tr>
@@ -678,10 +682,10 @@
 <tr><td>vmsbc.vvm v8,v16,v24,v0</td><td>0.5</td><td>6.0</td><td>12.0</td><td>24.0</td><td>0.5</td><td>6.0</td><td>12.0</td><td>24.0</td><td>0.5</td><td>6.0</td><td>12.0</td><td>24.0</td><td>0.5</td><td>6.0</td><td>12.0</td><td>24.0</td></tr>
 <tr><td>vmsbc.vxm v8,v16,t0,v0</td><td>3.1</td><td>6.0</td><td>12.0</td><td>24.0</td><td>3.1</td><td>6.0</td><td>12.0</td><td>24.0</td><td>3.1</td><td>6.0</td><td>12.0</td><td>24.0</td><td>3.1</td><td>6.0</td><td>12.0</td><td>24.0</td></tr>
 <tr><td>vmerge.vvm v8,v16,v24,v0</td><td>0.5</td><td>3.0</td><td>3.0</td><td>4.0</td><td>0.5</td><td>3.0</td><td>3.0</td><td>4.0</td><td>0.5</td><td>3.0</td><td>3.0</td><td>4.0</td><td>0.5</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
-<tr><td>vmerge.vxm v8,v16,t0,v0</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
+<tr><td>vmerge.vxm v8,v16,t0,v0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
 <tr><td>vmerge.vim v8,v16,13,v0</td><td>0.5</td><td>3.0</td><td>3.0</td><td>4.0</td><td>0.5</td><td>3.0</td><td>3.0</td><td>4.0</td><td>0.5</td><td>3.0</td><td>3.0</td><td>4.0</td><td>0.5</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vmv.v.v v8,v16</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
-<tr><td>vmv.v.x v8,t0</td><td>0.5</td><td>2.4</td><td>3.0</td><td>5.0</td><td>0.6</td><td>2.4</td><td>3.0</td><td>5.0</td><td>0.5</td><td>2.4</td><td>3.0</td><td>5.0</td><td>0.5</td><td>2.4</td><td>3.0</td><td>5.0</td></tr>
+<tr><td>vmv.v.x v8,t0</td><td>0.5</td><td>2.4</td><td>3.0</td><td>5.0</td><td>0.5</td><td>2.4</td><td>3.0</td><td>5.0</td><td>0.5</td><td>2.4</td><td>3.0</td><td>5.0</td><td>0.5</td><td>2.4</td><td>3.0</td><td>5.0</td></tr>
 <tr><td>vmv.v.i v8,13</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vmseq.vv v8,v16,v24</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmseq.vv v8,v16,v24,v0.t</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
@@ -701,8 +705,8 @@
 <tr><td>vmsltu.vx v8,v16,t0,v0.t</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmslt.vv v8,v16,v24</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmslt.vv v8,v16,v24,v0.t</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
-<tr><td>vmslt.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>4.1</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
-<tr><td>vmslt.vx v8,v16,t0,v0.t</td><td>2.4</td><td>2.4</td><td>4.1</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.1</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
+<tr><td>vmslt.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
+<tr><td>vmslt.vx v8,v16,t0,v0.t</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmsleu.vv v8,v16,v24</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmsleu.vv v8,v16,v24,v0.t</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmsleu.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
@@ -711,7 +715,7 @@
 <tr><td>vmsleu.vi v8,v16,13,v0.t</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmsle.vv v8,v16,v24</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmsle.vv v8,v16,v24,v0.t</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
-<tr><td>vmsle.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>4.1</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
+<tr><td>vmsle.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmsle.vx v8,v16,t0,v0.t</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td><td>2.4</td><td>2.4</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmsle.vi v8,v16,13</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td><td>0.5</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vmsle.vi v8,v16,13,v0.t</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
@@ -755,21 +759,21 @@
 <tr><td>vsadd.vv v8,v16,v24</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vsadd.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vsadd.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td></tr>
-<tr><td>vsadd.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td></tr>
+<tr><td>vsadd.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
 <tr><td>vsadd.vi v8,v16,13</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vsadd.vi v8,v16,13,v0.t</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vssubu.vv v8,v16,v24</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vssubu.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vssubu.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td></tr>
-<tr><td>vssubu.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
+<tr><td>vssubu.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
 <tr><td>vssub.vv v8,v16,v24</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vssub.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vssub.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td></tr>
-<tr><td>vssub.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
+<tr><td>vssub.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
 <tr><td>vaadd.vv v8,v16,v24</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vaadd.vv v8,v16,v24,v0.t</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vaadd.vx v8,v16,t0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.0</td></tr>
-<tr><td>vaadd.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.1</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
+<tr><td>vaadd.vx v8,v16,t0,v0.t</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td><td>3.1</td><td>3.0</td><td>3.1</td><td>5.0</td></tr>
 <tr><td>vaadd.vi v8,v16,13</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vaadd.vi v8,v16,13,v0.t</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vsll.vv v8,v16,v24</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>2.0</td><td>4.0</td><td>8.0</td></tr>
@@ -816,7 +820,7 @@
 <tr><td>vdivu.vx v8,v16,t0,v0.t</td><td>8.0</td><td>12.1</td><td>28.0</td><td>56.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>7.0</td><td>12.1</td><td>28.0</td><td>56.0</td><td>8.0</td><td>12.1</td><td>28.0</td><td>48.0</td></tr>
 <tr><td>vdiv.vv v8,v16,v24</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td></tr>
 <tr><td>vdiv.vv v8,v16,v24,v0.t</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td></tr>
-<tr><td>vdiv.vx v8,v16,t0</td><td>6.1</td><td>12.1</td><td>24.0</td><td>48.0</td><td>7.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>6.1</td><td>14.0</td><td>24.0</td><td>48.0</td></tr>
+<tr><td>vdiv.vx v8,v16,t0</td><td>6.1</td><td>12.1</td><td>24.0</td><td>48.0</td><td>7.0</td><td>12.1</td><td>24.0</td><td>48.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>6.1</td><td>14.0</td><td>24.0</td><td>48.0</td></tr>
 <tr><td>vdiv.vx v8,v16,t0,v0.t</td><td>7.0</td><td>12.1</td><td>28.0</td><td>48.0</td><td>7.0</td><td>14.0</td><td>24.0</td><td>56.0</td><td>8.0</td><td>12.1</td><td>24.0</td><td>56.0</td><td>8.0</td><td>12.1</td><td>28.0</td><td>56.0</td></tr>
 <tr><td>vremu.vv v8,v16,v24</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>7.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>15.0</td><td>28.0</td><td>57.0</td><td>8.0</td><td>15.0</td><td>29.0</td><td>57.0</td></tr>
 <tr><td>vremu.vv v8,v16,v24,v0.t</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>28.0</td><td>56.0</td><td>8.0</td><td>14.0</td><td>29.0</td><td>56.0</td><td>9.0</td><td>14.0</td><td>28.0</td><td>56.0</td></tr>
@@ -952,7 +956,7 @@
 <tr><td>vfsub.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td></tr>
 <tr><td>vfmul.vv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vfmul.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>5.0</td><td>5.0</td><td>5.0</td><td>5.0</td><td>5.0</td><td>5.0</td><td>5.0</td><td>5.0</td></tr>
-<tr><td>vfmul.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>2.4</td><td>3.1</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td></tr>
+<tr><td>vfmul.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td></tr>
 <tr><td>vfmul.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>5.0</td><td>4.0</td><td>4.0</td><td>5.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>5.4</td></tr>
 <tr><td>vfdiv.vv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>9.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>19.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
 <tr><td>vfdiv.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>11.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>14.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>21.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
@@ -964,11 +968,11 @@
 <tr><td>vfmin.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td></tr>
 <tr><td>vfmax.vv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vfmax.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
-<tr><td>vfmax.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>2.4</td><td>3.1</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td></tr>
+<tr><td>vfmax.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td></tr>
 <tr><td>vfmax.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td></tr>
 <tr><td>vfsgnj.vv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vfsgnj.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
-<tr><td>vfsgnj.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>2.4</td><td>3.1</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td></tr>
+<tr><td>vfsgnj.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td></tr>
 <tr><td>vfsgnj.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td></tr>
 <tr><td>vfsgnjn.vv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vfsgnjn.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
@@ -978,7 +982,7 @@
 <tr><td>vfsgnjx.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vfsgnjx.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td><td>2.4</td><td>2.4</td><td>3.0</td><td>5.5</td></tr>
 <tr><td>vfsgnjx.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td><td>3.0</td><td>3.0</td><td>3.0</td><td>5.5</td></tr>
-<tr><td>vfredsum.vs v8,v16,v24</td><td></td><td></td><td></td><td></td><td>3.1</td><td>9.1</td><td>27.6</td><td>79.1</td><td>1.9</td><td>5.6</td><td>16.6</td><td>52.9</td><td>1.4</td><td>3.0</td><td>9.1</td><td>27.6</td></tr>
+<tr><td>vfredsum.vs v8,v16,v24</td><td></td><td></td><td></td><td></td><td>3.0</td><td>9.1</td><td>27.6</td><td>79.1</td><td>1.9</td><td>5.6</td><td>16.6</td><td>52.9</td><td>1.4</td><td>3.0</td><td>9.1</td><td>27.6</td></tr>
 <tr><td>vfredsum.vs v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>9.1</td><td>27.6</td><td>79.1</td><td>1.9</td><td>5.6</td><td>16.6</td><td>52.9</td><td>1.4</td><td>3.0</td><td>9.1</td><td>27.6</td></tr>
 <tr><td>vfredosum.vs v8,v16,v24</td><td></td><td></td><td></td><td></td><td>9.1</td><td>27.6</td><td>79.1</td><td>207.1</td><td>3.0</td><td>9.1</td><td>27.6</td><td>79.1</td><td>1.4</td><td>3.0</td><td>9.1</td><td>27.6</td></tr>
 <tr><td>vfredosum.vs v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>9.1</td><td>27.6</td><td>79.1</td><td>207.1</td><td>3.0</td><td>9.1</td><td>27.6</td><td>79.1</td><td>1.4</td><td>3.0</td><td>9.1</td><td>27.6</td></tr>
@@ -1028,8 +1032,8 @@
 <tr><td>vfcvt.f.xu.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vfcvt.f.x.v v8,v16</td><td></td><td></td><td></td><td></td><td>1.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>1.0</td><td>3.0</td><td>4.0</td><td>8.0</td></tr>
 <tr><td>vfcvt.f.x.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>8.0</td></tr>
-<tr><td>vfsqrt.v v8,v16</td><td></td><td></td><td></td><td></td><td>9.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>19.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
-<tr><td>vfsqrt.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>11.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>14.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>21.0</td><td>38.0</td><td>76.0</td><td>152.0</td></tr>
+<tr><td>vfsqrt.v v8,v16</td><td></td><td></td><td></td><td></td><td>9.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>12.0</td><td>24.0</td><td>48.0</td><td>84.0</td><td>19.0</td><td>38.0</td><td>63.0</td><td>113.0</td></tr>
+<tr><td>vfsqrt.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>11.0</td><td>18.0</td><td>36.0</td><td>72.0</td><td>14.0</td><td>24.0</td><td>48.0</td><td>96.0</td><td>8.0</td><td>25.0</td><td>63.0</td><td>139.0</td></tr>
 <tr><td>vfclass.v v8,v16</td><td></td><td></td><td></td><td></td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td><td>0.5</td><td>1.0</td><td>2.0</td><td>4.0</td></tr>
 <tr><td>vfclass.v v8,v16,v0.t</td><td></td><td></td><td></td><td></td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td><td>3.0</td><td>3.0</td><td>3.0</td><td>4.0</td></tr>
 <tr><td>vfncvt.xu.f.v v8,v16</td><td></td><td></td><td></td><td></td><td>6.0</td><td>6.0</td><td>8.0</td><td></td><td>6.0</td><td>6.0</td><td>8.0</td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -1066,7 +1070,7 @@
 <tr><td>vfwadd.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>4.0</td><td>4.0</td><td>5.4</td><td></td><td>4.0</td><td>4.0</td><td>5.4</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>vfwsub.vv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>1.0</td><td>2.0</td><td>4.0</td><td></td><td>1.0</td><td>2.0</td><td>4.0</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>vfwsub.vv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>4.0</td><td>4.0</td><td>4.0</td><td></td><td>4.0</td><td>4.0</td><td>4.0</td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>vfwsub.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>3.0</td><td>5.5</td><td></td><td>2.4</td><td>3.1</td><td>5.5</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>vfwsub.vf v8,v16,ft0</td><td></td><td></td><td></td><td></td><td>2.4</td><td>3.0</td><td>5.5</td><td></td><td>2.4</td><td>3.0</td><td>5.5</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>vfwsub.vf v8,v16,ft0,v0.t</td><td></td><td></td><td></td><td></td><td>4.0</td><td>4.0</td><td>5.4</td><td></td><td>4.0</td><td>4.0</td><td>5.4</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>vfwadd.wv v8,v16,v24</td><td></td><td></td><td></td><td></td><td>2.4</td><td>4.7</td><td>9.4</td><td></td><td>2.4</td><td>4.7</td><td>9.4</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>vfwadd.wv v8,v16,v24,v0.t</td><td></td><td></td><td></td><td></td><td>6.0</td><td>12.0</td><td>24.0</td><td></td><td>6.0</td><td>12.0</td><td>24.0</td><td></td><td></td><td></td><td></td><td></td></tr>
