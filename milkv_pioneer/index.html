@@ -32,6 +32,7 @@
 	<li><a href="utf8_count.html">utf8 count</a></li>
 	<li><a href="mergelines.html">merge escaped lines</a></li>
 	<li><a href="mandelbrot.html">mandelbrot</a></li>
+	<li><a href="byteswap.html">reverse byte order of 32 bit elements</a></li>
 	<li><a href="ascii_to_utf16.html">ascii to utf16 (zero extend 1->2 bytes)</a></li>
 	<li><a href="ascii_to_utf32.html">ascii to utf32 (zero extend 1->4 bytes)</a></li>
 	<li><a href="chacha20.html">chacha20</a></li>
@@ -47,6 +48,7 @@
 <li>Maximizing LMUL is a good strategy for computation, it looks like LMUL=4 is better when memory bottlenecked (I'd recommend aiming for LMUL=4 as a default).</li>
 <li>The vl doesn't impact performance, so a vl=1 and a vl=VLMAX instruction with LMUL=8 will take the same amount of time to execute.</li>
 <li>The fault-only-first load instructions are quite slow compared to the regular load instructions, so one should try to page align the loads by hand when possible. (see <a href="strlen.html">strlen</a>)</li>
+<li>When a gather operation doesn't need to cross register bounderies, multiple LMUL=1 or LMUL=2 gathers are faster. (see <a href="byteswap.html">byteswap</a>)</li>
 <li>When not reading and doing much computation, SWAR implementations can be faster than RVV for large input sizes. (see <a href="memcpy.html">memcpy</a>)</li>
 <li>Manual tail handling and unrolling doesn't seem to be worth it in these benchmarks.</li>
 <li>Aligning the destination pointer in a streaming workload, like <a href="memcpy.html">memcpy</a> can make the runtime slightly faster for medium large sizes, but slows it down for smaller sizes.</li>
