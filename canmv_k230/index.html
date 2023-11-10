@@ -23,6 +23,8 @@ One core runs at 0.8 GHz and doesn't support rvv, the other one at 1.6GHz and su
 
 <p>Based on <a href="https://github.com/camel-cdr/rvv-bench/tree/64f446bd8557f908591fba62b144ac3d5d92ded9">this commit</a>.</p>
 
+<p>Thanks to <a href="https://github.com/mr-c">Michael Crusoe (mr-c)</a> for contributing the clang-18 results.</p>
+
 
 <h2>Benchmarks</h2>
 
@@ -42,9 +44,21 @@ One core runs at 0.8 GHz and doesn't support rvv, the other one at 1.6GHz and su
 
 <h2>Performance observations</h2>
 
-<!-- p>Note that all of these only apply to this processor and aren't set in stone.</p -->
-<p>TODO</p>
+<p>Note that all of these only apply to this processor and aren't set in stone.</p>
 
+<ul>
+<li>Maximizing LMUL is a good strategy for computation and load/stores, but not for permutation instructions</li>
+<li>The vl doesn't impact performance, so a vl=1 and a vl=VLMAX instruction with LMUL=8 will take the same amount of time to execute.</li>
+<li>The fault-only-first load instructions are slightly slower than the regular load instructions, it's probably worth page aligning the loads by hand when best performance is needed. (see <a href="strlen.html">strlen</a>)</li>
+<li>When a gather operation doesn't need to cross register boundaries, multiple LMUL=1 or LMUL=2 gathers are faster. (see <a href="byteswap.html">byteswap</a>)</li>
+<li>SWAR implementations could always be beat by RVV implementations. (see <a href="memcpy.html">memcpy</a>(musl), <a href="memset.html">memset</a>(musl), <a href="byteswap.html">byteswap</a>, <a href="utf8_count.html">utf8_count</a>)</li>
+<li>Manual tail handling doesn't seem to be worth it in these benchmarks.</li>
+<li>Manual unrolling could improve performance for very small loops (see <a href="utf8_count.html">utf8_count</a>).</li>
+<li>Aligning the destination or source pointer in a streaming workload, didn't change performance.</li>
+<li>Uni-stride segmented stores are almost as fast as uni-stride stores. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
+<li>Strided stores, are way slower than uni-stride stores. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
+<li>Using the mask operand seems to slow down arithmetic operations with LMUL smaller than 8 in the measurement. But this is likely because of the added dependency to the previous instruction, and won't be as visible in practice.</li>
+</ul>
 
 
 
