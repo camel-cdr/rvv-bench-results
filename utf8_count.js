@@ -9,6 +9,7 @@ let prefix = `
 	<li><b>rvv_tail:</b> uses manual tail handling, to avoid calling <code>vsetvl</code> in the loop</li>
 	<li><b>rvv_128:</b> like <b>rvv_tail</b>, but uses a fixed <code>vlenb=128/8</code> for every LMUL</li>
 	<li><b>rvv_4x:</b> like <b>rvv</b>, but unrolled 4 times.</li>
+	<li><b>rvv_4x_tail:</b> unrolled 4 times and manual tail handling.</li>
 </ul>
 
 <h3>Navigation:</h3>
