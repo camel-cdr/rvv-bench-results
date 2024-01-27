@@ -35,3 +35,10 @@ h1, h2, h3 { line-height: 1.2 }
 .tblCont tr :nth-child(1) { text-align: left; font-family: monospace;  }
 .tblCont tbody tr:nth-child(odd) { background-color: #f0f0f0; }
 .tblCont tbody tr :nth-child(3n + 2) { background-color: #e0e0e0; }
+
+
+.result-toggles { margin-top: 5px; text-align: center; }
+.result-btn { margin: 5px; }
+.result-btn-hidden { color: silver; }
+
+.center { display: flex; justify-content: center; };

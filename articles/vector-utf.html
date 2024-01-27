@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Vectorizing Unicode conversions on real RISC-V hardware</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+		<style>
+			pre {
+				counter-reset: line;
+				white-space: pre;
+				overflow-x: auto;
+			}
+			.scroll { overflow-x: auto; }
+			pre code { counter-increment: line; }
+			pre code::before {
+				content: counter(line);
+				display: inline-block;
+				width: 1.5em;
+				border-right: 1px solid #ddd;
+				margin-right: .5em;
+				color: #888;
+			}
+			code b { color: #cc0800; font-weight: normal; }
+			code i { color: #1e7210; font-style: normal; }
+			code em { color: #999; }
+			table { border-collapse: collapse; font-family: monospace; caption-side: top; }
+			table td, table th {
+				white-space: nowrap;
+				border: 1px solid #ddd;
+				padding: 0.3em;
+			}
+			table caption { font-weight: bold; }
+			table h1, table h2, table h3, table h4 {
+				display: inline; font-size: 1em; margin-top: 1em; margin-bottom: 1em; font-weight: normal;
+			}
+			table h1 { color: #cb2e00; }
+			table h2 { color: #6119ff; }
+			table h3 { color: #ff951a; }
+			table h4 { color: #b366ff; }
+			table em { color: #999; }
+			h2 a, h4 a { color: inherit; text-decoration: inherit; }
+			.shiftTbl b { color: #cc0800; }
+			.shiftTbl i { color: #1e7210; font-style: normal; }
+			.center pre { font-size: 0.85em; }
+			.center .smolasm { font-size: 0.6em; }
+		</style>
+	</head>
+	<body>
+
+<div id="main" class="base">
+<header><h1>Vectorizing Unicode conversions on real RISC-V hardware</h1></header>
+
+<p>
+In this article we'll discuss how to achieve the speedup below for UTF-8 to UTF-16 conversion, using the RISC-V Vector extension.
+</p>
+
+<div id="benchtop">
+<img id="bench-svg" src="vector-utf-8to16.svg" alt="UTF-8 to UTF-16 benchmarks, we get on average a ~3x speedup over scalar" style="height:50%;width:100%;" />
+</div>
+<p>
+I excluded the plain ASCII case from the graph above because it made the other results less readable, the speedup was: 8x for C908, and 11x for C920. More comprehensive measurements are at the <a href="#finbench">end</a> of the article.
+</p>
+
+
+<ul>
+	<li><a href="../index.html">Return to parent page</a></li>
+	<li><a href="https://github.com/camel-cdr/rvv-bench/blob/main/vector-utf">View source code</a></li>
+</ul>
+
+<h2 id="intro"><a href="#intro">Introduction</a></h2>
+
+<p>
+The vast majority of text you'll come across will be encoded in the UTF-8 format, but some languages and APIs use UTF-16 as their native format instead (JavaScript, Java, Windows, ...).
+This and other reasons, might cause you to convert between different Unicode encodings. As demonstrated by <a href="https://github.com/simdutf/simdutf/">simdutf</a>, this conversion process has a lot of optimization potential.
+</p>
+<p>
+Here we'll focus on UTF-8 to UTF-16 conversion, and aim to develop an optimized RISC-V implementation that can be upstreamed to the <a href="https://github.com/simdutf/simdutf/">simdutf</a> library, which is used among others by Node.js and Bun. (Upstreaming is, as of writing, still work in progress)
+</p>
+
+<p>
+The RISC-V Vector extension (RVV) adds a set of 32 vector registers that are each VLEN bits wide, where VLEN is a power-of-two greater or equal to 128.
+Vector registers can be interpreted as multiple 8/16/32/64 bit elements, and operated on accordingly, as signed/unsigned integers or single/double precision floating point numbers.
+Since we can operate on multiple elements at a time large speedup over scalar code is possible.
+</p>
+
+<p>
+At the time of writing (early 2024) there is almost no hardware available that supports RVV.
+</p>
+
+<ul>
+	<li>The only hardware with RVV support, regular consumers can buy, is the <a href="https://www.canaan.io/product/k230">Kendryte K230</a>. It has a <a href="https://www.t-head.cn/product/玄铁C908">C908</a> in-order core from Xuantie running at 1.6GHz with a VLEN of 128 bits.
+		(<a href="../canmv_k230/index.html">C908 benchmark page</a>)
+	<li>
+		You can also buy two other CPUs that support an early incompatible draft version (0.7.1) of the vector extension, the <a href="https://www.t-head.cn/product/C906?lang=en">C906</a> and the <a href="https://www.t-head.cn/product/C910?lang=en">C920</a> (C910 with RVV).
+		Since the C906s performance characteristics are very similar to the C908, we won't include benchmarks for this one.
+		(<a href="../mangopi_mq_pro/index.html">C906 benchmark page</a>)
+	</li>
+	<li>
+		The <a href="https://www.t-head.cn/product/c910?lang=en">C920</a> however is a much faster out-of-order core at 2GHz, the results of which are more interesting than the ones from C908 for future hardware.
+		Targeting RVV 0.7.1 is a pain, as there is no official toolchain support, but I've taken the time to manually translate the generated assembly and assemble it with an <a href="https://github.com/brucehoult/riscv-gnu-toolchain">older GCC branch</a>.
+		(<a href="../milkv_pioneer/index.html">C920 benchmark page</a>)
+	</li>
+	<li>
+		There are <a href="https://github.com/stars/camel-cdr/lists/rvv-implementations">a few open-source RVV implementations</a>, but most are still in development/incomplete. The only one that is complete, and we could simulate locally is Tenstorrents bobcat (formally ocelot), but it was a proof-of-concept design and some instructions we'll be using were explicitly not optimized. (we'll discuss that <a href="#gather">later</a>)
+	</li>
+</ul>
+
+<p>
+Fortunately, I own the Kendryte K230, and have ssh access to a Milk-V Pioneer server with 64 C920 cores, thanks to <a href="http://www.perfxlab.com/">perfXlab</a>.
+The development was done via qemu emulation, as that's far simpler than using real hardware, for now.
+</p>
+
+<p>
+The next two sections will cover the basics of RVV and Unicode, feel free to <a href="#attack">skip ahead</a> if you are already familiar with the topics.
+</p>
+
+
+
+
+<h4 id="u8cnt"><a href="#u8cnt">The RISC-V vector extension by example: UTF-8 count</a></h4>
+
+
+<p>
+I'll try to explain the RVV basics using a short example:
+</p>
+
+<div class="center"><pre>
+<code>size_t utf8_count_rvv(char const *buf, size_t len) {</code>
+<code>	size_t sum = <b>0</b>;</code>
+<code>	for (size_t vl; len &gt; <b>0</b>; len -= vl, buf += vl) {</code>
+<code>		vl = __riscv_vsetvl_e8m8(len);</code>
+<code>		vuint8m8_t v = __riscv_vle8_v_u8m8((uint8_t*)buf, vl);</code>
+<code>		vbool1_t b = __riscv_vmsne(__riscv_vsrl(v, <b>6</b>, vl), <b>0b10</b>, vl);  </code>
+<code>		sum += __riscv_vcpop(b, vl);</code>
+<code>	}</code>
+<code>	return sum;</code>
+<code>}</code>
+</pre><pre class="smolasm">
+<code><i>// the corresponding assembly code</i>:</code>
+<code><b>utf8_count_rvv</b>:</code>
+<code>    li      a2, <b>0</b></code>
+<code><b>loop</b>:</code>
+<code>    vsetvli a3, a1, e8, m8, ta, ma</code>
+<code>    vle8.v  v8, (a0)</code>
+<code>    vsrl.vi v8, v8, <b>6</b></code>
+<code>    vmsne.vi        v16, v8, <b>0b10</b></code>
+<code>    vcpop.m a4, v16</code>
+<code>    add     a2, a2, a4</code>
+<code>    sub     a1, a1, a3</code>
+<code>    add     a0, a0, a3</code>
+<code>    bnez    a1, loop</code>
+<code>    mv      a0, a2</code>
+<code>    ret</code>
+</pre></div>
+
+
+<p>
+Here we're using the C intrinsics API to count the number of UTF-8 characters* in the supplied data.
+
+The next section will describe this in more detail, but to count the number of UTF-8 characters we just need to count the number of bytes that don't match the pattern <code><b>0b10xxxxxx</b></code>, assuming the input is valid.
+</p>
+
+<p><i>
+*From here on out when I refer to a "character" I mean a Unicode code point. This doesn't directly map into a single character on screen, for example, this emoji "🧙‍♀️" is built with three Unicode code points: 🧙 + Zero Width Joiner + ♀️ = 🧙‍♀️
+</i></p>
+
+
+<p>
+As mentioned above RVV supports different vector lengths.
+To facilitate having the same code work on machines with different vector lengths RVV has the <code>vsetvl*</code> instruction.
+You give it the element count of your input, an element width, and it will give you a count smaller or equal to your supplied count that it can fit into a vector register.
+<br>
+The code above uses this to iterate over the input, <code>vl = vsetvl_e8m8(len)</code> represents the of number elements one iteration processes.
+Next <code>vle8_v_u8m8()</code> loads <code>vl</code> 8-bit integer elements from our input into a vector register.
+<br>
+Then a mask is created where each active element (element where the coresponding bit in the mask is set) doesn't match the pattern <code><b>0b10xxxxxx</b></code>. vsrl stands for <i>shift right logical</i>, and vmsne for <i>not equal to</i>, so <code>vmsne(vsrl(v, <b>6</b>, vl), <b>0b10</b>, vl)</code> does <code>(x &gt;&gt; <b>6</b>) != <b>0b10</b></code> on each element.
+RVV doesn't have separate mask registers, instead, masks are stored in the lower bits of a vector register, the intrinsics API adds the <code>vboolN_t</code> types to give this more type safety.
+Finally, we use <code>vcpop</code> to count the number of active elements in our mask and add that to our sum.
+</p>
+
+<p>
+You might be wondering what the "m8" means, I've omitted that so far.
+RVV has 32 VLEN bits wide vector registers, but with <code>vsetvl</code> you can also configure the LMUL (length multiplier), and cause the processor to group these registers.
+This means that subsequent instructions will act on a register group, and <code>vsetvl</code> will return a <code>vl</code> corresponding to LMUL.
+<br>
+When LMUL=1 we've got 32 VLEN bits wide registers, for LMUL=2 they now act like 16 VLEN*2 bit wide registers, so for "m8" (LMUL=8), we've got 4 VLEN*8 bit wide registers.
+Here we use less than five vector registers, so using LMUL=8 gives us essentially free loop unrolling, which makes the scalar- and mask operations less expensive.
+Unrolling isn't the only advantage of LMUL, it also allows us to easily work with mixed-width data, we'll be heavily using this later.
+
+<br>
+This also explains why masks are stored in a vector register, more specifically in an LMUL=1 vector register, even though they only store one bit per element they are referring to.
+For LMUL=8 and 8-bit elements you need a full LMUL=1 register to have enough bits to represent its mask.
+</p>
+
+<p>
+Apart from the RVV feature discussed already, the other features we'll be using are:
+</p>
+
+<ul>
+	<li><b>reductions</b> over elements: Applies an operation to all elements to produce a scalar result. E.g. sum all elements.</li>
+	<li><b>narrowing/widening</b> arithmetic operations: Operation that decreases/increases element width and LMUL.</li>
+	<li><b>permutations</b>: Instructions to move elements, RVV supports slides, merge (blend), compress, and gather (shuffle)</li>
+</ul>
+
+<p>
+I hope this wasn't too confusing, here are some more in-depth references on RVV if you don't feel prepared to follow along with the rest of the article:
+</p>
+
+<ul>
+<li><a href="https://github.com/riscv/riscv-v-spec/blob/master/v-spec.adoc">RVV specification</a></li>
+<li><a href="https://dzaima.github.io/intrinsics-viewer">RVV intrinsics viewer</a></li>
+<li><a href="https://youtu.be/oTaOd8qr53U">Tutorial: RISC-V Vector Extension Demystified (3 hour video)</a></li>
+<li><a href="https://fprox.substack.com/p/risc-v-vector-extension-in-a-nutshell-part-1">RISC-V Vector extension in a nutshell</a></li>
+</ul>
+
+
+
+
+
+<h4 id="uref"><a href="#uref">Quick Unicode intro and reference</a></h4>
+
+<p>
+Unicode defines a set of ~150,000 characters and assigns them a unique 32-bit number, called code point.
+Storing just the code points themself is called UTF-32. This isn't done in practice, because lower code points occur more often, and this wastes a lot of space.
+There are two other encoding schemes: UTF-8, and UTF-16.
+</p>
+<p>
+UTF-8 uses one- to four-bytes to represent a code point using the format visualized below:
+</p>
+
+<div class="center"><div class="scroll"><table><caption>Code point to UTF-8 conversion</caption>
+<tr><th># bytes</th><th>Code points</th><th>Invalid</th><th>Byte 1</th><th>Byte 2</th><th>Byte 3</th><th>Byte 4</th><th>Characters include</th></tr>
+<tr><td>1</td><td>00000-00007F</td><td></td><td>0xxxxxxx</td><td colspan="3"></td><td>equivalent to ASCII</td></tr>
+<tr><td>2</td><td>00080-0007FF</td><td></td><td>110xxxxx</td><td>10xxxxxx</td><td colspan="2"></td><td>Latin, Greek, Cyrillic, ...</td></tr>
+<tr><td>3</td><td>00800-00FFFF</td><td>D800-DFFF</td><td>1110xxxx</td><td>10xxxxxx</td><td>10xxxxxx</td><td></td><td>Chinese, Japanese, Korean (CJK), ...</td></tr>
+<tr><td>4</td><td>10000-10FFFF</td><td></td><td>11110xxx</td><td>10xxxxxx</td><td>10xxxxxx</td><td>10xxxxxx</td><td>Emoji, uncommon CJK, ...</td></tr>
+</table></div></div>
+
+
+<p>
+Notice the small Invalid range. Code points between 0xD800-0xDFFF are unassigned and invalid, this is used to allow for the UTF-16 encoding.
+<br>
+UTF-16 encodes the code points from 1, 2 and 3 byte UTF-8 characters directly as a single 16-bit character.
+Four-byte UTF-8 code points are encoded in two 16-bit characters by leveraging part of the invalid character range to signal that it's a multi-word UTF-16 character.
+<br>
+16-bit words in the range 0xD800-0xDBFF are called high surrogates and in the range 0xDC00-0xDFFF low surrogates.
+A high surrogate is always followed by a low surrogate, the code points are encoded as follows:
+</p>
+
+<div class="center"><div class="scroll"><table><caption>Code point to UTF-16 conversion</caption>
+<tr><th># UTF-16 words</th><th>Code points</th><th>Invalid</th><th>Word 1</th><th>Word 2</th></tr>
+<tr><td>1</td><td>000000-00FFFF</td><td></td><td>X</td><td ></td></tr>
+<tr><td>2</td><td>010000-10FFFF</td><td>D800-DFFF</td><td>0xD800 | ((X-0x10000) >> 10)</td><td>0xDC00 | ((X-0x10000) & 0x3FF)</td></tr>
+</table></div></div>
+
+<p>
+Lastly, here is a side-by-side comparison of the encodings for the string "rνṿ🧙", which includes all UTF-8 character lengths:
+</p>
+
+
+<div class="center"><div class="scroll"><table><caption>Unicode representations of "rνṿ🧙"</caption>
+<tr><td><b>character</b></td><td>r</td><td>ν</td><td></td><td>ṿ</td><td></td><td></td><td>🧙</td><td></td><td></td><td></td></tr>
+<tr><td><b>UTF-32</b></td><td>0x00000072</td><td>0x000003BD</td><td></td><td>0x00001E7F</td><td></td><td></td><td>0x0001F9D9</td><td></td><td></td><td></td></tr>
+<tr><td><b>UTF-16</b></td><td>0x0072</td><td>0x03BD</td><td></td><td>0x1E7F</td><td></td><td></td><td>0xD83E</td><td>0xDDD9</td><td></td><td></td></tr>
+<tr><td><b>UTF-8</b></td><td>0b01110010</td><td>0b11001110</td><td>0b10111101</td><td>0b11100001</td><td>0b10111001</td><td>0b10111111</td><td>0b11110000</td><td>0b10011111</td><td>0b10100111</td><td>0b10011001</td></tr>
+</table></div></div>
+
+
+
+<h2 id="attack"><a href="#attack">Plan of attack</a></h2>
+
+<p>
+Our goal is to implement a fast vectorized validating UTF-8 to UTF-16 conversion routine, but let's tackle non-validating general UTF-8 to UTF-32 conversion first and see where that leads us.
+We might end up simply converting the Unicode code point (UTF-32) to UTF-16, or figure out a use of some intermediate variables to get to UTF-16.
+</p>
+
+<p>
+So, this leaves us with a few things to do:
+</p>
+
+<ul>
+	<li>identify character positions</li>
+	<li>remove prefixes</li>
+	<li>combine to UTF-32 code point</li>
+</ul>
+
+
+<div class="center"><div class="scroll"><table><caption>What we need to do for "rνṿ🧙"</caption>
+<tr><th>character</th><th>r</th><th>ν</th><th></th><th>ṿ</th><th></th><th></th><th>🧙</th><th></th><th></th><th></th></tr>
+<tr><th>UTF-8</th><td>01110010</td><td>11001110</td><td>10111101</td><td>11100001</td><td>10111001</td><td>10111111</td><td>11110000</td><td>10011111</td><td>10100111</td><td>10011001</td></tr>
+<tr><th>identify<br>character<br>positions</th><td><h1>01110010</h1></td><td><h1>11001110</h1></td><td><h2>10111101</h2></td><td><h1>11100001</h1></td><td><h2>10111001</h2></td><td><h3>10111111</h3></td><td><h1>11110000</h1></td><td><h2>10011111</h2></td><td><h3>10100111</h3></td><td><h4>10011001</h4></td></tr>
+<tr><th>remove prefixes</th><td>0<h1>1110010</h1></td><td>000<h1>01110</h1></td><td>00<h2>111101</h2></td><td>0000<h1>0001</h1></td><td>00<h2>111001</h2></td><td>00<h3>111111</h3></td><td>00000<h1>000</h1></td><td>00<h2>011111</h2></td><td>00<h3>100111</h3></td><td>00<h4>011001</h4></td></tr>
+<tr><th rowspan="4">shift to <br>UTF-32</th><td colspan="4">0000000000000000000000000<h1>1110010</h1></td></tr>
+<tr><td colspan="4">000000000000000000000<h1>01110</h1><h2>111101</h2></td></tr>
+<tr><td colspan="4">0000000000000000<h1>0001</h1><h2>111001</h2><h3>111111</h3></td></tr>
+<tr><td colspan="4">00000000000<h1>000</h1><h2>011111</h2><h3>100111</h3><h4>011001</h4></td></tr>
+</table></div></div>
+
+
+
+<p>
+The most important question seems to be, how we deal with the different character sizes. <br>
+Initially, I had two ideas on how to approach this:
+</p>
+
+<ul>
+<li><p><b>vdecompress:</b>
+	Skimming through the specification, the first instruction that seemed to fit the bill was vdecompress.
+	Although it isn't really an instruction, but rather a combination of the <code>viota</code> and <code>vrgather</code> instructions to synthesize a <code>vcompress</code> inverse.
+	It uses a mask to move every nth element of a vector to the nth active element in the source register.
+	This could allow us to widen every UTF-8 character to four bytes long, so we can work on the different-sized characters uniformly.
+</p></li>
+<li><p><b>vcompress:</b>
+	Alternatively we could also <code>vcompress</code> every nth byte of all UTF-8 characters into the nth of four separate vector registers.
+	Then we could also write code that operates on all character sizes uniformly, but we'd need to recombine the registers to store the final code point.
+</p></li>
+</ul>
+
+<p>
+The first approach seemed quite promising to me, so I sketched out the creation of the decompress-mask but got stuck on how to proceed from there.
+The problem is, that now you go from an input register of, let's for now assume LMUL=1, to an LMUL=4 register, and still need to do all of the logic to remove prefixes and shift the bits into place.
+That makes every operation we do four times slower, and we'd need to quite a few operations.
+Add to that, that <code>vrgather</code> is slow with larger LMULs (see <a href="#gather">later discussion</a>), and this doesn't seem like that good of an idea anymore.
+</p>
+
+<p>
+Let's consider the <code>vcompress</code> approach again.
+Once we've removed the prefixes from our four registers, we get the "shifting the bits into the right position" part basically for free, because we need to recombine them anyway.
+Using a widening multiply makes combining them while shifting by six bits even easier than interleaving the bytes (shifting by eight bits), because we can't multiply by <code><b>1</b>&lt;&lt;<b>8</b></code> since it doesn't fit into 8-bits.
+</p>
+<p>
+I was hoping to use masked widening adds and multiplies, but that didn't end up being worth it, as we need to specify a destination operand that is already widened.
+Another complication is that combining the first two bytes with the last two bytes needs to shift the first two by 0, 6 or 12 bits, which doesn't nicely translate into a masked operation.
+<br>
+We can however always act like we have a four-byte UTF-8 character and later calculate and apply a correction right shift amount. This also removes the need to mask the add operations, as any residual bits are shifted away.
+</p>
+
+<p>
+So here is the game plan:
+</p>
+
+<div class="center"><div class="scroll"><table><caption>What we need to do for "rνṿ🧙"</caption>
+<tr><th>character</th><th>r</th><th>ν</th><th></th><th>ṿ</th><th></th><th></th><th>🧙</th><th></th><th></th><th></th></tr>
+<tr><th>UTF-8</th><td>01110010</td><td>11001110</td><td>10111101</td><td>11100001</td><td>10111001</td><td>10111111</td><td>11110000</td><td>10011111</td><td>10100111</td><td>10011001</td></tr>
+<tr><th>identify<br>character<br>positions</th><td><h1>01110010</h1></td><td><h1>11001110</h1></td><td><h2>10111101</h2></td><td><h1>11100001</h1></td><td><h2>10111001</h2></td><td><h3>10111111</h3></td><td><h1>11110000</h1></td><td><h2>10011111</h2></td><td><h3>10100111</h3></td><td><h4>10011001</h4></td></tr>
+<tr><th>b1</th><td><h1>01110010</h1></td><td><h1>11001110</h1></td><td><h1>11100001</h1></td><td><h1>11110000</h1></td><th rowspan="4">remove<br>prefixes</th><td>0<h1>1110010</h1></td><td>000<h1>01110</h1></td><td>0000<h1>0001</h1></td><td>00000<h1>000</h1></td></tr>
+<tr><th>b2</th><td><em>11001110</em></td><td><h2>10111101</h2></td><td><h2>10111001</h2></td><td><h2>10011111</h2></td><td><em>00001110</em></td><td>00<h2>111101</h2></td><td>00<h2>111001</h2></td><td>00<h2>011111</h2></td></tr>
+<tr><th>b3</th><td><em>10111101</em></td><td><em>11100001</em></td><td><h3>10111111</h3></td><td><h3>10100111</h3></td><td><em>00111101</em></td><td><em>00100001</em></td><td>00<h3>111111</h3></td><td>00<h3>100111</h3></td></tr>
+<tr><th>b4</th><td><em>11100001</em></td><td><em>10111001</em></td><td><em>11110000</em></td><td><h4>10011001</h4></td><td><em>00100001</em></td><td><em>00111001</em></td><td><em>00110000</em></td><td>00<h4>011001</h4></td></tr>
+<tr><th rowspan="4">widen and<br>combine<br>to b1234<td colspan="4">0000000<h1>1110010</h1><em>001110111101100001</em></td><th rowspan="4">shift to <br>UTF-32</th><td colspan="4">0000000000000000000000000<h1>1110010</h1></td></tr>
+<tr><td colspan="4">000000000<h1>01110</h1><h2>111101</h2><em>100001111001</em></td><td colspan="4">000000000000000000000<h1>01110</h1><h2>111101</h2></td></tr>
+<tr><td colspan="4">0000000000<h1>0001</h1><h2>111001</h2><h3>111111</h3><em>110000</em></td><td colspan="4">0000000000000000<h1>0001</h1><h2>111001</h2><h3>111111</h3></td></tr>
+<tr><td colspan="4">00000000000<h1>000</h1><h2>011111</h2><h3>100111</h3><h4>011001</h4></td><td colspan="4">00000000000<h1>000</h1><h2>011111</h2><h3>100111</h3><h4>011001</h4></td></tr>
+</table></div></div>
+
+
+
+<h2 id="8to32"><a href="#8to32">utf8 to UTF-32</a></h2>
+
+<p>
+We want to process the input in chunks, but if we were to load the data directly into a single vector register, we'd need to figure out where the last full character ends in the register.
+Instead of doing that we can always lookahead three bytes, and only consider them as continuation bytes, you'll see why that works out quite well later.
+Here is the framework we'll be building on top of:
+</p>
+
+
+
+<div class="center"><pre>
+<code>size_t utf8_to_utf32(char const *src, size_t count, uint32_t *dest) {</code>
+<code>	size_t tail = <b>3</b>;</code>
+<code>	if (count &lt; tail) return utf8_to_utf32_scalar(src, count, dest);</code>
+<code></code>
+<code>	size_t n = count - tail;</code>
+<code>	uint32_t *destBeg = dest;</code>
+<code></code>
+<code>	for (size_t vl, vlOut; n &gt; <b>0</b>; n -= vl, src += vl, dest += vlOut) {</code>
+<code>		vl = __riscv_vsetvl_e8m2(n);</code>
+<code>		vuint8m2_t v0 = __riscv_vle8_v_u8m2((uint8_t const*)src, vl);</code>
+<code></code>
+<code>		<i>/* TODO: extract b1/b2/b3/b4 */</i></code>
+<code>		<i>/* TODO: remove prefixes */</i></code>
+<code>		<i>/* TODO: combine to b1234 */</i></code>
+<code></code>
+<code>		__riscv_vse32(dest, b1234, vlOut);</code>
+<code>	}</code>
+<code></code>
+<code>	<i>/* reparse last character + tail */</i></code>
+<code>	if (count &gt; tail) {</code>
+<code>		if ((src[<b>0</b>] &gt;&gt; <b>6</b>) == <b>0b10</b>) --dest;</code>
+<code>		while ((src[<b>0</b>] &gt;&gt; <b>6</b>) == <b>0b10</b> &amp;&amp; tail &lt; count)</code>
+<code>			--src, ++tail;</code>
+<code>	}</code>
+<code>	size_t ret = utf8_to_utf32_scalar(src, tail, dest);</code>
+<code>	if (ret == <b>0</b>) return <b>0</b>;</code>
+<code>	return (size_t)(dest - destBeg) + ret;</code>
+<code>}</code>
+</pre></div>
+
+<p>
+The loop structure itself is relatively simple, but we also need to make sure that we handle our lookahead of three correctly.
+For simplicity, we'll fall back to a scalar implementation for the tail, but we need to make sure we pass it a pointer to the beginning of a UTF-8 character.
+<br>
+Notice how we are loading <code>vuint8m2_t</code>, this is a bit optimistic, but the idea is that we can get away with using 16 instead of 32 registers. This would essentially unroll the loop and make the scalar and mask operations less expensive.
+</p>
+
+<h4 id="extb1234"><a href="#extb1234">Extracting nth UTF-8 bytes into b1/b2/b3/b4</a></h4>
+
+<p>
+
+Initially, my thought was to create a mask of all the first bytes of all UTF-8 characters, compress those, and shift the mask right to extract the second bytes, and so on.
+Obtaining the mask is trivial, you just find all bytes that aren't continuation bytes: <code>x &gt;&gt; <b>6</b> != <b>0b10</b></code>.
+RVV can't shift masks though, unless you treat the mask vector as a normal vector and assume it fits in 64-bit elements, or handle the carry.
+<br>
+Instead, we can left-shift (<code>vslide1down</code>) the elements of the vector itself and leave the mask constant.
+This now comes back to why the lookahead works so well, as we can specify a scalar to shift into the rightmost element.
+<br>
+The following brings the above concepts together:
+</p>
+
+
+<div class="center"><pre>
+<code><i>/* IMPL: extract b1/b2/b3/b4 */</i></code>
+<code>vuint8m2_t v1 = __riscv_vslide1down(v0, src[vl+<b>0</b>], vl);</code>
+<code>vuint8m2_t v2 = __riscv_vslide1down(v1, src[vl+<b>1</b>], vl);</code>
+<code>vuint8m2_t v3 = __riscv_vslide1down(v2, src[vl+<b>2</b>], vl);</code>
+<code><i>/* mask of non-continuation bytes */</i></code>
+<code>vbool4_t m = __riscv_vmsne(__riscv_vsrl(v0, <b>6</b>, vl), <b>0b10</b>, vl);</code>
+<code><i>/* extract third and fourth bytes */</i></code>
+<code>vuint8m2_t b1 = __riscv_vcompress(v0, m, vl);</code>
+<code>vuint8m2_t b2 = __riscv_vcompress(v1, m, vl);</code>
+<code>vuint8m2_t b3 = __riscv_vcompress(v2, m, vl);</code>
+<code>vuint8m2_t b4 = __riscv_vcompress(v3, m, vl);</code>
+</pre></div>
+
+<h4 id="rmpref"><a href="#rmpref">Removing the prefix</a></h4>
+
+<p>
+Removing the prefixes of b2/b3/b4 is trivial, we only need to mask out the two MSBs.
+</p>
+
+
+<div class="center"><pre>
+<code><i>/* IMPL: remove prefixes */</i></code>
+<code><i>/* remove prefix from trailing bytes */</i></code>
+<code>vlOut = __riscv_vcpop(m, vl);</code>
+<code>b2 = __riscv_vand(b2, <b>0b00111111</b>, vlOut);</code>
+<code>b3 = __riscv_vand(b3, <b>0b00111111</b>, vlOut);</code>
+<code>b4 = __riscv_vand(b4, <b>0b00111111</b>, vlOut);</code>
+<code><i>/* TODO: remove prefix from leading bytes */</i></code>
+</pre></div>
+
+
+<p>
+For b1 we need to determine how many bytes to mask-off, depending on the prefix.
+Fortunately, the first four bytes are enough to determine which bits to mask-off, and we could simply use a <code>vrgater</code> lookup table.
+On current hardware however another approach seems to be faster.
+</p>
+<p>
+Instead of a mask, we can also use left and then immediately right shifts by the same value to remove prefix bits.
+The shift amounts for this can almost be calculated using a single saturating subtract 10:
+</p>
+
+<div class="center"><div class="scroll"><table class="shiftTbl">
+<tr><th>prefix</th><th>x in range</th><th>shift amount</th><th>max(x-10,0)      </th></tr>
+<tr><td>0xxx  </td><td>0000-0111 </td><td>0 or 1      </td><td><i>0</i>         </td></tr>
+<tr><td>10xx  </td><td>1000-1011 </td><td>don't care  </td><td>                 </td></tr>
+<tr><td>110x  </td><td>1100,1101 </td><td>3           </td><td><b>2</b>,<i>3</i></td></tr>
+<tr><td>1110  </td><td>1110      </td><td>4           </td><td><i>4</i>         </td></tr>
+<tr><td>1111  </td><td>1111      </td><td>5           </td><td><i>5</i>         </td></tr>
+</table></div></div>
+
+<p>
+There is one outlier, we can easily address using a merge:
+</p>
+
+
+<div class="center"><pre>
+<code><i>/* IMPL: remove prefix from leading bytes */</i></code>
+<code>vuint8m2_t shift = __riscv_vsrl(b1, <b>4</b>, vlOut);</code>
+<code>shift = __riscv_vmerge(__riscv_vssubu(shift, <b>10</b>, vlOut), <b>3</b>,</code>
+<code>                       __riscv_vmseq(shift, <b>12</b>, vlOut), vlOut);</code>
+<code>b1 = __riscv_vsll(b1, shift, vlOut);</code>
+<code>b1 = __riscv_vsrl(b1, shift, vlOut);</code>
+</pre></div>
+
+<p>
+The <code>vrgather</code> implementation should probably be revisited once more hardware is available.
+</p>
+
+<h4 id="cmbb1234"><a href="#cmbb1234">Combining b1/b2/b3/b4 into b1234</a></h4>
+
+<p>
+As described above, well first treat all elements as four-byte UTF-8 characters and then right shift this into place.
+</p>
+
+<div class="center"><div class="scroll"><table><caption>A quick reminder</caption>
+<tr><th>b1</th><td>0<h1>1110010</h1></td><td>000<h1>01110</h1></td><td>0000<h1>0001</h1></td><td>00000<h1>000</h1></td></tr>
+<tr><th>b2</th><td><em>00001110</em></td><td>00<h2>111101</h2></td><td>00<h2>111001</h2></td><td>00<h2>011111</h2></td></tr>
+<tr><th>b3</th><td><em>00111101</em></td><td><em>00100001</em></td><td>00<h3>111111</h3></td><td>00<h3>100111</h3></td></tr>
+<tr><th>b4</th><td><em>00100001</em></td><td><em>00111001</em></td><td><em>00110000</em></td><td>00<h4>011001</h4></td></tr>
+<tr><th rowspan="4">widen and<br>combine<br>to b1234</th><td colspan="4">0000000<h1>1110010</h1><em>001110111101100001</em></td><th rowspan="4">shift to <br>UTF-32</th><td colspan="4">0000000000000000000000000<h1>1110010</h1></td></tr>
+<tr><td colspan="4">000000000<h1>01110</h1><h2>111101</h2><em>100001111001</em></td><td colspan="4">000000000000000000000<h1>01110</h1><h2>111101</h2></td></tr>
+<tr><td colspan="4">0000000000<h1>0001</h1><h2>111001</h2><h3>111111</h3><em>110000</em></td><td colspan="4">0000000000000000<h1>0001</h1><h2>111001</h2><h3>111111</h3></td></tr>
+<tr><td colspan="4">00000000000<h1>000</h1><h2>011111</h2><h3>100111</h3><h4>011001</h4></td><td colspan="4">00000000000<h1>000</h1><h2>011111</h2><h3>100111</h3><h4>011001</h4></td></tr>
+</table></div></div>
+
+<p>
+The first part is trivially using widening operations, and assuming we've already calculated the correct right shift amount that we can just widen and apply:
+</p>
+
+<div class="center"><pre>
+<code><i>/* IMPL: combine to b1234 */</i></code>
+<code><i>/* unconditionally widen and combine to b1234 */</i></code>
+<code>vuint16m4_t b34   = __riscv_vwaddu_wv(__riscv_vwmulu(b3,  <b>1</b>&lt;&lt;<b>6</b>,  vlOut), b4,  vlOut);</code>
+<code>vuint16m4_t b12   = __riscv_vwaddu_wv(__riscv_vwmulu(b1,  <b>1</b>&lt;&lt;<b>6</b>,  vlOut), b2,  vlOut);</code>
+<code>vuint32m8_t b1234 = __riscv_vwaddu_wv(__riscv_vwmulu(b12, <b>1</b>&lt;&lt;<b>12</b>, vlOut), b34, vlOut);</code>
+<code><i>/* TODO: compute shift amount */</i></code>
+<code>b1234 = __riscv_vsrl(b1234, __riscv_vzext_vf4(shift, vlOut), vlOut);</code>
+</pre></div>
+
+<p>
+Computing the shift amount it's a bit more involved than last time, but it can be done using as follows:
+</p>
+
+<div class="center"><div class="scroll"><table class="shiftTbl">
+<tr><th>prefix</th><th>x: "shift" from above</th><th>target shift</th><th>6*(3-max(x-2,0))</th></tr>
+<tr><td>0xxx</td><td>1</td><td>18</td><td><i>18</i></td></tr>
+<tr><td>110x</td><td>3</td><td>12</td><td><i>12</i></td></tr>
+<tr><td>1110</td><td>4</td><td>6 </td><td><i>6</i> </td></tr>
+<tr><td>1111</td><td>5</td><td>0 </td><td><i>0</i> </td></tr>
+</table></div></div>
+
+<p>
+This maps directly into the following code:
+</p>
+
+<div class="center"><pre>
+<code><i>/* IMPL: compute shift amount */</i></code>
+<code><i>/* derive required right-shift amount from `shift` to reduce</i></code>
+<code><i> * b1234 to the required number of bytes */</i></code>
+<code>shift = __riscv_vmul(__riscv_vrsub(__riscv_vssubu(shift, <b>2</b>, vlOut), <b>3</b>, vlOut), <b>6</b>, vlOut);</code>
+</pre></div>
+
+
+
+<h2 id="validation"><a href="#validation">validation</a></h2>
+
+<p>
+For validation, we use the method described in <a href="https://arxiv.org/abs/2010.03090">"Validating UTF-8 In Less Than One Instruction Per Byte"</a>.
+I won't go into the full detail, but I'll summarise how it works:
+</p>
+<p>
+There are seven error patterns in a 2 byte UTF-8 sequence, they can all be detected by only looking at the first 12 bits.
+We use three 4-bit lookup tables that map to a bitmask of the errors matching that pattern and AND them together to determine if the was an error.
+The only error not detected by this are related to 3-4 byte UTF-8 characters that have the wrong amount of continuation bytes.
+To detect those, the last remaining bit in the bitmask of the LUTs is used to indicate a pair of continuation bytes, which combined with a few comparisons manages to detect all invalid UTF-8 sequences.
+</p>
+
+<p>
+Instead of doing a three LMUL=2 vrgather, we do six LMUL=1 <code>vrgather</code>, as we don't need to cross any lanes, and this performs better because it needs to do a less complex task (see <a href="#gather">later discussion</a>).
+To help with that, we define the <code>VRGATHER_u8m1x2</code> macro, which unrolls the <code>vrgather</code> for us.
+Before we get into the implementation we also need to define the error lookup tables, and some constants we'll use later:
+</p>
+
+<div class="center"><pre>
+<code>#define VRGATHER_u8m1x2(tbl, idx) \</code>
+<code>	__riscv_vset(__riscv_vlmul_ext_u8m2( \</code>
+<code>		__riscv_vrgather(tbl, __riscv_vget_u8m1(idx, <b>0</b>), vl8m1)), <b>1</b>, \</code>
+<code>		__riscv_vrgather(tbl, __riscv_vget_u8m1(idx, <b>1</b>), vl8m1));</code>
+<code></code>
+<code>static const uint64_t err1m[] = { <b>0x0202020202020202</b>, <b>0x4915012180808080</b> };</code>
+<code>static const uint64_t err2m[] = { <b>0xCBCBCB8B8383A3E7</b>, <b>0xCBCBDBCBCBCBCBCB</b> };</code>
+<code>static const uint64_t err3m[] = { <b>0x0101010101010101</b>, <b>0x01010101BABAAEE6</b> };</code>
+<code>const vuint8m1_t err1tbl = __riscv_vreinterpret_u8m1(__riscv_vle64_v_u64m1(err1m, <b>2</b>));</code>
+<code>const vuint8m1_t err2tbl = __riscv_vreinterpret_u8m1(__riscv_vle64_v_u64m1(err2m, <b>2</b>));</code>
+<code>const vuint8m1_t err3tbl = __riscv_vreinterpret_u8m1(__riscv_vle64_v_u64m1(err3m, <b>2</b>));</code>
+<code>const size_t vl8m1 = __riscv_vsetvlmax_e8m1();</code>
+<code>const size_t vl16m2 = __riscv_vsetvlmax_e16m2();</code>
+</pre></div>
+
+<p>
+Now we need to extract the 4-bits and do the lookup three times.
+</p>
+
+<div class="center"><pre>
+<code><em>...</em></code>
+<code><em>vuint8m2_t v3 = __riscv_vslide1down(v2, src[vl+2], vl);</em></code>
+<code></code>
+<code>vuint8m2_t s1 = __riscv_vreinterpret_u8m2(__riscv_vsrl(__riscv_vreinterpret_u16m2(v2), <b>4</b>, vl16m2));</code>
+<code>vuint8m2_t s3 = __riscv_vreinterpret_u8m2(__riscv_vsrl(__riscv_vreinterpret_u16m2(v3), <b>4</b>, vl16m2));</code>
+<code></code>
+<code>vuint8m2_t idx2 = __riscv_vand(v2, <b>0xF</b>, vl);</code>
+<code>vuint8m2_t idx1 = __riscv_vand(s1, <b>0xF</b>, vl);</code>
+<code>vuint8m2_t idx3 = __riscv_vand(s3, <b>0xF</b>, vl);</code>
+<code></code>
+<code>vuint8m2_t err1 = VRGATHER_u8m1x2(err1tbl, idx1);</code>
+<code>vuint8m2_t err2 = VRGATHER_u8m1x2(err2tbl, idx2);</code>
+<code>vuint8m2_t err3 = VRGATHER_u8m1x2(err3tbl, idx3);</code>
+<code>vint8m2_t  errs = __riscv_vreinterpret_i8m2(</code>
+<code>                  __riscv_vand(__riscv_vand(err1, err2, vl), err3, vl));</code>
+<code><i>/* TODO: detect 3/4 byte errors */</i></code>
+</pre></div>
+
+<p>
+To check for 3/4 byte errors, we check if the previous input had a 3 or 4 byte character, which should be followed by two continuation bytes.
+There is no error, if we expect two continuations and get them, and if we don't expect two continuations and don't get them, this maps perfectly to an XOR operation.
+We use the fact, that the upper bit of our error bit set indicates the expectation of two continuations. Interpreting the byte as a signed number, lets us easily check if the MSB bit is set (<code>x &lt; 0</code>) and if any of the other bits are set (<code>x &gt; 0</code>).
+<br>
+Finally, we test if our error mask contains an error, and exit the function with an error code.
+</p>
+
+<div class="center"><pre>
+<code><i>/* IMPL: detect 3/4 byte errors */</i></code>
+<code>vbool4_t is_3 = __riscv_vmsgtu(v1, <b>0b11100000</b>-1, vl);</code>
+<code>vbool4_t is_4 = __riscv_vmsgtu(v0, <b>0b11110000</b>-1, vl);</code>
+<code>vbool4_t is_34 = __riscv_vmor(is_3, is_4, vl);</code>
+<code>vbool4_t err34 = __riscv_vmxor(is_34, __riscv_vmslt(errs, <b>0</b>, vl), vl);</code>
+<code>vbool4_t errm = __riscv_vmor(__riscv_vmsgt(errs, <b>0</b>, vl), err34, vl);</code>
+<code></code>
+<code>if (__riscv_vfirst(errm, vl) &gt;= <b>0</b>)</code>
+<code>	return <b>0</b>;</code>
+</pre></div>
+
+
+<p>
+Lastly, we can't forget about the first three bytes. They could e.g. be all continuation bytes, which would cause our loop to ignore them.
+Before the start of our loop, we find the end of the thired UTF-8 character and pass that to a scalar validation routine, here we reuse <code>utf8_to_utf32_scalar</code> for simplicity:
+</p>
+
+
+<div class="center"><pre>
+<code><em>...</em></code>
+<code><em>if (count &lt; tail) return utf8_to_utf32_scalar(src, count, dest);</em></code>
+<code><i>/* validate first three bytes */</i></code>
+<code>{</code>
+<code>	size_t idx = tail;</code>
+<code>	while (idx &lt; count &amp;&amp; (src[idx] &gt;&gt; <b>6</b>) == <b>0b10</b>)</code>
+<code>		++idx;</code>
+<code>	uint32_t buf[<b>10</b>];</code>
+<code>	if (idx &gt; tail + <b>3</b> || !utf8_to_utf32_scalar(src, idx, buf))</code>
+<code>		return <b>0</b>;</code>
+<code>}</code>
+</pre></div>
+
+<h2 id="fastpath"><a href="#fastpath">fast paths</a></h2>
+
+<p>
+Now for the fun part, making things faster.
+</p>
+
+<h4 id="ascii"><a href="#ascii">ASCII</a></h4>
+
+<p>
+If we read an all ASCII vector, then we can skip the validation pass, and simply widen and store the vector.
+We use a max reduction to determine if we have only ASCII bytes, the result of which we can also use for our other fast paths:
+</p>
+
+<div class="center"><pre>
+<code><em>...</em></code>
+<code><em>vuint8m2_t v0 = __riscv_vle8_v_u8m2((uint8_t const*)src, vl);</em></code>
+<code>uint64_t max = __riscv_vmv_x(__riscv_vredmaxu(v0, __riscv_vmv_s_x_u8m1(<b>0</b>, vl), vl));</code>
+<code></code>
+<code><i>/* fast path: ASCII */</i></code>
+<code>if (max &lt; <b>0b10000000</b>) {</code>
+<code>	vlOut = vl;</code>
+<code>	__riscv_vse32(dest, __riscv_vzext_vf4(v0, vlOut), vlOut);</code>
+<code>	continue;</code>
+<code>}</code>
+</pre></div>
+
+
+
+<h4 id="12u8"><a href="#12u8">One and two byte UTF-8</a></h4>
+
+<p>
+This fast path needs to happen after validation.
+We are only concerned with creating b12 from b1 and b2, which allows us to simplify the code from the general case a lot.
+<br>
+We don't need to bother with shifting to remove the prefix from b1, there are only two possibilities, and one is to do nothing, hence a masked and fits perfectly.
+<br>
+We still can't use a masked widening multiply without first widening the destination operand, but we can use a simple <code>vmerge</code> to select between the two possible shift values.
+The addition can then be done using a masked widening add because the destination is already widened.
+<br>
+Now we need to zero extend again and we are done:
+</p>
+
+<div class="center"><pre>
+<code><em>...</em></code>
+<code><em>vuint8m2_t b2 = __riscv_vcompress(v1, m, vl);</em></code>
+<code>vlOut = __riscv_vcpop(m, vl); <i>/* needs to be moved up from previous place to here */</i></code>
+<code></code>
+<code><i>/* fast path: one and two byte */</i></code>
+<code>if (max &lt; <b>0b11100000</b>) {</code>
+<code>	b2 = __riscv_vand(b2, <b>0b00111111</b>, vlOut);</code>
+<code>	vbool4_t m1 = __riscv_vmsgtu(b1, <b>0b10111111</b>, vlOut);</code>
+<code>	b1 = __riscv_vand_mu(m1, b1, b1, <b>63</b>, vlOut);</code>
+<code>	vuint16m4_t b12 = __riscv_vwmulu(b1, __riscv_vmerge(__riscv_vmv_v_x_u8m2(<b>1</b>, vlOut), <b>1</b>&lt;&lt;<b>6</b>, m1, vlOut), vlOut);</code>
+<code>	b12 = __riscv_vwaddu_wv_mu(m1, b12, b12, b2, vlOut);</code>
+<code>	__riscv_vse32(dest, __riscv_vzext_vf2(b12, vlOut), vlOut);</code>
+<code>	continue;</code>
+<code>}</code>
+</pre></div>
+
+
+
+<h4 id="123u8"><a href="#123u8">One, two and three byte UTF-8</a></h4>
+
+
+<p>
+I'll leave understanding this one as an exercise to the reader, note that the code points of all three and below byte UTF-8 characters fit into 16 bytes.
+</p>
+
+<div class="center"><pre>
+<code><em>/* fast path: one and two byte */</em></code>
+<code><em>...</em></code>
+<code></code>
+<code><i>/* fast path: one, two and three byte */</i></code>
+<code>if (max &lt; <b>0b11110000</b>) {</code>
+<code>	vuint8m2_t b3 = __riscv_vcompress(v2, m, vl);</code>
+<code>	b2 = __riscv_vand(b2, <b>0b00111111</b>, vlOut);</code>
+<code>	b3 = __riscv_vand(b3, <b>0b00111111</b>, vlOut);</code>
+<code></code>
+<code>	vbool4_t m1 = __riscv_vmsgtu(b1, <b>0b10111111</b>, vlOut);</code>
+<code>	vbool4_t m3 = __riscv_vmsgtu(b1, <b>0b11011111</b>, vlOut);</code>
+<code></code>
+<code>	vuint8m2_t t1 = __riscv_vand(m1, b1, b1, <b>63</b>, vlOut);</code>
+<code>	b1 = __riscv_vand(m3, t1, b1, <b>15</b>, vlOut);</code>
+<code></code>
+<code>	vuint16m4_t b12 = __riscv_vwmulu(b1, __riscv_vmerge(__riscv_vmv_v_x_u8m2(<b>1</b>, vlOut), <b>1</b>&lt;&lt;<b>6</b>, m1, vlOut), vlOut);</code>
+<code>	b12 = __riscv_vwaddu_wv(m1, b12, b12, b2, vlOut);</code>
+<code>	vuint16m4_t b123 = __riscv_vwaddu_wv_(m3, b12, __riscv_vsll_vx_u16m4_mu(m3, b12, b12, <b>6</b>, vlOut), b3, vlOut);</code>
+<code>	__riscv_vse32(dest, __riscv_vzext_vf2(b123, vlOut), vlOut);</code>
+<code>	continue;</code>
+<code>}</code>
+</pre></div>
+
+
+
+<h2 id="8to16"><a href="#8to16">UTF-8 to UTF-16</a></h2>
+
+<p>
+Every 1 to 3 byte UTF-8 character can be represented in a single word UTF-16 character, so for the fast paths above, we need to widen and store to 16 instead of 32 bits.
+<br>
+Hey! The fast paths just got a bit faster!
+</p>
+
+<p>
+The next step starts right after we've computed the UTF-32 code point in the general path.
+We treat all characters as two-word UTF-16 and convert them to surrogate pairs accordingly.
+Then we <code>vmerge</code> between the original UTF-32 code point and the two-word UTF-16 code points.
+Afterward, we use the original UTF-32 code point to create a compression mask for our UTF-32 words.
+This can be done by matching the UTF-32 code points that fit into 16 bits, their upper two bytes are zero.
+</p>
+
+<p>
+We predefine a mask <code>m2even</code> that masks all odd indexes and two helpers, as we'll need to switch between treating the vector as a vector of 16-bit and 32-bit elements.
+</p>
+
+<div class="center"><pre>
+<code>size_t vl8m4 = __riscv_vsetvlmax_e8m4();</code>
+<code>const vbool2_t m2even = __riscv_vmseq(__riscv_vand(__riscv_vid_v_u8m4(vl8m4), <b>1</b>, vl8m4), <b>0</b>, vl8m4);</code>
+
+<code>#define DOWN __riscv_vreinterpret_u16m8</code>
+<code>#define UP __riscv_vreinterpret_u32m8</code>
+</pre></div>
+
+<p>
+Now we shift the bits around to create the surrogate representation of each code point and then select between this and the UTF-32 code point using <code>vmerge</code>.
+To obtain the correct UTF-16 output, we need to compress all odd words that are zero, as those are only present in the one single UTF-16 character currently stored as UTF-32.
+</p>
+
+<div class="center"><pre>
+<code><em>...</em></code>
+<code><em>b1234 = __riscv_vsrl(b1234, ...);</em></code>
+<code><i>/* convert [000000000000aaaa|aaaaaabbbbbbbbbb]</i></code>
+<code><i> * to      [110111bbbbbbbbbb|110110aaaaaaaaaa] */</i></code>
+<code>vuint32m8_t sur = __riscv_vsub(b1234, <b>0x10000</b>, vlOut);</code>
+<code>sur = __riscv_vor(__riscv_vsll(sur, <b>16</b>, vlOut),</code>
+<code>                  __riscv_vsrl(sur, <b>10</b>, vlOut), vlOut);</code>
+<code>sur = __riscv_vand(sur, <b>0x3FF03FF</b>, vlOut);</code>
+<code>sur = __riscv_vor(sur, <b>0xDC00D800</b>, vlOut);</code>
+<code><i>/* merge 1 byte b1234 and 2 byte sur */</i></code>
+<code>vbool4_t m4 = __riscv_vmsgtu(b1234, <b>0xFFFF</b>, vlOut);</code>
+<code>b1234 = __riscv_vmerge(b1234, sur, m4, vlOut);</code>
+<code><i>/* swap b1234 two byte pairs */</i></code>
+<code><i>/* compress and store */</i></code>
+<code>vbool2_t mOut = __riscv_vmor(__riscv_vmsne(DOWN(b1234), <b>0</b>, vlOut*<b>2</b>), m2even, vlOut*<b>2</b>);</code>
+<code>b1234 = UP(__riscv_vcompress(DOWN(b1234), mOut, vlOut*<b>2</b>));</code>
+<code>size_t vlDest = __riscv_vcpop(mOut, vlOut*<b>2</b>);</code>
+<code>__riscv_vse16_v_u16m8(dest, DOWN(b1234), vlDest);</code>
+</pre></div>
+
+
+<p>
+Finally, we need to adjust the tail handling to account for UTF-16 output.
+Since we want to reparse the last character, we need to decrement the destination pointer, if the last output word was a high surrogate.
+</p>
+
+
+<div class="center"><pre>
+<code><em>/* reparse last character + tail */</em></code>
+<code><em>if (count &gt; tail) {</em></code>
+<code>	<em>if ((src[0] &gt;&gt; 6) == 0b10) --dest;</em></code>
+<code>	<em>while ((src[0] &gt;&gt; 6) == 0b10 &amp;&amp; tail &lt; count)</em></code>
+<code>		<em>--src, ++tail;</em></code>
+<code>	<i>/* go back one more, when on high surrogate */</i></code>
+<code>	if (dest[-<b>1</b>] &gt;= <b>0xD800</b> &amp;&amp; dest[-<b>1</b>] &lt;= <b>0xDBFF</b>)</code>
+<code>		--dest;</code>
+<code><em>}</em></code>
+</pre></div>
+
+
+<h2 id="revising"><a href="#revising">Revising the general case</a></h2>
+
+<p>
+Let's do one last optimization.
+If you look at the general case again, you might notice that we are doing twice the needed work needed, if the average input character size is equal to or above two.
+To circumvent that, we can lower the LMUL from two to one and unroll the code with an early exit between the iterations.
+</p>
+<p>
+This is a simple transformation, and you can browse the <a href="https://github.com/camel-cdr/rvv-bench/blob/main/vector-utf/8toN_gather.c">final code here</a>.
+It's a bit more complex because it implements both the UTF-8 to UTF-16 and UTF-8 to UTF-32 conversions in one function.
+</p>
+
+
+<h2 id="finbench"><a href="#finbench">Benchmark results</a></h2>
+
+
+<p>
+I used the Lemires <a href="https://github.com/lemire/unicode_lipsum/">unicode_lipsum</a> dataset to measure the performance for inputs of different languages.
+You can look at the <a href="https://github.com/camel-cdr/rvv-bench/blob/main/vector-utf/bench.c">benchmark code here</a>, it reads an input file into a buffer and measures the average time a conversion of that input takes.
+</p>
+
+<p>
+The code for the <code>C920</code> needed to be manually backported to the draft 0.7.1 RVV version, which introduced a few pessimization:
+</p>
+
+<ul>
+	<li><code>vmvNr</code> needed to be replaced with one <code>vmv.v.v</code> and two <code>vsetvli</code> instructions.</li>
+	<li><code>vzext.vN</code> needed to be replaced with N/2 <code>vwaddu.vx</code> and N/2+1 <code>vsetvli</code> instructions.</li>
+	<li><code>vredmax</code> needed to be replaced with one <code>vmsgtu.vx</code> and one <code>vfirst.m</code> instruction.
+	<br>This shouldn't be needed for RVV 0.7.1, but the hardware I've got access to seems to produce the wrong result for vredmax. I haven't looked into this further.</li>
+</ul>
+
+<p>
+The <a href="https://github.com/lemire/unicode_lipsum/">unicode_lipsum</a> dataset is split into two parts.
+One contains <a href="https://en.wikipedia.org/wiki/Lorem_ipsum">Lorem ipsum</a> style text in different languages and was created by Hans Kratz, for the <a href="https://github.com/lemire/unicode_lipsum/blob/main/simdutf8">simdutf8</a> project.
+<br>
+This gives us very dense input, the average character sizes are as follows: Arabic: 1.8 Chinese: 3.0 Emoji: 4.0 Hebrew: 1.8 Hindi: 2.7 Japanese: 2.9 Korean: 2.5 Latin: 1.0 Russian: 1.8
+<br>
+</p>
+
+
+<div id="bench1"></div>
+
+<p>
+Excluding the, all ASCII, Latin input, we get an average speedup of 3x over scalar on the C920, and 3.5x on the C908. That's a lot!
+<br>
+We are a bit lacking in the Emoji test case, which solely consists of 4-byte UTF-8 emojis. We could add an extra fast path for that, but such input will rarely occur in the real world, so I don't think it's worth optimizing for.
+</p>
+
+
+<p>
+The second part of the data set includes the source code of different translations for the <a href="https://en.wikipedia.org/wiki/Mars">Mars</a> Wikipedia entries.
+This is less dense, no average character length is above 2.0, but probably more representative, as a lot of text comes in some sort of structural format (XML, JSON, ...) or has Arabic numerals, links, ... in between the native language characters.
+</p>
+
+
+<div id="bench2"></div>
+<p>
+Here, we get an average speedup of 3.6x over scalar on the C920, and 4.0x on the C908, excluding the all ASCII English case.
+</p>
+
+<h4 id="gather"><a href="#gather">Performance portability of the permutation instructions</a></h4>
+
+<p>
+We managed to get a good speedup on real hardware, but we are still in the early days of RVV implementations.
+Will the code also have similar speedups on future hardware that might support bigger vector lengths?
+</p>
+<p>
+Most RVV instructions can be expected to perform well across implementations, but the permutation instructions, specifically <code>vrgather.vv</code> and <code>vcompress.vm</code>, are harder to scale and already exhibit a variety of performance characteristics.
+
+I've compiled cycle estimates for all implementations I could get the data for:
+
+<div class="center"><div class="scroll"><table>
+<tr><th></th><th colspan="5">vcompress.vm</th><th>&nbsp;&nbsp;&nbsp;&nbsp;</th><th colspan="5">vrgather.vv</th></tr>
+<tr><th></th><th>VLEN</th><th>e8m1</th><th>e8m2</th><th>e8m4</th><th>e8m8</th><th></th><th>VLEN</th><th>e8m1</th><th>e8m2</th><th>e8m4</th><th>e8m8</th></tr>
+<tr><th>c906</th><td>128</td><td>4</td><td>10</td><td>32</td><td>136</td><th></th><td>128</td><td>4</td><td>16</td><td>64</td><td>256</td></tr>
+<tr><th>c908</th><td>128</td><td>4</td><td>10</td><td>32</td><td>139</td><th></th><td>128</td><td>4</td><td>16</td><td>65</td><td>261</td></tr>
+<tr><th>c920</th><td>128</td><td>0.5</td><td>2.4</td><td>5.4</td><td>20</td><th></th><td>128</td><td>0.5</td><td>2.4</td><td>8</td><td>32</td></tr>
+<tr><th>bobcat*</th><td>256</td><td>32</td><td>64</td><td>132</td><td>260</td><th></th><td>256</td><td>68</td><td>132</td><td>260</td><td>516</td></tr>
+<tr><th>x280*</th><td>512</td><td>65</td><td>129</td><td>257</td><td>513</td><th></th><td>512</td><td>65</td><td>129</td><td>257</td><td>513</td></tr>
+</table></div></div>
+
+
+<p><i>*bobcat: Note, that it was explicitly stated, that they didn't optimize the permutation instructions</i></p>
+
+<p><i>*x280: the numbers are from llvm-mca, but I was told they match reality. There is also supposed to be a <code>vrgather.vv</code> fast path for vl&lt;=256. I think they didn't have much incentive to optimize this, as the x280 targets AI workloads w.</i></p>
+
+<p>
+Now you might see why we've decided to use six LMUL=1 gathers instead of three LMUL=2 gathers for our validation lookup tables.
+Current implementations don't scale well to larger LMUL, and some won't perform well enough for our implementation on any LMUL.
+</p>
+
+<p>
+I think that the C920 results are the most representative of what to expect of future desktop CPUs and we can safely ignore the bobcat/x280 cycle counts for that use case.
+I suspect we'll see <code>vrgather.vv</code> perform well for LMUL=1, and then grow exponentially per element with higher LMUL, as an all-to-all mapping is quite expensive to scale.
+<br>
+<code>vcompress.vm</code> should be better scalable than <code>vrgather.vv</code>, since the work is subdividable, and I think we might see a range of implementations that scale almost linearly in respect to LMUL.
+</p>
+
+<p>
+We've seen that <code>vrgather.vv</code> is really useful for quick lookup tables, but provides a way more powerful all-to-all mapping than required for that.
+Four-bit lookup tables specifically are very likely to be used by a bunch of other implementations as well, as the standard V extension guarantees a VLEN of at least 128, so a 4-bit LUT can always be assumed to fit into one vector register.
+</p>
+<p>
+I don't know anything about hardware design, but implementing a LMUL=1 <code>vrgather.vv</code> for very long vector implementations that performs, per element, as fast as one for a smaller implementation, seems almost impossible.
+If you expect to use it for its full capabilities, it isn't a big problem, sometimes you just need to get the elements into a specific permutation. But for 4-bit lookup tables we only care about selecting one of 16 values.
+</p>
+<p>
+Hardware might be able to have a special case/fast path implementation for smaller indices, but we can't expect most implementations to support it.
+I think adding a dedicated <code>vrgatherei4</code>, which only uses the four LSB for indices, to the specification might be a good idea.
+</p>
+
+<h2 id="conc"><a href="#conc">Conclusion</a></h2>
+
+<p>
+We've managed to effectively use the RISC-V Vector extension to speed up UTF-8 to UTF-16 conversion by on average 3 to 4 times on real hardware.
+Upstreaming this and other conversion functions to the <a href="https://github.com/simdutf/simdutf/">simdutf</a> library is still work in progress, and I'll return to working on it after my exams.
+Hopefully, we can see this contribute to bridging the optimization gap of RISC-V compared to other architectures, and maybe even inspire some people to give porting to RVV a shot.
+</p>
+
+<p>
+I hope you could follow this write up, have a nice day :3
+</p>
+
+<h2 id="perfcmp"><a href="#perfcmp">Appendix: Performance comparisons with other architectures</a></h2>
+
+<p>
+If you are wondering how the RISC-V hardware compares to existing hardware of other architectures, here are the measurements for the dataset from above including simdutf implementations for the other architectures.
+</p>
+
+</div>
+
+<script src="../uPlot/dist/uPlot.iife.js"></script>
+<script src="../uPlot/demos/lib/quadtree.js"></script>
+<script src="../uPlot/demos/lib/distr.js"></script>
+<script src="../bars.js"></script>
+
+<script>
+	let data = [];
+	let series = [];
+	let body = [];
+	series = [
+		{ label: "Implementation" },
+		{ label: "C908 scalar", fill: "#6119ff" },
+		{ label: "C908 rvv",    fill: "#b366ff" },
+		{ label: "C920 scalar", fill: "#cb2e00" },
+		{ label: "C920 rvv",    fill: "#ff951a" },
+	];
+
+	data = [
+		["Arabic","Emoji","Hebrew","Japanese","Russian"],
+		[0.0331370,0.0522199,0.0330693,0.0448987,0.0331387],
+		[0.1676699,0.0831130,0.1675394,0.1302059,0.1674591],
+		[0.0497147,0.0923569,0.0494750,0.0772785,0.0509461],
+		[0.2216386,0.1242158,0.2242518,0.1603533,0.2299110],
+	];
+	body = document.getElementById("benchtop");
+	makeBar({ title: "UTF-8 to UTF-16 (input bytes/cycle)", data, series, body, toggle: false, width: 1.0, height: 0.5});
+	body.removeChild(document.getElementById("bench-svg"));
+
+	data = [
+		["Arabic","Chinese","Emoji","Hebrew","Hindi","Japanese","Korean","Latin","Russian"],
+		[0.0331370,0.0457254,0.0522199,0.0330693,0.0424079,0.0448987,0.0399847,0.1462973,0.0331387],
+		[0.1676699,0.1301323,0.0831130,0.1675394,0.1302720,0.1302059,0.1300402,1.0275230,0.1674591],
+		[0.0497147,0.0797070,0.0923569,0.0494750,0.0700269,0.0772785,0.0596959,0.2109710,0.0509461],
+		[0.2216386,0.1608991,0.1242158,0.2242518,0.1601953,0.1603533,0.1592920,2.2189945,0.2299110],
+	];
+	body = document.getElementById("bench1");
+	makeBar({ title: "UTF-8 to UTF-16 (input bytes/cycle)", data, series, body, height: 0.4, minimize: [7] });
+
+	data = [
+		["arabic","chinese","czech","english","esperanto","french","german","greek","hebrew","hindi","japanese","korean","persan","portuguese","russian","thai","turkish","vietnamese"],
+		[0.0497569,0.0565430,0.0528302,0.1275831,0.0881123,0.0737802,0.0905761,0.0497033,0.0448840,0.0563662,0.0560357,0.0522578,0.0496008,0.0791921,0.0466324,0.0600823,0.0587339,0.0447605],
+		[0.2353216,0.1788198,0.2278120,0.7338758,0.3412668,0.2843437,0.3502627,0.2285679,0.2028331,0.1848405,0.1775926,0.1727464,0.2126346,0.3004463,0.2121076,0.1928356,0.2584671,0.1853099],
+		[0.0744813,0.0855446,0.0755292,0.1827197,0.1263762,0.1070867,0.1296940,0.0755349,0.0661844,0.0857724,0.0866018,0.0765637,0.0742834,0.1171257,0.0708612,0.0963939,0.0847053,0.0642606],
+		[0.3212577,0.2223617,0.3633922,1.4220564,0.5216554,0.3670641,0.5333178,0.3727045,0.2759717,0.2719399,0.2630760,0.2563889,0.2688770,0.4517186,0.2807201,0.2377943,0.3365346,0.2283996],
+	];
+	body = document.getElementById("bench2");
+	makeBar({ title: "UTF-8 to UTF-16 (input bytes/cycle)", data, series, body, height: 0.4, minimize: [3]});
+
+	series = [
+		{ label: "Implementation" },
+		{ label: "arabic",     fill: "#ff218c" },
+		{ label: "chinese",    fill: "#ffd800" },
+		{ label: "czech",      fill: "#21b1ff" },
+		{ label: "english",    fill: "#dddddd" },
+		{ label: "esperanto",  fill: "#f57dc5" },
+		{ label: "french",     fill: "#88c4ed" },
+		{ label: "german",     fill: "#784F17" },
+		{ label: "greek",      fill: "#000000" },
+		{ label: "hebrew",     fill: "#E40303" },
+		{ label: "hindi",      fill: "#FF8C00" },
+		{ label: "japanese",   fill: "#FFED00" },
+		{ label: "korean",     fill: "#008026" },
+		{ label: "persan",     fill: "#24408E" },
+		{ label: "portuguese", fill: "#732982" },
+		{ label: "russian",    fill: "#888888" },
+		{ label: "thai",       fill: "#d60270" },
+		{ label: "turkish",    fill: "#0038a8" },
+		{ label: "vietnamese", fill: "#9b4f96" },
+	];
+
+	data = [
+		["scalar C908","scalar C920","scalar A53","scalar A72","scalar 1600X","scalar i7-9750H","scalar M1","rvv C908","rvv C920","simdutf A53","simdutf A72","simdutf 1600X","simdutf i7-9750H","simdutf M1"],
+		[0.0491457,0.0743101,0.1354231,0.2114785,0.2574719,0.3414548,0.4378575,0.2388506,0.3092979,0.2310344,0.3283478,0.6880574,1.0470451,0.7794319],
+		[0.0559008,0.0843288,0.1408603,0.2316115,0.2843754,0.3734232,0.5429763,0.1777389,0.2200010,0.2270650,0.2696474,0.4827609,0.7340795,0.6863333],
+		[0.0513666,0.0748410,0.1690527,0.2350114,0.2544848,0.3701257,0.4793255,0.2299610,0.3410132,0.2222558,0.2802409,0.5271188,0.8315708,0.6114518],
+		[0.1163292,0.1919444,0.4569094,0.8316088,0.5693755,1.1212809,1.8399298,0.7330911,1.3563776,0.7260120,0.9062110,2.5404727,4.2462024,4.3555984],
+		[0.0832711,0.1301558,0.2841371,0.4499066,0.3942278,0.6923883,1.2005135,0.3428494,0.5015722,0.3556356,0.4182948,0.9804535,1.7244758,1.4835212],
+		[0.0705925,0.1059926,0.2460420,0.3621993,0.3478727,0.5634434,0.6755324,0.2865071,0.3548735,0.2470069,0.3277024,0.5908176,0.8593920,0.8181734],
+		[0.0857454,0.1326355,0.3073234,0.4929095,0.4057874,0.7198016,1.0268820,0.3521010,0.5047745,0.3269007,0.4068323,0.8398505,1.2502019,1.1496856],
+		[0.0491302,0.0743849,0.1352044,0.2148418,0.2621245,0.3454852,0.4719592,0.2308281,0.3484973,0.2453089,0.3109284,0.6596540,1.0811703,0.7892237],
+		[0.0444262,0.0657207,0.1198750,0.1817924,0.2231821,0.2900305,0.3800557,0.2051222,0.2519301,0.2194366,0.2931596,0.5892751,0.9470063,0.7394472],
+		[0.0556963,0.0840421,0.1320936,0.2123668,0.2689250,0.3412544,0.4684677,0.1834244,0.2661423,0.2374890,0.2956764,0.5114079,0.7868680,0.7118736],
+		[0.0554638,0.0856917,0.1378256,0.2331030,0.2928130,0.3653799,0.5753021,0.1767404,0.2564093,0.2378347,0.2775700,0.4971031,0.7720553,0.6546134],
+		[0.0514618,0.0744880,0.1276751,0.1919761,0.2398389,0.3043222,0.4179226,0.1720308,0.2500946,0.2131450,0.2651781,0.5042498,0.8197241,0.7157508],
+		[0.0491077,0.0746324,0.1346438,0.2049125,0.2475086,0.3220353,0.4370368,0.2140265,0.2573505,0.2333298,0.2995894,0.5850021,0.9576644,0.6817807],
+		[0.0754610,0.1133960,0.2648940,0.4003072,0.3585384,0.6054108,0.7706301,0.3040160,0.4049422,0.2640020,0.3500982,0.6366338,0.9813460,0.9231399],
+		[0.0461894,0.0709277,0.1255640,0.1989378,0.2436699,0.3136491,0.4042792,0.2147953,0.2689097,0.2173104,0.2837450,0.5778110,0.8912897,0.6517395],
+		[0.0595188,0.0931044,0.1410111,0.2643768,0.3388941,0.4130897,0.6333910,0.1913748,0.2361437,0.2827373,0.3485531,0.6286138,0.9396864,0.9229331],
+		[0.0570188,0.0844697,0.1897855,0.2690026,0.2808244,0.4225871,0.5456137,0.2615971,0.3219025,0.2435181,0.3191425,0.6059648,0.9410647,0.7341295],
+		[0.0441433,0.0620659,0.1312987,0.1830550,0.2025158,0.2847936,0.3378188,0.1842004,0.2251780,0.1773362,0.2235864,0.3721163,0.5501347,0.4830454],
+	];
+	makeBar({ title: "UTF-8 to UTF-16 (input bytes/cycle)", data, series, height: 0.8, groupWidth: 0.75, showLabels: false, hide: [4]});
+
+	series = [
+		{ label: "Implementation" },
+		{ label: "Arabic",   fill: "#E40303" },
+		{ label: "Chinese",  fill: "#FF8C00" },
+		{ label: "Emoji",    fill: "#FFED00" },
+		{ label: "Hebrew",   fill: "#008026" },
+		{ label: "Hindi",    fill: "#24408E" },
+		{ label: "Japanese", fill: "#732982" },
+		{ label: "Korean",   fill: "#bbbbbb" },
+		{ label: "Latin",    fill: "#888888" },
+		{ label: "Russian",  fill: "#222222" },
+	];
+
+	data = [
+		["scalar C908","scalar C920","scalar A53","scalar A72","scalar 1600X","scalar i7-9750H","scalar M1","rvv C908","rvv C920","simdutf A53","simdutf A72","simdutf 1600X","simdutf i7-9750H","simdutf M1"],
+		[0.0331383,0.0501303,0.0808099,0.1264330,0.1895300,0.2233402,0.4065707,0.1696342,0.2106904,0.1976679,0.2776978,0.6463231,1.0423151,0.6603189],
+		[0.0457665,0.0742007,0.0907770,0.1937984,0.3313206,0.2972229,0.5276373,0.1292095,0.1609399,0.2914807,0.4063735,0.9425734,1.5418087,1.6425514],
+		[0.0529478,0.0923723,0.0904885,0.1898922,0.3213189,0.3547256,0.5521120,0.0873716,0.1458740,0.1840541,0.2963957,0.5000688,0.6971095,1.1263244],
+		[0.0330992,0.0500370,0.0807457,0.1222110,0.1886200,0.2295315,0.4945803,0.1703227,0.2261334,0.1965479,0.2776678,0.6592829,1.0445829,0.6568957],
+		[0.0424541,0.0661703,0.0860560,0.1518731,0.2218608,0.2422732,0.3627878,0.1291317,0.1600601,0.2036635,0.2635254,0.4796877,0.8025232,0.6426302],
+		[0.0449738,0.0724267,0.0895563,0.1831465,0.3030678,0.2864362,0.4955096,0.1291728,0.1595002,0.2623468,0.3603684,0.7745818,1.4842373,1.3626354],
+		[0.0402183,0.0579241,0.0819272,0.1376725,0.2191902,0.2989218,0.5281440,0.1290117,0.1609201,0.1875101,0.2649601,0.5264089,0.9602881,0.6351035],
+		[0.1304180,0.2044210,0.5605951,1.1282937,0.6301390,1.3165563,2.1466297,1.0384059,2.2352198,1.4012956,1.4026019,6.2130125,10.6915851,9.1837200],
+		[0.0333600,0.0515273,0.0815381,0.1275474,0.1864178,0.2127296,0.2813454,0.1700943,0.2278289,0.1992868,0.2659083,0.6239820,1.0238777,0.6220427],
+	];
+	makeBar({ title: "UTF-8 to UTF-16 (input bytes/cycle)", data, series, height: 0.8, up: true, groupWidth: 0.75, showLabels: false, hide: [8] });
+
+
+</script>
+</body>
+</html>
+
