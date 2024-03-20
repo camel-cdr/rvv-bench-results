@@ -88,7 +88,7 @@ The vast majority of text you'll come across will be encoded in the UTF-8 format
 This and other reasons, might cause you to convert between different Unicode encodings. As demonstrated by <a href="https://github.com/simdutf/simdutf/">simdutf</a>, this conversion process has a lot of optimization potential.
 </p>
 <p>
-Here we'll focus on UTF-8 to UTF-16 conversion, and aim to develop an optimized RISC-V implementation that can be upstreamed to the <a href="https://github.com/simdutf/simdutf/">simdutf</a> library, which is used among others by Node.js and Bun. (Upstreaming is, as of writing, still work in progress)
+Here we'll focus on UTF-8 to UTF-16 conversion, and aim to develop an optimized RISC-V implementation that can be upstreamed to the <a href="https://github.com/simdutf/simdutf/">simdutf</a> library, which is used among others by Node.js and Bun. (<a href="https://github.com/simdutf/simdutf/pull/373">The changes</a> are now upstream)
 </p>
 
 <p>
@@ -940,7 +940,7 @@ I think adding a dedicated <code>vrgatherei4</code>, which only uses the four LS
 
 <p>
 We've managed to effectively use the RISC-V Vector extension to speed up UTF-8 to UTF-16 conversion by on average 3 to 4 times on real hardware.
-Upstreaming this and other conversion functions to the <a href="https://github.com/simdutf/simdutf/">simdutf</a> library is still work in progress.
+<a href="https://github.com/simdutf/simdutf/pull/373">This and other conversion functions</a> have been successfully upstreamed to the <a href="https://github.com/simdutf/simdutf/">simdutf</a> library.
 Hopefully, we can see this contribute to bridging the optimization gap of RISC-V compared to other architectures, and maybe even inspire some people to give porting to RVV a shot.
 </p>
 
