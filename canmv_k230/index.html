@@ -81,7 +81,7 @@ One core runs at 0.8 GHz and doesn't support rvv, the other one at 1.6GHz and su
 </div>
 
 
-<div class="tblCont">
+<div class="tblCont tblContv">
 
 <table id="tblMaa" class="tabPage" style="width:100%;">
 <thead><tr><th>instruction</th><th>e8m1</th><th>e8m2</th><th>e8m4</th><th>e8m8</th><th>e16m1</th><th>e16m2</th><th>e16m4</th><th>e16m8</th><th>e32m1</th><th>e32m2</th><th>e32m4</th><th>e32m8</th><th>e64m1</th><th>e64m2</th><th>e64m4</th><th>e64m8</th></tr></thead>
@@ -4750,6 +4750,90 @@ One core runs at 0.8 GHz and doesn't support rvv, the other one at 1.6GHz and su
 </table>
 </div>
 
+<p>Below are measurements for the scalar instructions obtained using the same methodology as above:</p>
+
+<div class="tblCont tblConts">
+
+<table style="width:100%;">
+<thead><tr><th>instruction</th><th>cycles</th><th>instruction</th><th>cycles</th><th>instruction</th><th>cycles</th></tr></thead>
+<tbody>
+
+<tr><td>add t0, t1, t2</td><td>1.0</td><td>fmv.w.x ft0, t0</td><td>4.0</td><td>fmv.d.x ft0, t0</td><td>4.0</td></tr>
+<tr><td>addw t0, t1, t2</td><td>1.0</td><td>fmv.x.w t0, ft0</td><td>6.0</td><td>fmv.x.d t0, ft0</td><td>6.0</td></tr>
+<tr><td>addi t0, t1, 13</td><td>1.0</td><td>fcvt.w.s t0, ft0</td><td>6.0</td><td>fcvt.w.d t0, ft0</td><td>6.0</td></tr>
+<tr><td>addiw t0, t1, 13</td><td>1.0</td><td>fcvt.wu.s t0, ft0</td><td>6.0</td><td>fcvt.wu.d t0, ft0</td><td>6.0</td></tr>
+<tr><td>sub t0, t1, t2</td><td>1.0</td><td>fcvt.s.w ft0, t0</td><td>4.0</td><td>fcvt.d.w ft0, t0</td><td>4.0</td></tr>
+<tr><td>subw t0, t1, t2</td><td>1.0</td><td>fcvt.s.wu ft0, t0</td><td>4.0</td><td>fcvt.d.wu ft0, t0</td><td>4.0</td></tr>
+<tr><td>lui t0, 13</td><td>1.0</td><td>fcvt.l.s t0, ft0</td><td>6.0</td><td>fcvt.l.d t0, ft0</td><td>6.0</td></tr>
+<tr><td>auipc t0, 13</td><td>1.5</td><td>fcvt.lu.s t0, ft0</td><td>6.0</td><td>fcvt.lu.d t0, ft0</td><td>6.0</td></tr>
+<tr><td>xor t0, t1, t2</td><td>1.0</td><td>fcvt.s.l ft0, t0</td><td>4.0</td><td>fcvt.d.l ft0, t0</td><td>4.0</td></tr>
+<tr><td>xori t0, t1, 13</td><td>1.0</td><td>fcvt.s.lu ft0, t0</td><td>4.0</td><td>fcvt.d.lu ft0, t0</td><td>4.0</td></tr>
+<tr><td>or t0, t1, t2</td><td>1.0</td><td>flw ft0, 13(s1)</td><td>1.2</td><td>fld ft0, 13(s1)</td><td>1.2</td></tr>
+<tr><td>ori t0, t1, 13</td><td>1.0</td><td>fsw ft0, 13(s1)</td><td>1.5</td><td>fsd ft0, 13(s1)</td><td>1.5</td></tr>
+<tr><td>and t0, t1, t2</td><td>1.0</td><td>fadd.s ft0, ft1, ft2</td><td>4.0</td><td>fadd.d ft0, ft1, ft2</td><td>4.0</td></tr>
+<tr><td>andi t0, t1, 13</td><td>1.0</td><td>fsub.s ft0, ft1, ft2</td><td>4.0</td><td>fsub.d ft0, ft1, ft2</td><td>4.0</td></tr>
+<tr><td>slt t0, t1, t2</td><td>1.0</td><td>fmul.s ft0, ft1, ft2</td><td>4.0</td><td>fmul.d ft0, ft1, ft2</td><td>5.0</td></tr>
+<tr><td>slti t0, t1, 13</td><td>1.0</td><td>fdiv.s ft0, ft1, ft2</td><td>10.1</td><td>fdiv.d ft0, ft1, ft2</td><td>10.1</td></tr>
+<tr><td>sltu t0, t1, t2</td><td>1.0</td><td>fsqrt.s ft0, ft1</td><td>10.2</td><td>fsqrt.d ft0, ft1</td><td>21.5</td></tr>
+<tr><td>sltiu t0, t1, 13</td><td>1.0</td><td>fmadd.s ft0, ft1, ft2, ft3</td><td>5.0</td><td>fmadd.d ft0, ft1, ft2, ft3</td><td>6.0</td></tr>
+<tr><td>sll t0, t1, t2</td><td>1.0</td><td>fmsub.s ft0, ft1, ft2, ft3</td><td>5.0</td><td>fmsub.d ft0, ft1, ft2, ft3</td><td>6.0</td></tr>
+<tr><td>sllw t0, t1, t2</td><td>1.0</td><td>fnmsub.s ft0, ft1, ft2, ft3</td><td>5.0</td><td>fnmsub.d ft0, ft1, ft2, ft3</td><td>6.0</td></tr>
+<tr><td>slli t0, t1, 13</td><td>1.0</td><td>fnmadd.s ft0, ft1, ft2, ft3</td><td>5.0</td><td>fnmadd.d ft0, ft1, ft2, ft3</td><td>6.0</td></tr>
+<tr><td>slliw t0, t1, 13</td><td>1.0</td><td>fsgnj.s ft0, ft1, ft2</td><td>4.0</td><td>fsgnj.d ft0, ft1, ft2</td><td>4.0</td></tr>
+<tr><td>srl t0, t1, t2</td><td>1.0</td><td>fsgnjn.s ft0, ft1, ft2</td><td>4.0</td><td>fsgnjn.d ft0, ft1, ft2</td><td>4.0</td></tr>
+<tr><td>srlw t0, t1, t2</td><td>1.0</td><td>fsgnjx.s ft0, ft1, ft2</td><td>4.0</td><td>fsgnjx.d ft0, ft1, ft2</td><td>4.0</td></tr>
+<tr><td>srli t0, t1, 13</td><td>1.0</td><td>fmin.s ft0, ft1, ft2</td><td>4.0</td><td>fmin.d ft0, ft1, ft2</td><td>4.0</td></tr>
+<tr><td>srliw t0, t1, 13</td><td>1.0</td><td>fmax.s ft0, ft1, ft2</td><td>4.0</td><td>fmax.d ft0, ft1, ft2</td><td>4.0</td></tr>
+<tr><td>sra t0, t1, t2</td><td>1.0</td><td>feq.s t0, ft0, ft1</td><td>6.0</td><td>feq.d t0, ft0, ft1</td><td>6.0</td></tr>
+<tr><td>sraw t0, t1, t2</td><td>1.0</td><td>flt.s t0, ft0, ft1</td><td>6.0</td><td>flt.d t0, ft0, ft1</td><td>6.0</td></tr>
+<tr><td>srai t0, t1, 13</td><td>1.0</td><td>fle.s t0, ft0, ft1</td><td>6.0</td><td>fle.d t0, ft0, ft1</td><td>6.0</td></tr>
+<tr><td>sraiw t0, t1, 13</td><td>1.0</td><td>fclass.s t0, ft0</td><td>6.0</td><td>fclass.d t0, ft0</td><td>6.0</td></tr>
+<tr><td>lb t0, 13(s1)</td><td>1.0</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>lh t0, 13(s1)</td><td>1.0</td><td>amoswap.w t0, t1, (s1)</td><td>13.3</td><td>add.uw t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>lw t0, 13(s1)</td><td>1.0</td><td>amoswap.d t0, t1, (s1)</td><td>13.3</td><td>sh1add t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>ld t0, 13(s1)</td><td>1.0</td><td>amoadd.w t0, t1, (s1)</td><td>13.3</td><td>sh1add.uw t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>lbu t0, 13(s1)</td><td>1.0</td><td>amoadd.d t0, t1, (s1)</td><td>13.3</td><td>sh2add t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>lhu t0, 13(s1)</td><td>1.0</td><td>amoxor.w t0, t1, (s1)</td><td>13.3</td><td>sh2add.uw t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>lwu t0, 13(s1)</td><td>1.0</td><td>amoxor.d t0, t1, (s1)</td><td>13.2</td><td>sh3add t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>sb t0, 13(s1)</td><td>1.0</td><td>amoand.w t0, t1, (s1)</td><td>13.3</td><td>sh3add.uw t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>sh t0, 13(s1)</td><td>1.0</td><td>amoand.d t0, t1, (s1)</td><td>13.3</td><td>slli.uw t0, t1, 13</td><td>1.0</td></tr>
+<tr><td>sw t0, 13(s1)</td><td>1.0</td><td>amoor.w t0, t1, (s1)</td><td>13.3</td><td>zext.w t0, t1</td><td>1.0</td></tr>
+<tr><td>sd t0, 13(s1)</td><td>1.0</td><td>amoor.d t0, t1, (s1)</td><td>13.2</td><td>andn t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>mul t0, t1, t2</td><td>2.0</td><td>amomin.w t0, t1, (s1)</td><td>13.3</td><td>orn t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>mulh t0, t1, t2</td><td>2.0</td><td>amomin.d t0, t1, (s1)</td><td>13.3</td><td>xnor t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>mulhsu t0, t1, t2</td><td>2.0</td><td>amomax.w t0, t1, (s1)</td><td>13.2</td><td>clz t0, t1</td><td>1.0</td></tr>
+<tr><td>mulhu t0, t1, t2</td><td>2.0</td><td>amomax.d t0, t1, (s1)</td><td>13.3</td><td>clzw t0, t1</td><td>1.0</td></tr>
+<tr><td>div t0, t1, t2</td><td>4.0</td><td>amominu.w t0, t1, (s1)</td><td>13.3</td><td>ctz t0, t1</td><td>1.0</td></tr>
+<tr><td>divu t0, t1, t2</td><td>4.0</td><td>amominu.d t0, t1, (s1)</td><td>13.2</td><td>ctzw t0, t1</td><td>1.0</td></tr>
+<tr><td>rem t0, t1, t2</td><td>4.0</td><td>amomaxu.w t0, t1, (s1)</td><td>13.3</td><td>cpop t0, t1</td><td>1.0</td></tr>
+<tr><td>remu t0, t1, t2</td><td>4.0</td><td>amomaxu.d t0, t1, (s1)</td><td>13.3</td><td>cpopw t0, t1</td><td>1.0</td></tr>
+<tr><td>lr.w t0, (s1)</td><td>1.0</td><td></td><td></td><td>max t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>lr.d t0, (s1)</td><td>1.0</td><td></td><td></td><td>maxu t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>sc.w t0, t1, (s1)</td><td>4.0</td><td></td><td></td><td>min t0, t1, t2</td><td>1.0</td></tr>
+<tr><td>sc.d t0, t1, (s1)</td><td>4.0</td><td></td><td></td><td>minu t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>sext.b t0, t1</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>sext.h t0, t1</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>zext.h t0, t1</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>rol t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>rolw t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>ror t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>rori t0, t1, 13</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>roriw t0, t1, 13</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>rorw t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>orc.b t0, t1</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>rev8 t0, t1</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>bclr t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>bclri t0, t1, 13</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>bext t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>bexti t0, t1, 13</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>binv t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>binvi t0, t1, 13</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>bset t0, t1, t2</td><td>1.0</td></tr>
+<tr><td></td><td></td><td></td><td></td><td>bseti t0, t1, 13</td><td>1.0</td></tr>
+
+</tbody>
+</table>
+</div>
 
 </body>
 </html>
