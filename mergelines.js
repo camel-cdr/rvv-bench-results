@@ -2,8 +2,9 @@ let prefix = `
 <p>Implements a function that removes escaped newlines (<code>\\\\\\n</code>) from a string, and truncates the string accordingly.</p>
 
 <ul>
-	<li><b>rvv:</b> basic implementation</li>
-	<li><b>rvv_skip:</b> like <b>rvv</b>, but skips the vcompress.vv step, if nothing needs to be compressed</li>
+	<li><b>rvv_vslide:</b> creates mask by shifting the input and doing the comparison twice</li>
+	<li><b>rvv_mslide:</b> creates by comparing once, and shifting the masky by 1</li>
+	<li><b>rvv_*_skip:</b> like <b>rvv_*</b>, but skips the vcompress.vv step, if nothing needs to be compressed</li>
 </ul>
 
 <h3>Navigation:</h3>

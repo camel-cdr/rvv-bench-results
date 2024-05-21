@@ -65,10 +65,12 @@
 
 <p>This doesn't necessarily measure either latency or throughput, it just uses the methodology described above with the instructions in the table below.</p>
 
+<p><b>Note: The way it's currently measured has a dependency on the destination, the newer benchmark code gets rid of that, but hasn't been run on this processor yet.</b></p>
+
 <div class="tab">
 	<button class="tabSel active" onclick="switchTbl(event, 'tbl0')">vl=VLMAX</button>
 	<button class="tabSel" onclick="switchTbl(event, 'tbl1')">vl=1</button>
-	<button class="tabSel">Note: VLEN=128</button>
+	<button class="tabSel"><b>Note: VLEN=128</b></button>
 </div>
 
 
