@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>XiangShanV3 mandelbrot benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body>
+	<div id="main" class="base"><header><h1>XiangShanV3 (Kuminghu) mandelbrot benchmark</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../uPlot/dist/uPlot.cjs.js"></script>
+	<script src="../mandelbrot.js"></script>
+	<script src="../common.js"></script>
+<script>
+
+let infos = [
+
+{
+title: "mandelbrot 100",
+labels: ["0","scalar_f32","scalar_f64","rvv_f32_m1","rvv_f32_m2"],
+data: [
+[1,4,9,16,27,43,67,103,157,238,360,543,],
+[0.0050761,0.0009661,0.0018000,0.0009408,0.0011603,0.0014926,0.0012219,0.0011673,0.0013227,0.0013280,0.0013997,0.0012966,],
+[0.0046296,0.0009739,0.0018203,0.0009378,0.0011582,0.0014876,0.0012201,0.0011662,0.0013132,0.0013186,0.0013896,0.0012867,],
+[0.0034602,0.0015100,0.0018277,0.0017728,0.0026714,0.0028672,0.0029190,0.0025109,0.0030676,0.0031237,0.0033384,0.0032624,],
+[0.0032051,0.0014089,0.0016961,0.0016222,0.0026632,0.0034216,0.0040179,0.0038241,0.0042187,0.0053505,0.0049470,0.0049476,],
+]
+}
+
+];
+
+for (const info of infos)
+	makeChart(info);
+
+</script>
+</body>
+</html>

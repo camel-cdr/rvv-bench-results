@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>XiangShanV3 chacha20 benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body>
+	<div id="main" class="base"><header><h1>XiangShanV3 (Kuminghu) chacha20 benchmark</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../uPlot/dist/uPlot.cjs.js"></script>
+	<script src="../chacha20.js"></script>
+	<script src="../common.js"></script>
+<script>
+
+let infos = [
+
+{
+title: "chacha20 aligned",
+labels: ["0","boring","rvv",],
+data: [
+[1,4,9,16,27,43,67,103,157,238,360,543,817,1228,1845,2770,4158,6240,9363,14047,],
+[0.0008019,0.0046674,0.0120481,0.0202020,0.0352941,0.0601398,0.0483405,0.0706932,0.0787362,0.0906666,0.0940684,0.0975215,0.1020229,0.1012366,0.1046986,0.1038230,0.1063808,0.1058667,0.1059486,0.1064707,],
+
+TODO
+
+
+];
+
+for (const info of infos)
+	makeChart(info);
+
+</script>
+</body>
+</html>
