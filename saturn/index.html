@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>RVV benchmark Saturn</title>
+	<link rel="stylesheet" href="../base.css">
+	<script type="text/javascript" src="../base.js"></script>
+</head>
+<body class="base">
+
+<header><h1>RVV benchmark Saturn</h1></header>
+
+
+<p>
+<a href="https://github.com/ucb-bar/saturn-vectors">Saturn</a> is a parameterized RVV 1.0 vector unit integrated into the Chipyard framework.
+It supports different VLEN and DLEN configurations as well as "full chaining with zero dead-time".
+This benchmark was done on the VLEN=256 DLEN=128 configuration connected to a rocket-chip core (REFV256D128RocketConfig).
+<br>
+<b>Saturn is currently at version 0.9, and some still benchmarks fail to run correctly.</b>
+</p>
+
+<ul>
+	<li><a href="../index.html">Return to parent page</a></li>
+</ul>
+
+
+<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/tree/5dc20c3596b3aa8412804e2d169d1b175bae927a">this commit</a>.</p>
+
+
+<h2>Benchmarks</h2>
+
+<ul>
+	<li><a href="memcpy.html">memcpy</a></li>
+	<li><a href="memset.html">memset</a></li>
+	<li><a href="strlen.html">strlen</a></li>
+	<li><a href="utf8_count.html">utf8 count</a></li>
+	<li><a href="mergelines.html">merge escaped lines</a></li>
+	<li><a href="mandelbrot.html">mandelbrot</a></li>
+	<li><a href="byteswap.html">reverse byte order of 32 bit elements</a></li>
+	<li><a href="LUT4.html">4-bit lookup table</a></li>
+	<li><a href="ascii_to_utf16.html">ascii to utf16 (zero extend 1->2 bytes)</a></li>
+	<li><a href="ascii_to_utf32.html">ascii to utf32 (zero extend 1->4 bytes)</a></li>
+	<li><a href="chacha20.html">chacha20</a></li>
+	<li><a href="poly1305.html">poly1305</a></li>
+</ul>
+
+
+</body>
+</html>
