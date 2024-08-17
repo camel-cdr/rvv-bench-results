@@ -3,6 +3,7 @@ let prefix = `
 
 <ul>
 	<li><b>SWAR_rev8:</b> uses rev8 instruction from the zbb extension</li>
+	<li><b>rvv_vrev8:</b> uses vrev8.v with given LMUL</li>
 	<li><b>rvv_gather:</b> uses gather with given LMUL</li>
 	<li><b>rvv_m1_gather:</b> uses multiple LMUL=1 gathers to permute a vector with the given LMUL</li>
 </ul>
