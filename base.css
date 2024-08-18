@@ -26,8 +26,13 @@ h1, h2, h3 { line-height: 1.2 }
 
 .tblCont {
 	height: 500px;
-	overflow: scroll;
+	overflow: auto;
 	resize: vertical;
+}
+.tblCont thead th {
+	position: sticky;
+	top: 0px;
+	background: #fff;
 }
 
 .tblCont td:empty::before { content: "--"; }

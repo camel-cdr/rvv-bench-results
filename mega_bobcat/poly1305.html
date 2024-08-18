@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bobcat poly1305 benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body>
+	<div id="main" class="base"><header><h1>Bobcat poly1305 benchmark</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../uPlot/dist/uPlot.cjs.js"></script>
+	<script src="../poly1305.js"></script>
+	<script src="../common.js"></script>
+<script>
+
+let infos = [
+
+{
+title: "poly1305 aligned",
+labels: ["0","boring","rvv",],
+data: [
+[1,4,9,16,27,43,67,103,157,238,360,543,817,1228,1845,2770,4158,6240,9363,14047,21073,31612,],
+[0.0012970,0.0060790,0.0139318,0.0248062,0.0372413,0.0525672,0.0674044,0.0872881,0.1090277,0.1271367,0.1412872,0.1550542,0.1610486,0.1692159,0.1740894,0.1772232,0.1804609,0.1815431,0.1817528,0.1817041,0.1816590,0.1809036,],
+[0.0008650,0.0038797,0.0087209,0.0155038,0.0261627,0.0416666,0.0648596,0.0997095,0.1241106,0.1874015,0.2404809,0.2764765,0.3359375,0.3917065,0.4286710,0.4660945,0.4882573,0.5089307,0.5170071,0.5289377,0.5347255,0.5392146,],
+]
+},
+
+];
+
+for (const info of infos)
+	makeChart(info);
+
+</script>
+</body>
+</html>

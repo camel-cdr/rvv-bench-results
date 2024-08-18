@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bobcat chacha20 benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body>
+	<div id="main" class="base"><header><h1>Bobcat chacha20 benchmark</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../uPlot/dist/uPlot.cjs.js"></script>
+	<script src="../chacha20.js"></script>
+	<script src="../common.js"></script>
+<script>
+
+let infos = [
+
+{
+title: "chacha20 aligned",
+labels: ["0","boring","rvv",],
+data: [
+[1,4,9,16,27,43,67,103,157,238,360,543,817,1228,1845,2770,4158,6240,9363,14047,],
+[0.0006653,0.0027643,0.0059920,0.0107454,0.0174644,0.0286475,0.0309183,0.0457981,0.0547038,0.0684892,0.0759013,0.0812995,0.0884677,0.0887539,0.0938167,0.0942369,0.0965741,0.0968883,0.0972344,0.0976890,],
+[0.0002182,0.0008791,0.0019775,0.0035164,0.0059249,0.0094298,0.0147155,0.0225778,0.0344373,0.0521701,0.0792427,0.0622492,0.0937894,0.0955642,0.1084528,0.1095121,0.1101690,0.1148431,0.1182092,0.1205430,],
+]
+},
+
+];
+
+for (const info of infos)
+	makeChart(info);
+
+</script>
+</body>
+</html>

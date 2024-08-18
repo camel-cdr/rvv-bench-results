@@ -15,6 +15,8 @@
 <p><a href="https://github.com/tenstorrent/riscv-ocelot/tree/bobcat">Bobcat</a> is Tenstorrents open source fork of <a href="https://github.com/riscv-boom/riscv-boom">BOOM<a>, which adds vector extension support.
 It supports a large subset of the ratified 1.0 version of the V vector extension including half precision floating points, and has a VLEN of 256 bits.
 The unimplemented instructions are: <code>vdiv, vdivu, vfsqrt, vfsqrt7, vfrec7, vfdiv, vfrdiv, vremu, vrem</code>.
+<br>
+All measurements were done on rtl simulation of the master branch on 2024-07-18.
 </p>
 
 <p>See the following presentations for more detail (Note: ocelot was the bobcat predecessor):</p>
@@ -23,15 +25,156 @@ The unimplemented instructions are: <code>vdiv, vdivu, vfsqrt, vfsqrt7, vfrec7, 
 	<li><a href="https://www.youtube.com/watch?v=D7zceyHZCvc">Ocelot: Open Source Vector Unit</a> (video)</li>
 </ul>
 
-
-<p>Note that all of the measurements where using <a href="https://verilator.org">verilator<a> to simulating the hardware.</p>
-
 <ul>
 	<li><a href="../index.html">Return to parent page</a></li>
 </ul>
 
-<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/tree/e05a2a8ad30fec5f01f5d2b7426eb71f45321ad3">this commit</a>.</p>
 
+<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/commit/72b0b9223d5d5850771e5bc67b9feedb04603531">this commit</a>, see <a href="https://github.com/camel-cdr/rvv-bench/wiki/Build-instructions-%E2%80%90-Bobcat">wiki page</a> for build instructions.</p>
+
+<details>
+<summary>Core configuration log (expand me)</summary>
+<pre>
+======BOOM Tile 0 Params======
+
+====Overall Frontend Params====
+
+==L1-ICache==
+Fetch bytes   : 16
+Block bytes   : 64
+Row bytes     : 16
+Word bits     : 128
+Sets          : 64
+Ways          : 8
+Refill cycles : 4
+RAMs          : (64 x 256) using 2 banks
+Dual-banked
+I-TLB ways    : 32
+
+==Branch Predictor Memory Sizes==
+
+bank0 tage_l2: 128 x 44 = 704
+bank0 tage_l4: 128 x 44 = 704
+bank0 tage_l8: 256 x 48 = 1536
+bank0 tage_l16: 256 x 48 = 1536
+bank0 tage_l32: 128 x 52 = 832
+bank0 tage_l64: 128 x 52 = 832
+bank0 btb_meta_way0: 128 x 120 = 1920
+bank0 btb_data_way0: 128 x 56 = 896
+bank0 btb_meta_way1: 128 x 120 = 1920
+bank0 btb_data_way1: 128 x 56 = 896
+bank0 ebtb: 128 x 40 = 640
+bank0 bim: 2048 x 8 = 2048
+bank1 tage_l2: 128 x 44 = 704
+bank1 tage_l4: 128 x 44 = 704
+bank1 tage_l8: 256 x 48 = 1536
+bank1 tage_l16: 256 x 48 = 1536
+bank1 tage_l32: 128 x 52 = 832
+bank1 tage_l64: 128 x 52 = 832
+bank1 btb_meta_way0: 128 x 120 = 1920
+bank1 btb_data_way0: 128 x 56 = 896
+bank1 btb_meta_way1: 128 x 120 = 1920
+bank1 btb_data_way1: 128 x 56 = 896
+bank1 ebtb: 128 x 40 = 640
+bank1 bim: 2048 x 8 = 2048
+Total bpd size: 28 KB
+
+====Overall Core Params====
+
+===ExecutionUnits===
+
+==4-wide Machine==
+==9 Issue==
+
+==ExeUnit==
+ - Mem
+==ExeUnit==
+ - Mem
+==ExeUnit==
+ - ALU
+ - IFPU
+==ExeUnit==
+ - ALU
+==ExeUnit==
+ - ALU
+ - Mul
+==ExeUnit==
+ - ALU
+ - Div
+==ExeUnit==
+ - VecExe
+
+===FP Pipeline===
+
+==Floating Point Regfile==
+Num RF Read Ports     : 7
+Num RF Write Ports    : 5
+RF Cost (R+W)*(R+2W)  : 204
+Bypassable Units      : List(false, false, false, false, false)
+Num Wakeup Ports      : 5
+Num Bypass Ports      : 0
+
+==ROB==
+Machine Width      : 4
+Rob Entries        : 128
+Rob Rows           : 32
+Rob Row size       : 5
+log2Ceil(coreWidth): 2
+FPU FFlag Ports    : 6
+
+===Other Core Params===
+Fetch Width           : 8
+Decode Width          : 4
+Issue Width           : 9
+ROB Size              : 128
+Issue Window Size     : List(24, 40, 32, 32) (Age-based Priority)
+Load/Store Unit Size  : 32/32
+Num Int Phys Registers: 128
+Num FP  Phys Registers: 128
+Max Branch Count      : 20
+==Integer Regfile==
+Num RF Read Ports     : 14
+Num RF Write Ports    : 7
+RF Cost (R+W)*(R+2W)  : 588
+Bypassable Units      : List(true, true, true, true, true, true, false)
+
+Num Slow Wakeup Ports : 7
+Num Fast Wakeup Ports : 4
+Num Bypass Ports      : 6
+
+DCache Ways           : 8
+DCache Sets           : 64
+DCache nMSHRs         : 8
+ICache Ways           : 8
+ICache Sets           : 64
+D-TLB Ways            : 32
+I-TLB Ways            : 32
+Paddr Bits            : 32
+Vaddr Bits            : 39
+
+Using FPU Unit?       : true
+Using FDivSqrt?       : true
+Using VM?             : true
+</pre>
+</details>
+
+
+<h2>Benchmarks</h2>
+
+<ul>
+	<li><a href="memcpy.html">memcpy</a></li>
+	<li><a href="memset.html">memset</a></li>
+	<li><a href="strlen.html">strlen</a></li>
+	<li><a href="utf8_count.html">utf8 count</a></li>
+	<li><a href="mergelines.html">merge escaped lines</a></li>
+	<li><a href="mandelbrot.html">mandelbrot</a></li>
+	<li><a href="byteswap.html">reverse byte order of 32 bit elements</a></li>
+	<li><a href="LUT4.html">4-bit lookup table</a></li>
+	<li><a href="ascii_to_utf16.html">ascii to utf16 (zero extend 1->2 bytes)</a></li>
+	<li><a href="ascii_to_utf32.html">ascii to utf32 (zero extend 1->4 bytes)</a></li>
+	<li><a href="chacha20.html">chacha20</a></li>
+	<li><a href="poly1305.html">poly1305</a></li>
+</ul>
 
 <h2>Instruction timings</h2>
 <p>The following are 20/80 percentile cycle averages when unrolling and looping over the given instruction, it doesn't include vsetvl and load/store instructions. The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range.</p>
