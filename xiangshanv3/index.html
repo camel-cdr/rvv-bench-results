@@ -17,7 +17,7 @@
 See the latest <a href="https://xiangshan-doc.readthedocs.io/zh-cn/latest/tutorials/asplos24/">tutorials page</a> on the documentation website, for slides including more architectural details.
 Also be sure to check out the source code, hint <a href="https://github.com/OpenXiangShan/XiangShan/blob/master/src/main/scala/xiangshan/Parameters.scala">Parameters.scalar</a> gives a good high level overview of the core.
 <br>
-<b>Kuminghu introduced RVV support to XiangShan, it is still work in progress and further optimizations and fixes are expected.</b>
+Kuminghu introduced RVV support to XiangShan, it is still work in progress and further optimizations and fixes are expected.
 <br>
 All measurements were done on rtl simulation of the master branch from 2024-07-13.
 </p>
@@ -27,67 +27,7 @@ All measurements were done on rtl simulation of the master branch from 2024-07-1
 </ul>
 
 
-<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/commit/5dc20c3596b3aa8412804e2d169d1b175bae927a">this commit</a>.</p>
-
-
-<details>
-<summary>Build instructions (expand me)</summary>
-
-<pre>
-<code>$ cat &lt;&lt;EOF &gt;Dockerfile</code>
-<code>FROM ubuntu:23.04</code>
-<code>RUN apt-get update &amp;&amp; apt-get install -y build-essential clang libclang-dev llvm-dev \</code>
-<code>    cmake libspdlog-dev vim git curl wget time default-jre default-jdk</code>
-<code>RUN git clone --recursive https://github.com/OpenXiangShan/xs-env</code>
-<code>WORKDIR /xs-env</code>
-<code>RUN sed 's/apt\S* install/\0 -y/g;s/source /. /g;s/sudo //g' -i ./*.sh</code>
-<code>RUN . ./env.sh &amp;&amp; sed 's/$/; cd \/xs-env/g' -i ./update-submodule.sh &amp;&amp; ./update-submodule.sh</code>
-<code>RUN . ./env.sh &amp;&amp; ./setup-tools.sh</code>
-<code>RUN . ./env.sh &amp;&amp; . ./install-verilator.sh</code>
-<code>RUN . ./env.sh &amp;&amp; sed 's/^git submodule.*$//g;s/env.*$//g' -i ./setup.sh &amp;&amp; . ./setup.sh</code>
-<code>RUN . ./env.sh &amp;&amp; make -C XiangShan init</code>
-<code>RUN . ./env.sh &amp;&amp; cd DRAMsim3 &amp;&amp; mkdir build &amp;&amp; cd build &amp;&amp; cmake -D COSIM=1 .. &amp;&amp; make -j 8</code>
-<code>RUN . ./env.sh &amp;&amp; make -C XiangShan emu CONFIG=DefaultConfig WITH_DRAMSIM3=1 MFC=1 -j 8</code>
-<code>RUN . ./env.sh &amp;&amp; sed 's/unknown-//g;s/rv64gc/rv64gcv/g' -i $AM_HOME/am/arch/isa/riscv64.mk</code>
-<code># This builds a vanilla xs-env enviroment</code>
-<code>EOF</code>
-<code>$ docker build -t xs . --progress=plain</code>
-<code>$ docker run --rm -it xs</code>
-<code>$ source env.sh; cd $AM_HOME/apps/hello</code>
-<code>$</code>
-<code>$ # this will not be needed once my PR is merged</code>
-<code>$ sed 's/= (uintptr_t)dst % 8;/=(8-(uintptr_t)dst%8)%8;/g' -i $AM_HOME/libs/klib/src/string.c</code>
-<code>$ sed 's/= (uintptr_t)dst % 4;/=(4-(uintptr_t)dst%4)%4;/g' -i $AM_HOME/libs/klib/src/string.c</code>
-<code>$</code>
-<code>$ git clone --recursive https://github.com/camel-cdr/rvv-bench</code>
-<code>$ cp -r rvv-bench/nolibc.h rvv-bench/thirdparty rvv-bench/bench/* .</code>
-<code>$ sed -e '2a#include &lt;klib.h&gt;' -e 's/\(memwrite(.*\)}/\1printf("%.*s",len,ptr);}/g' -i nolibc.h</code>
-<code>$ sed 's/main/nolibc_main/g;s/_start/main/g;s/nolibc_main();/\0\n#define main nolibc_main/g' -i nolibc.h</code>
-<code>$ sed 's/\.\.\/nolibc/nolibc/g' -i bench.h; sed 's/\.\.\/thirdparty/thirdparty/g' -i *.c</code>
-<code>$ cat &lt;&lt;EOF &gt;config.h</code>
-<code>#define HAS_E64 (__riscv_v_elen &gt;= 64)</code>
-<code>#define HAS_F16 0</code>
-<code>#define MAX_MEM (4024*8)</code>
-<code>#define NEXT(c) (c + c/2 + 3)</code>
-<code>#define MIN_REPEATS 1</code>
-<code>#define MAX_REPEATS 1</code>
-<code>#define STOP_CYCLES (1024*1024*500)</code>
-<code>#define VALIDATE 0</code>
-<code>#define SCALE_mandelbrot(N) ((N)/10)</code>
-<code>#define SCALE_mergelines(N) ((N)/10)</code>
-<code>#define mandelbrot_ITER 100</code>
-<code>EOF</code>
-<code>$ cat &lt;&lt;EOF &gt;Makefile</code>
-<code>SRCS = \$(NAME).c template.S</code>
-<code>CFLAGS=-w -DCUSTOM_HOST</code>
-<code>ASFLAGS=-DINC=\$(NAME).S</code>
-<code>include \$(AM_HOME)/Makefile.app</code>
-<code>EOF</code>
-<code>$ export NAME=memcpy; make clean; make ARCH=riscv64-xs &amp;&amp; $NOOP_HOME/build/emu --no-diff -i ./build/$NAME-riscv64-xs.bin 2&gt;/dev/null</code>
-</pre>
-
-</details>
-
+<p>Based on <a href="https://github.com/camel-cdr/rvv-bench/commit/72b0b9223d5d5850771e5bc67b9feedb04603531">this commit</a>, see <a href="https://github.com/camel-cdr/rvv-bench/wiki/Build-instructions-%E2%80%90-XiangShan">wiki page</a> for build instructions.</p>
 
 <h2>Benchmarks</h2>
 
