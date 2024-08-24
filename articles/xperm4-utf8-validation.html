@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>SWAR UTF-8 validation with the hidden RISC-V gem xperm4</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+		<style>
+			pre {
+				counter-reset: line;
+				white-space: pre;
+				overflow-x: auto;
+			}
+			pre code { counter-increment: line; }
+			pre code::before {
+				content: counter(line);
+				display: inline-block;
+				width: 1.5em;
+				border-right: 1px solid #ddd;
+				margin-right: .5em;
+				color: #888;
+			}
+			code b { color: #cc0800; font-weight: normal; }
+			code i { color: #1e7210; font-style: normal; }
+			code em { color: #999; }
+			table { border-collapse: collapse; font-family: monospace; caption-side: top; }
+			table td, table th {
+				white-space: nowrap;
+				border: 1px solid #ddd;
+				padding: 0.3em;
+			}
+			table caption { font-weight: bold; }
+			table em { color: #999; }
+			h2 a, h4 a { color: inherit; text-decoration: inherit; }
+
+		</style>
+	</head>
+	<body>
+
+<div id="main" class="base">
+<header><h1>SWAR UTF-8 Validation with the hidden RISC-V gem xperm4</h1></header>
+
+<p>
+I was reading through the RISC-V spec again a few days ago, as one does, and found one of the greatest bit-banging instructions I've seen so far: <code>xperm4</code> and <code>xperm8</code>
+<br>
+These nifty instructions form the Zbkx ("Crossbar permutations") extension, which is part of the Zbkb "Bit-manipulation for Cryptography" extension, which are sadly currently not planned to be part of future application profiles.
+This is because the expectation is for the vector crypto extensions to replace it, so it shouldn't be mandatory, but I'll argue that these instructions are also very useful in other contexts.
+</p>
+
+<ul>
+	<li><a href="../index.html">Return to parent page</a></li>
+</ul>
+
+<h2 id="xperm"><a href="#xperm">Crossbar permutations: xperm4 and xperm8</a></h2>
+
+<p>
+The <code>xperm4</code> and <code>xperm8</code> instructions implement a "lookup table" for 4 and 8 bit elements inside a general purpose registers.
+This is quite analogous to the vrgather.vv vector instructions, just in general purpose registers instead.
+</p>
+
+<p>
+<code>xperm4</code> is particularly elegant, as a 64-bit general purpose register can hold 16 nibbles, and a nibble can address 16 indices, so you apply arbitrary bit-permutations in 4-bit lanes.
+</p>
+
+<p>
+Here are some simple usage examples:
+</p>
+
+<ul>
+	<li>Check if any bytes are zero: <code>xperm8(0xFF,x) == 0</code></li>
+	<li>Replicate first byte to all others: <code>xperm8(x,0)</code></li>
+	<li>Replicate nth byte to all others: <code>xperm8(x,perm8(n,0))</code></li>
+	<li>Zero all negative 8-bit integers: <code>y=xperm4(0xFFFFFFFFull,x)&amp;0xF0F0F0F0F0F0F0F0; (y&gt;&gt;4|y)&amp;x</code></li>
+</ul>
+
+
+<h2 id="benchmarks"><a href="#benchmarks">SWAR UTF-8 Validation</a></h2>
+
+
+<p>
+The title promised UTF-8 validation, so here we go!
+</p>
+<p>
+I <a href="https://camel-cdr.github.io/rvv-bench-results/articles/vector-utf.html#validation"> explained in the previous article</a> how to implement UTF-8 to UTF-16 conversion, one step of which is validating the UTF-8 input.
+This was done using three 4-bit lookup tables, as described in <a href="https://arxiv.org/abs/2010.03090">"Validating UTF-8 In Less Than One Instruction Per Byte"</a>.
+<br>
+Sound familiar?
+<br>
+<code>xperm4</code> gives us almost exactly what we need, the only difference is that we need to look up 16 8-bit elements, so we can just call xperm4 twice:
+</p>
+
+<div class="center"><pre>
+<code>#include &lt;riscv_bitmanip.h&gt;</code>
+<code></code>
+<code>static uint64_t</code>
+<code>perm4x8_lo(uint64_t x, uint64_t hi, uint64_t lo) {</code>
+<code>	return (__riscv_xperm4_64(hi, x) &amp; <b>0x0F0F0F0F0F0F0F0F</b>) &lt;&lt; <b>4</b></code>
+<code>	     | (__riscv_xperm4_64(lo, x) &amp; <b>0x0F0F0F0F0F0F0F0F</b>);</code>
+<code>}</code>
+<code></code>
+<code>static uint64_t</code>
+<code>perm4x8_hi(uint64_t x, uint64_t hi, uint64_t lo) {</code></code>
+<code>	return (__riscv_xperm4_64(hi, x) &amp; <b>0xF0F0F0F0F0F0F0F0</b>)</code>
+<code>	     | (__riscv_xperm4_64(lo, x) &amp; <b>0xF0F0F0F0F0F0F0F0</b>) &gt;&gt; <b>4</b>;</code>
+<code>}</code>
+</pre></div>
+
+
+<p>
+These two helpers implement 4-bit lookup of 8-bit elements, one uses the lower and one the higher nibble as the index.
+Now we can directly translate the firs part of the RVV code to scalar, however one puzzle piece is still missing.
+<br>
+We need to create a mask of 3 byte (<code>0b111?????</code>) and 4 byte (<code>0b1111????</code>) leading UTF-8 characters and combine this with the lookup table result.
+Notice how only the upper nibble is important. This calls for our friend <code>xperm4</code>.
+It can be used to map all matching nibbles to 0xFF and all others to zero, then we mask out the not needed result from the lower nibbles, and we are done.
+</p>
+
+<div class="center"><pre>
+<code>static uint64_t</code>
+<code>check_utf8_bytes(uint64_t in0, uint64_t next) {</code>
+<code>	uint64_t in1 = in0&gt;&gt; <b>8</b>|next&lt;&lt;<b>56</b>;</code>
+<code>	uint64_t in2 = in0&gt;&gt;<b>16</b>|next&lt;&lt;<b>48</b>;</code>
+<code>	uint64_t in3 = in0&gt;&gt;<b>24</b>|next&lt;&lt;<b>40</b>;</code>
+<code>	uint64_t err = perm4x8_hi(in2, <b>0x4102888800000000</b>, <b>0x9511000022222222</b>)</code>
+<code>	             &amp; perm4x8_lo(in2, <b>0xCCDCCCCCCCC888AE</b>, <b>0xBBBBBBBBBBBB3337</b>)</code>
+<code>	             &amp; perm4x8_hi(in3, <b>0x0000BBAE00000000</b>, <b>0x1111AAE611111111</b>);</code>
+<code>	uint64_t is_3 = __riscv_xperm4_64(<b>0xFFull</b>&lt;&lt;<b>56</b>, in1); <i>/* 0b111????? */</i></code>
+<code>	uint64_t is_4 = __riscv_xperm4_64(<b>0xF0ull</b>&lt;&lt;<b>56</b>, in0); <i>/* 0b1111???? */</i></code>
+<code>	return ((is_3|is_4) &amp; <b>0x8080808080808080</b>) ^ err;</code>
+<code>}</code>
+</pre></div>
+
+<p>
+There we go, now we have a primitive that we need to apply on aligned 64-bit slices of the input.
+<br>
+I don't expect you to follow this exactly, if you aren't familiar with this method of UTF-8 validation.
+Hopefully you could see how <code>xpack4</code> was invaluable in implementing it.
+</p>
+
+<p>
+For completeness, here is a function that uses our primitive to validate a byte stream.
+</p>
+
+
+<div class="center"><pre>
+<code>static int</code>
+<code>utf8_validate(const char *buf, size_t len)</code>
+<code>{</code>
+<code>	typedef uint64_t __attribute__((__may_alias__)) u64;</code>
+<code>	uint64_t prev, cur, i;</code>
+<code></code>
+<code>	for (prev = <b>0</b>; len &amp;&amp; ((uintptr_t)buf &amp; <b>7</b>) != <b>0</b>; --len)</code>
+<code>		prev = prev&gt;&gt;<b>8</b> | *buf++*<b>1ull</b>&lt;&lt;<b>56</b>;</code>
+<code></code>
+<code>	for (; len &gt;= <b>8</b>; len -= <b>8</b>, buf += <b>8</b>, prev = cur) {</code>
+<code>		cur = *(u64*)buf;</code>
+<code>		if (!((prev | (cur &lt;&lt; <b>40</b>)) &amp; <b>0x8080808080808080</b>)) continue;</code>
+<code>		if (check_utf8_bytes(prev, cur)) return <b>0</b>;</code>
+<code>	}</code>
+<code></code>
+<code>	for (i=cur=<b>0</b>; len; --len, i += <b>8</b>)</code>
+<code>		cur |= *buf++*<b>1ull</b> &lt;&lt; i;</code>
+<code></code>
+<code>	return !check_utf8_bytes(prev, cur) &amp;&amp; !check_utf8_bytes(cur, <b>0</b>);</code>
+<code>}</code>
+</pre></div>
+
+
+<p>
+We could handle the head and tail with separate scalar code, however it's easiest just use or primitive again, but with partially filled 64-bit numbers.
+This implementation also fast forwards if a 64-bit register contains only ASCII characters.
+</p>
+
+
+<h2 id="benchmarks"><a href="#benchmarks">Benchmarks</a></h2>
+
+<p>
+For benchmarking, you usually need hardware, but currently there is no RISC-V chip that implements the scalar crypto instructions, that regular people can buy.
+<p>
+</p>
+RISC-V isn't a proprietary ISA, though, which allows for open-source implementations.
+We'll be using the second and third generation of the open-source XiangShan high performance out-of-order cores.
+As of writing, <a href="https://github.com/OpenXiangShan">XiangShanV3</a> outperforms any available and announced proprietary RISC-V dev board:
+</p>
+
+<div class="center"><svg version="1.1" width="570.92627" height="247.7885" viewBox="0 0 570.92627 247.7885" >
+<g transform="translate(-560.74856,272.09187)">
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="592.55035" y="-179.71196"><tspan x="592.55035" y="-179.71196" style="font-size:16px">6.11</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;fill:#ed7d31;stroke-width:3" x="657.12634" y="-186.62947"><tspan x="657.12634" y="-186.62947">7.01</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="719.33917" y="-192.53348"><tspan x="719.33917" y="-192.53348">8.65</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;fill:#00b050;stroke-width:3" x="782.77545" y="-195.48933"><tspan x="782.77545" y="-195.48933">9.55</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="846.21167" y="-198.40547"><tspan x="846.21167" y="-198.40547">9.90</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="909.64795" y="-204.30948"><tspan x="909.64795" y="-204.30948">11.0</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;fill:#7030a0;stroke-width:3" x="973.08423" y="-225.8745"><tspan x="973.08423" y="-225.8745">15.0</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="1036.5205" y="-230.02275"><tspan x="1036.5205" y="-230.02275">15.73</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="1099.873" y="-260.50787"><tspan x="1099.873" y="-260.50787">21.69</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="551.3858" y="243.10416" transform="rotate(-35)"><tspan x="551.3858" y="243.10416">XT910</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;fill:#ed7d31;stroke-width:3" x="576.76819" y="279.4722" transform="rotate(-35)"><tspan x="576.76819" y="279.4722">XiangShanV1</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="635.14911" y="315.82721" transform="rotate(-35)"><tspan x="635.14911" y="315.82721">SiFive P550</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;fill:#00b050;stroke-width:3" x="678.33069" y="352.15863" transform="rotate(-35)"><tspan x="678.33069" y="352.15863">XiangShanV2</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="718.81152" y="388.56607" transform="rotate(-35)"><tspan x="718.81152" y="388.56607">ARM Cortex-A76</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="791.17804" y="425.07986" transform="rotate(-35)"><tspan x="791.17804" y="425.07986">SiFive P650</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;fill:#7030a0;stroke-width:3" x="834.39636" y="461.35864" transform="rotate(-35)"><tspan x="834.39636" y="461.35864">XiangShanV3</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="881.68317" y="497.73746" transform="rotate(-35)"><tspan x="881.68317" y="497.73746">ARM Cortex-X1</tspan></text>
+<text style="font-weight:bold;font-size:16px;font-family:sans-serif;text-anchor:middle;stroke-width:3" x="956.06769" y="534.24945" transform="rotate(-35)"><tspan x="956.06769" y="534.24945">Apple M1</tspan></text>
+<rect style="fill:#1f4c73;stroke-width:3" width="35.149368" height="31.634439" x="574.97571" y="-176.72415" />
+<rect style="fill:#ed7d31;stroke-width:3.26958" width="35.149368" height="36.990528" x="638.49567" y="-182.08025" />
+<rect style="fill:#1f4c73;stroke-width:3.59378" width="35.149368" height="44.689926" x="701.76453" y="-189.77963" />
+<rect style="fill:#1f4c73;stroke-width:3.8473" width="35.149368" height="51.217663" x="828.63702" y="-196.30737" />
+<rect style="fill:#1f4c73;stroke-width:4.03842" width="35.149368" height="56.432331" x="892.24066" y="-201.99821" />
+<rect style="fill:#1f4c73;stroke-width:4.84858" width="35.149368" height="81.345711" x="1019.0294" y="-226.43541" />
+<rect style="fill:#1f4c73;stroke-width:5.68081" width="35.149368" height="111.66708" x="1082.6862" y="-256.75681" />
+<rect style="fill:#7030a0;stroke-width:4.73245" width="35.149368" height="77.496002" x="955.50952" y="-222.58571" />
+<rect style="fill:#00b050;stroke-width:3.71304" width="35.149368" height="47.705338" x="765.03339" y="-192.79243" />
+<path d="M 560.74856,-145.08971 H 1131.6748" style="stroke:#000000;stroke-width:1.74352" />
+<text style="font-weight:bold;font-size:18.6667px;font-family:sans-serif;text-anchor:middle;fill:#7030a0;stroke-width:3" x="845.745" y="-28.783382"><tspan x="845.745" y="-28.783382" style="font-weight:bold;font-size:18.6667px;font-family:sans-serif;fill:#020103">Estimated SPECint 2006/GHz (Proportional to IPC)</tspan></text>
+</g></svg></div>
+
+<p>
+Interestingly MILK-V just announced a <a href="https://milkv.io/ruyibook">Laptop featuring XiangShanV2 cores</a>, and there will be a presentation about the XiangShan project at <a href="https://www.hotchips.org/">Hot Chips 2024</a>.
+</p>
+
+<p>
+As input text, I've used the first lines of languages in the <a href="https://github.com/lemire/unicode_lipsum/blob/main/lipsum/">unicode_lipsum/lipsum</a> dataset, and filled up the rest with Emojis to reach a total of 5000 bytes.
+Using a larger input that that wasn't possible, since simulating RTL is quite slow.
+For reference, I also included measurements from my Zen1 Desktop, and vectorized implementations from simdutf.
+I modified all implementations to remove the just ASCII fast path, because the regular scalar implementation can only use it with fast unaligned load/stores.
+<br>
+Anyway, here are the results:
+</p>
+
+
+<div class="center"><div class="scroll"><table class="shiftTbl">
+<tr><th>Implementation</th><th>XiangShanV2</th><th>XiangShanV3</th><th>Ryzen 1600x (Zen1)</th></tr>
+<tr><td><a href="https://github.com/simdutf/simdutf/blob/master/src/scalar/utf8.h#L11">scalar</a></td><td>54413 cycles</td><td>20714 cycle</td><td>24272 cycles</td></tr>
+<tr><td>xperm4 SWAR</td><td>15050 cycles</td><td>7520 cycles</td><td>---</td></tr>
+<tr><td><a href="https://lemire.me/blog/2018/05/09/how-quickly-can-you-check-that-a-string-is-valid-unicode-utf-8/">LUT</a></td><td>38085 cycles</td><td>31529 cycle</td><td>27010 cycles</td></tr>
+<tr><td><a href="https://github.com/simdutf/simdutf">simdutf</a></td><td>---</td><td>7349 cycles</td><td>4255 cycles</td></tr>
+</table></div></div>
+
+<p>
+Wow, we are about 2x faster than the regular scalar implementation, and surprisingly also very close to the RVV implementation.
+<br>
+That might sound weird, however, a likely explanation is that the XiangShanV3 RVV implementation is a relatively new addition to the core and still being worked on.
+Predicting and speculating across vsetvli instructions for example is currently not supported, but on the roadmap.
+It also has two xperm4 capable execution units, but only one that supports vrgather.
+</p>
+
+</div>
+
+</body>
+</html>
+
