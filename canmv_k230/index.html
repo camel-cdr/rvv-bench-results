@@ -55,7 +55,7 @@ One core runs at 0.8 GHz and doesn't support rvv, the other one at 1.6GHz and su
 <li>SWAR implementations could always be beat by RVV implementations. (see <a href="memcpy.html">memcpy</a>(musl), <a href="memset.html">memset</a>(musl), <a href="byteswap.html">byteswap</a>, <a href="utf8_count.html">utf8_count</a>)</li>
 <li>Manual tail handling doesn't seem to be worth it in these benchmarks.</li>
 <li>Manual unrolling could improve performance for very small loops (see <a href="utf8_count.html">utf8_count</a>).</li>
-<li>Aligning the destination or source pointer in a streaming workload, didn't change performance.</li>
+<li>Aligning the destination or source pointer in a streaming workload, didn't change performance, except for a slight speedup in <a href="memset.html">memset</a>.</li>
 <li>Uni-stride segmented stores are almost as fast as uni-stride stores. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
 <li>Strided stores, are way slower than uni-stride stores. (see ascii to <a href="ascii_to_utf16.html">utf16</a>/<a href="ascii_to_utf32.html">utf32</a>)</li>
 <li>Using the mask operand seems to slow down arithmetic operations with LMUL smaller than 8 in the measurement. But this is likely because of the added dependency to the previous instruction, and won't be as visible in practice.</li>
