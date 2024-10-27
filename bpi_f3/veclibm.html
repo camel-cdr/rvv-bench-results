@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BPI-F3 veclibm benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body>
+	<div id="main" class="base"><header><h1>BPI-F3 (SpacemiT K1, X60) veclibm benchmarks</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../veclibm.js"></script>
+
+<div class="tblCont center" style="height:auto;resize:none">
+<table class="tabPage" style="width:30%;">
+	<thead><tr><th>function</th><th>scalar libc fp64/cycle</th><th>RVV veclibm fp64/cycle</th><th>speedup</th></thead>
+<tbody>
+
+<tr><td>exp</td><td>0.010041</td><td>0.036663</td><td>3.65x</td></tr>
+<tr><td>exp2</td><td>0.010880</td><td>0.031866</td><td>2.92x</td></tr>
+<tr><td>expm1</td><td>0.006542</td><td>0.025765</td><td>3.93x</td></tr>
+<tr><td>log</td><td>0.011769</td><td>0.025071</td><td>2.13x</td></tr>
+<tr><td>log10</td><td>0.006865</td><td>0.023795</td><td>3.46x</td></tr>
+<tr><td>log2</td><td>0.012316</td><td>0.025622</td><td>2.08x</td></tr>
+<tr><td>log1p</td><td>0.005046</td><td>0.029617</td><td>5.86x</td></tr>
+<tr><td>sqrt</td><td>0.026011</td><td>0.087398</td><td>3.36x</td></tr>
+<tr><td>cbrt</td><td>0.003617</td><td>0.021652</td><td>5.98x</td></tr>
+<tr><td>sin</td><td>0.007350</td><td>0.025246</td><td>3.43x</td></tr>
+<tr><td>cos</td><td>0.007662</td><td>0.024844</td><td>3.24x</td></tr>
+<tr><td>tan</td><td>0.005325</td><td>0.015874</td><td>2.98x</td></tr>
+<tr><td>asin</td><td>0.006330</td><td>0.015950</td><td>2.51x</td></tr>
+<tr><td>acos</td><td>0.007101</td><td>0.014722</td><td>2.07x</td></tr>
+<tr><td>atan</td><td>0.006554</td><td>0.012272</td><td>1.87x</td></tr>
+<tr><td>sinh</td><td>0.003711</td><td>0.020924</td><td>5.63x</td></tr>
+<tr><td>cosh</td><td>0.005534</td><td>0.024105</td><td>4.35x</td></tr>
+<tr><td>tanh</td><td>0.004238</td><td>0.017362</td><td>4.09x</td></tr>
+<tr><td>asinh</td><td>0.003840</td><td>0.013434</td><td>3.49x</td></tr>
+<tr><td>acosh</td><td>0.014037</td><td>0.015503</td><td>1.10x</td></tr>
+<tr><td>atanh</td><td>0.003320</td><td>0.021419</td><td>6.45x</td></tr>
+<tr><td>erf</td><td>0.008981</td><td>0.011269</td><td>1.25x</td></tr>
+<tr><td>erfc</td><td>0.009433</td><td>0.005403</td><td>0.57x</td></tr>
+<tr><td>tgamma</td><td>0.002126</td><td>0.003782</td><td>1.77x</td></tr>
+<tr><td>lgamma</td><td>0.004234</td><td>0.003266</td><td>0.77x</td></tr>
+
+</tbody>
+</table>
+</div>
+
+</body>
+</html>

@@ -37,7 +37,7 @@ h1, h2, h3 { line-height: 1.2 }
 
 .tblCont td:empty::before { content: "--"; }
 .tblCont tr > td, tr > th { text-align: center; white-space: nowrap; }
-.tblContv tr :nth-child(1) { text-align: left; font-family: monospace;  }
+.tblCont tr :nth-child(1) { text-align: left; font-family: monospace;  }
 .tblConts tr :nth-child(2n+1) { text-align: left; font-family: monospace;  }
 .tblCont tbody tr:nth-child(odd) { background-color: #f0f0f0; }
 .tblContv tbody tr :nth-child(4n + 2) { background-color: #e0e0e0; }
