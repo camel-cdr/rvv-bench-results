@@ -41,6 +41,7 @@ h1, h2, h3 { line-height: 1.2 }
 .tblConts tr :nth-child(2n+1) { text-align: left; font-family: monospace;  }
 .tblCont tbody tr:nth-child(odd) { background-color: #f0f0f0; }
 .tblContv tbody tr :nth-child(4n + 2) { background-color: #e0e0e0; }
+.tblContvf tbody tr :nth-child(7n + 2) { background-color: #e0e0e0; }
 
 
 .result-toggles { margin-top: 5px; text-align: center; }
