@@ -42,6 +42,10 @@ h1, h2, h3 { line-height: 1.2 }
 .tblCont tbody tr:nth-child(odd) { background-color: #f0f0f0; }
 .tblContv tbody tr :nth-child(4n + 2) { background-color: #e0e0e0; }
 .tblContvf tbody tr :nth-child(7n + 2) { background-color: #e0e0e0; }
+.tblContvf:not(.tblContvf-show) tbody tr :nth-child(7n + 5) { background-color: #e0e0e0; }
+.tblContvf:not(.tblContvf-show) tr :nth-child(7n + 2) { display: none; }
+.tblContvf:not(.tblContvf-show) tr :nth-child(7n + 3) { display: none; }
+.tblContvf:not(.tblContvf-show) tr :nth-child(7n + 4) { display: none; }
 
 
 .result-toggles { margin-top: 5px; text-align: center; }
