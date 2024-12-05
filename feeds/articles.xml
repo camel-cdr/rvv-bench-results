@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+   <channel>
+      <title>rvv-bench - Articles</title>
+      <link>https://camel-cdr.github.io/rvv-bench-results/index.html</link>
+      <description>Articles about RISC-V optimizations with focus on vectorization. I kind of treat this as a personal blog.</description>
+      <language>en-us</language>
+      <docs>https://www.rssboard.org/rss-specification</docs>
+      <generator>neovim</generator>
+      <atom:link href="https://camel-cdr.github.io/rvv-bench-results/feeds/articles.xml" rel="self" type="application/rss+xml" />
+
+      <item>
+         <title>RISC-V Vector Extension for Integer Workloads: An Informal Gap Analysis</title>
+         <link>https://gist.github.com/camel-cdr/99a41367d6529f390d25e36ca3e4b626</link>
+         <guid>https://gist.github.com/camel-cdr/99a41367d6529f390d25e36ca3e4b626</guid>
+         <description>Something slightly different today, this is an "informal" gap analysis of RVV for integer workloads. I've been working on this for quite some time now, please provide opinions and feedback.</description>
+         <pubDate>Thu, 07 Nov 2024 02:00 GMT</pubDate>
+      </item>
+
+      <item>
+         <title>SWAR UTF-8 Validation with the hidden RISC-V gem xperm4</title>
+         <link>https://camel-cdr.github.io/rvv-bench-results/articles/xperm4-utf8-validation.html</link>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/articles/xperm4-utf8-validation.html</guid>
+         <description>I recently stubled on the very versatile xperm4 an xperm8 instructions, and I'll show how they can be used to implement SWAR UTF-8 validation.</description>
+         <pubDate>Sun, 25 Aug 2024 23:45 GMT</pubDate>
+      </item>
+
+      <item>
+         <title>Vectorizing Unicode conversions on real RISC-V hardware</title>
+         <link>https://camel-cdr.github.io/rvv-bench-results/articles/vector-utf.html</link>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/articles/vector-utf.html</guid>
+         <enclosure url="https://camel-cdr.github.io/rvv-bench-results/articles/preview.png" length="37190" type="image/png" />
+         <description>This article discusses how to vectorize UTF-8 to UTF-16 conversion, using the RISC-V Vector extension. We archive substation speedups on real hardware: 8x for C908/X60, and 11x for C920.</description>
+         <pubDate>Sat, 27 Jan 2024 16:00 GMT</pubDate>
+      </item>
+
+   </channel>
+</rss>

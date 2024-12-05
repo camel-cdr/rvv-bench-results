@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+   <channel>
+      <title>rvv-bench - Updates</title>
+      <link>https://camel-cdr.github.io/rvv-bench-results/index.html</link>
+      <description>A collection of RISC-V Vector (RVV) benchmarks to help developers write performance portable RVV code. I'll try to keep this up to date with major changes, like new benchmarks or processors. Article updates are posted to the separate feed.</description>
+      <language>en-us</language>
+      <docs>https://www.rssboard.org/rss-specification</docs>
+      <generator>neovim</generator>
+      <atom:link href="https://camel-cdr.github.io/rvv-bench-results/feeds/updates.xml" rel="self" type="application/rss+xml" />
+
+      <item>
+         <title>rvv-bench now has RSS feeds!</title>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-1</guid>
+         <description><![CDATA[<p>rvv-bench now has RSS feeds: <a href="https://camel-cdr.github.io/rvv-bench-results/feeds/articles.xml">articles</a> and <a href="https://camel-cdr.github.io/rvv-bench-results/feeds/updates.xml">updates</a></p><p>I'll try to keep the "<a href="https://camel-cdr.github.io/rvv-bench-results/feeds/updates.xml">updates</a>" feed, this one, up to date with major changes, like new benchmarks or processors. Article updates are posted to the separate "<a href="https://camel-cdr.github.io/rvv-bench-results/feeds/updates.xml">updates</a>" feed.</p>]]></description>
+         <pubDate>Thu, 05 Dec 2024 19:00 GMT</pubDate>
+      </item>
+
+   </channel>
+</rss>
