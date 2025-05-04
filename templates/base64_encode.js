@@ -11,6 +11,6 @@ let prefix = `
 <h3>Navigation:</h3>
 <ul>
 	<li><a href="index.html">Return to parent page</a></li>
-	<li><a href="https://github.com/camel-cdr/rvv-bench/blob/main/bench/base64-encode.S">View source code</a></li>
+	<li><a href="https://github.com/camel-cdr/rvv-bench/blob/main/bench/base64_encode.S">View source code</a></li>
 </ul>
 `;
