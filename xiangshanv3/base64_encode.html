@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>XiangShanV3 base64 encode benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body>
+	<div id="main" class="base"><header><h1>XiangShanV3 (Kuminghu) base64 encode benchmark</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../uPlot/dist/uPlot.cjs.js"></script>
+	<script src="../templates/base64_encode.js"></script>
+	<script src="../templates/common.js"></script>
+<script>
+
+let infos = [
+
+{
+title: "base64 encode",
+labels: ["0","scalar","rvv_LUT64","rvv_LUT16","rvv_seg_LUT64","rvv_seg_LUT16",],
+data: [
+[1,4,10,22,46,94,190,382,766,1534,3070,6142,12286,24574,49150,],
+[0.0030581,0.0207253,0.0657894,0.0664652,0.1043083,0.2243436,0.3838383,0.4526066,0.4932388,0.5082836,0.5168350,0.5350640,0.5355944,0.5371248,0.5312364,],
+[0.0050761,0.0170940,0.0632911,0.0634005,0.1173469,0.1693693,0.3877551,0.5380281,0.6325350,0.6994984,0.7351532,0.7564971,0.7674912,0.7708764,0.7326416,],
+[0.0060606,0.0170212,0.0645161,0.0567010,0.1138613,0.2243436,0.3877551,0.4817150,0.5436479,0.5804010,0.6031434,0.6625674,0.6189732,0.6718796,0.6533037,],
+[0.0042016,0.0105263,0.0714285,0.0577427,0.1108433,0.0782029,0.0694698,0.0633184,0.0608757,0.0596121,0.0590305,0.0587352,0.0585887,0.0583601,0.0572225,],
+[0.0042735,0.0176211,0.0714285,0.0617977,0.1182519,0.0800000,0.0682471,0.0621542,0.0597224,0.0586436,0.0580592,0.0577782,0.0576152,0.0573953,0.0562936,],
+]
+},
+
+];
+
+for (const info of infos)
+	makeChart(info);
+
+</script>
+</body>
+</html>
