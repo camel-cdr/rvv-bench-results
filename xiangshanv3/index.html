@@ -18,18 +18,20 @@ See the latest <a href="https://xiangshan-doc.readthedocs.io/zh-cn/latest/tutori
 Also be sure to check out the source code; hint <a href="https://github.com/OpenXiangShan/XiangShan/blob/master/src/main/scala/xiangshan/Parameters.scala">Parameters.scalar</a> gives a good high-level overview of the core.
 <br>
 Kuminghu introduced RVV support to XiangShan, it is still work in progress, and further optimizations and fixes are expected.
-<br>
+</p>
+<p>
 The current Kuminghu RVV implementation is severely bottlenecked by instruction decode.
-The master branch can only decode one vector instruction per cycle, while the scalar of the core can decode and issue six instructions per cycle.
+The master branch can only decode one vector instruction per cycle, while the scalar part of the core can decode and issue six instructions per cycle.
 Since the vector backend has five execution units, you basically have to write LMUL&gt;=4 code to take advantage of the full backend.
 <br>
-However, currently mask-generating LMUL&gt;1 instructions, mostly comparison instructions, generate dependent uops, which causes catastrophic LMUL latency scaling.
-Other currently not well implemented instructions include: vslideup/vslidedown, vcpop.m, vid.v and segmented-load/stores
+However, mask-generating LMUL&gt;1 instructions (e.g. comparison instructions) currently generate dependent uops, which causes catastrophic LMUL latency scaling.
+Other currently not well implemented instructions include: vslideup/vslidedown, vcpop.m, vid.v and segmented-load/stores.
 <br>
 The <a href="https://github.com/OpenXiangShan/XiangShan/tree/lmul-1">lmul-1</a> branch adds support for decoding simple LMUL=1 vector instructions at the full decode width of six.
 This notably doesn't include .vf instruction variants and any other instruction that generates more than one uop at LMUL=1.
 vsetvli instructions are still only decoded at one per cycle, which limits the performance of not manually unrolled LMUL=1 loops.
-<br>
+</p>
+<p>
 All measurements were done on rtl simulation of the <a href="https://github.com/OpenXiangShan/XiangShan/tree/lmul-1">lmul-1</a> branch from 2025-05-08.
 </p>
 
