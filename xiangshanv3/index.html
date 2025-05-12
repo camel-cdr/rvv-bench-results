@@ -19,18 +19,8 @@ Also be sure to check out the source code; hint <a href="https://github.com/Open
 <br>
 Kuminghu introduced RVV support to XiangShan, it is still work in progress, and further optimizations and fixes are expected.
 </p>
-<p>
-The current Kuminghu RVV implementation is severely bottlenecked by instruction decode.
-The master branch can only decode one vector instruction per cycle, while the scalar part of the core can decode and issue six instructions per cycle.
-Since the vector backend has five execution units, you basically have to write LMUL&gt;=4 code to take advantage of the full backend.
-<br>
-However, mask-generating LMUL&gt;1 instructions (e.g. comparison instructions) currently generate dependent uops, which causes catastrophic LMUL latency scaling.
-Other currently not well implemented instructions include: vslideup/vslidedown, vcpop.m, vid.v and segmented-load/stores.
-<br>
-The <a href="https://github.com/OpenXiangShan/XiangShan/tree/lmul-1">lmul-1</a> branch adds support for decoding simple LMUL=1 vector instructions at the full decode width of six.
-This notably doesn't include .vf instruction variants and any other instruction that generates more than one uop at LMUL=1.
-vsetvli instructions are still only decoded at one per cycle, which limits the performance of not manually unrolled LMUL=1 loops.
-</p>
+
+
 <p>
 All measurements were done on rtl simulation of the <a href="https://github.com/OpenXiangShan/XiangShan/tree/lmul-1">lmul-1</a> branch from 2025-05-08.
 </p>
@@ -61,6 +51,22 @@ All measurements were done on rtl simulation of the <a href="https://github.com/
 	<li><a href="poly1305.html">poly1305</a></li>
 	<li><a href="base64_encode.html">base64 encode</a></li>
 </ul>
+
+<h2>Performance observations</h2>
+
+<p>
+The current Kuminghu RVV implementation is severely bottlenecked by instruction decode.
+The master branch can only decode one vector instruction per cycle, while the scalar part of the core can decode and issue six instructions per cycle.
+Since the vector backend has five execution units, you basically have to write LMUL&gt;=4 code to take advantage of the full backend.
+<br>
+However, mask-generating LMUL&gt;1 instructions (e.g. comparison instructions) currently generate dependent uops, which causes catastrophic LMUL latency scaling.
+Other currently not well implemented instructions include: vslideup/vslidedown, vcpop.m, vid.v and segmented-load/stores.
+<br>
+The <a href="https://github.com/OpenXiangShan/XiangShan/tree/lmul-1">lmul-1</a> branch adds support for decoding simple LMUL=1 vector instructions at the full decode width of six.
+This notably doesn't include .vf instruction variants and any other instruction that generates more than one uop at LMUL=1.
+vsetvli instructions are still only decoded at one per cycle, which limits the performance of not manually unrolled LMUL=1 loops.
+</p>
+
 
 <h2>Instruction timings</h2>
 <p>The following are measured cycle averages when unrolling and looping over the given instruction, which should estimate the instruction throughput. The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range.</p>
