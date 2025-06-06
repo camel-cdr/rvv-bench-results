@@ -26,7 +26,7 @@
       <item>
          <title>SiFive X280</title>
          <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-3</guid>
-         <description><![CDATA[<p>We finally have new measurements from actual hardware: <a href="https://camel-cdr.github.io/rvv-bench-results/tt_x280/index.html">SiFive X280</a></p><p><a href="https://github.com/Civil">Civil</a> was so nice to run the benchmarks on the SiFive X280 cores present on the <a href="https://tenstorrent.com/hardware/blackhole>Tenstorrent Blackhole</a> AI accelerator card.<br>Apparently the smaller "Baby RISC-V" cores in the Blackhole card now also support a subset of RVV, previous generations had a custom SIMD ISA. We'll see if we can figure out how to measure the performance of those as well.</p>]]></description>
+         <description><![CDATA[<p>We finally have new measurements from actual hardware: <a href="https://camel-cdr.github.io/rvv-bench-results/tt_x280/index.html">SiFive X280</a></p><p><a href="https://github.com/Civil">Civil</a> was so nice to run the benchmarks on the SiFive X280 cores present on the <a href="https://tenstorrent.com/hardware/blackhole">Tenstorrent Blackhole</a> AI accelerator card.<br>Apparently the smaller "Baby RISC-V" cores in the Blackhole card now also support a subset of RVV, previous generations had a custom SIMD ISA. We'll see if we can figure out how to measure the performance of those as well.</p>]]></description>
          <pubDate>Fri, 06 Jun 2025 10:30 GMT</pubDate>
       </item>
 
