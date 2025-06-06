@@ -47,8 +47,23 @@ The cores runs 1.75 GHz and support the standard V extension with VLEN=512 and D
 </ul>
 
 
+<h2>Performance observations</h2>
+
+<p>These are just my first impressions of the core looking at the initial benchmark results.</p>
+
+<ul>
+<li>the regular vector instructions take 2/4/8/16 cycles for LMUL=1/2/4/8</li>
+<li>The core likes bigger LMUL and vsetvli has basically no overhead (unrolling can still be advantageous, because of the in-order scalar core)</li>
+<li>vl based dispatch, so a LMUL=8 instruction is as fast as a LMUL=1 instruction if vl elements fit into a LMUL=1 register</li>
+<li>1 cycle per element `vrgather.vv` and `vcompress.vm`, but you can still get decent speed up over scalar loads from memory. (see <a href="LUT4.html">LUT4</a> and <a href="LUT6.html">LUT6</a>)</li>
+<li>Very good fault-only-first load support. Page-size-aware <a href="strlen.html">strlen</a> is only about 25% faster than the fault-only-first load version.</li>
+<li>nf=2 segmented load/stores seems very fast. (see <a href="ascii_to_utf16.html">utf16</a>)</li>
+<li>nf&gt;2 segmented- and strided load/stores perform decently until a big drop in performance between 8 and 24 KiB of processed data. (see <a href="ascii_to_utf32.html">utf32</a>)</li>
+</ul>
+
+
 <h2>Instruction timings</h2>
-<p>The following are measured cycle averages when unrolling and looping over the given instruction, which should estimate the instruction throughput. The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range.</p>
+<p>The following are measured cycle averages when unrolling and looping over the given instruction, which should estimate the instruction throughput. <s>The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range.</s> <b>NOTE: the vector arguments couldn't be suitably randomized</b></p>
 
 <details>
 <summary>Example measurement code for vadd.vx</summary>
