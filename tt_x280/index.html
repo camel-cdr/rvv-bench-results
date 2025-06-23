@@ -52,7 +52,7 @@ The cores runs 1.75 GHz and support the standard V extension with VLEN=512 and D
 <p>These are just my first impressions of the core looking at the initial benchmark results.</p>
 
 <ul>
-<li>the regular vector instructions take 2/4/8/16 cycles for LMUL=1/2/4/8</li>
+<li>The regular vector instructions take 2/4/8/16 cycles for LMUL=1/2/4/8</li>
 <li>The core likes bigger LMUL and vsetvli has basically no overhead (unrolling can still be advantageous, because of the in-order scalar core)</li>
 <li>vl based dispatch, so a LMUL=8 instruction is as fast as a LMUL=1 instruction if vl elements fit into a LMUL=1 register</li>
 <li>1 cycle per element `vrgather.vv` and `vcompress.vm`, but you can still get decent speed up over scalar loads from memory. (see <a href="LUT4.html">LUT4</a> and <a href="LUT6.html">LUT6</a>)</li>

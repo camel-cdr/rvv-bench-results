@@ -57,7 +57,7 @@ Note: The core (C920v1 + XTheadVector) was originally marketed as C920, but Xuan
 <li>The vl doesn't impact performance, so a vl=1 and a vl=VLMAX instruction with LMUL=8 will take the same amount of time to execute.</li>
 <li>The fault-only-first load instructions are quite slow compared to the regular load instructions, so one should try to page align the loads by hand when possible. (see <a href="strlen.html">strlen</a>)</li>
 <li>When a gather operation doesn't need to cross register bounderies, multiple LMUL=1 or LMUL=2 gathers are faster. (see <a href="byteswap.html">byteswap</a>)</li>
-<li>The results from <a href="LUT4.html">LUT4</a> are confusing, my best bet is that the added vsetvli cause the slowdown, otherwise <code>rvv_gather_m1</code> shouldn't be faster than <code>rvv_m1_gather_m2</code>.</li>
+<li>The results from <a href="LUT4.html">LUT4</a> are confusing, my best bet is that the added vsetvli cause the slowdown, otherwise <code>rvv_vrgather_m1</code> shouldn't be faster than <code>rvv_m1_vrgather_m2</code>.</li>
 
 <li>When not reading and doing much computation, SWAR implementations can be faster than RVV for large input sizes. (see <a href="memcpy.html">memcpy</a>)</li>
 <li>Manual tail handling and unrolling doesn't seem to be worth it in these benchmarks.</li>
