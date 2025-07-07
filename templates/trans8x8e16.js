@@ -17,6 +17,6 @@ let prefix = `
 <h3>Navigation:</h3>
 <ul>
 	<li><a href="index.html">Return to parent page</a></li>
-	<li><a href="https://github.com/camel-cdr/rvv-bench/blob/main/bench/trans8x8e8.S">View source code</a></li>
+	<li><a href="https://github.com/camel-cdr/rvv-bench/blob/main/bench/trans8x8e16.S">View source code</a></li>
 </ul>
 `;
