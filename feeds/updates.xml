@@ -30,5 +30,13 @@
          <pubDate>Fri, 06 Jun 2025 10:30 GMT</pubDate>
       </item>
 
+
+      <item>
+         <title>New benchmark inspired by IDCT: 8x8 matrix transpose</title>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-4</guid>
+         <description><![CDATA[<p>I've added two new benchmark for 8x8 matrix transposes (<a href="https://camel-cdr.github.io/rvv-bench-results/bpi_f3/trans8x8e8.html">trans8x8e8</a>,<a href="https://camel-cdr.github.io/rvv-bench-results/bpi_f3/trans8x8e16.html">trans8x8e16</a>), which are meant to mimic the properties of DCT/IDCT kernels, which are common in video processing.</p>]]></description>
+         <pubDate>Mon, 07 Jul 2025 22:00 GMT</pubDate>
+      </item>
+
    </channel>
 </rss>
