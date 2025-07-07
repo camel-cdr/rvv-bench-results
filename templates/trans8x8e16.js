@@ -1,6 +1,6 @@
 let prefix = `
 <p>This benchmark is designed to mimic the properties of DCT/IDCT kernels, which are common in video processing.</p>
-<p>It involves loading 8x8 matrices of 8-bit elements from memory, applying a kernel of operations between rows, transposing the matrices, applying the same kernel again, and finally writing back the rows to strided memory (2d row of image).</p>
+<p>It involves loading 8x8 matrices of 8-bit elements from memory, applying a kernel of operations between rows, transposing the matrices, applying the same kernel again, and finally writing back the rows to strided memory (8 rows of 2d image).</p>
 
 <ul>
 	<li><b>seq_*:</b> input 8x8 matrices are stored sequentially</li>
