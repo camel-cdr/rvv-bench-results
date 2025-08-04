@@ -15,6 +15,7 @@
 <p>The <a href="https://tenstorrent.com/hardware/blackhole">Tenstorrent Blackhole</a> is an AI accelerator built out of Tensix tiles, which each contain 5 32-bit "baby" RISC-V cores, one of which supports a subset of Zve32f.
 The Zve32f subest doesn't support the <code>vdiv/vdivu/vrem/vremu/vfdiv/vrfdiv/vfsqrt/vfrsqrt7/vfrec7</code> instructions, the <code>vcsr</code> CSR and doesn't have compliant floating-point semantics for denormals, rounding, and FMA.
 The cores runs at 1.35 GHz and have a vector length of 128-bit.
+See the <a href="https://github.com/tenstorrent/tt-isa-documentation/tree/main/BlackholeA0/TensixTile/BabyRISCV">Tenstorrent documentation</a> for more detail.
 <br>
 Blackhole separately also contains 16 Linux capable <a href="https://www.sifive.com/cores/intelligence-x200-series">SiFive X280</a> cores, see <a href="../tt_x280/index.html">the benchmarks for the X280</a>.
 </p>
