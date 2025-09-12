@@ -63,7 +63,7 @@ The cores runs 1.75 GHz and support the standard V extension with VLEN=512 and D
 
 
 <h2>Instruction timings</h2>
-<p>The following are measured cycle averages when unrolling and looping over the given instruction, which should estimate the instruction throughput. <s>The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range.</s> <b>NOTE: The vector arguments couldn't be suitably randomized</b>, I'll have to fix something in the code first.</p>
+<p>The following are measured cycle averages when unrolling and looping over the given instruction, which should estimate the instruction throughput. <s>The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range Some valid vtype-instruction combinations are missing.</s> <b>NOTE: The vector arguments couldn't be suitably randomized</b>, I'll have to fix something in the code first.</p>
 
 <details>
 <summary>Example measurement code for vadd.vx</summary>
