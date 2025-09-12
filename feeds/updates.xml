@@ -38,5 +38,14 @@
          <pubDate>Mon, 07 Jul 2025 22:00 GMT</pubDate>
       </item>
 
+
+      <item>
+      <title>Partial vector load/stores instruction throughput and new uarch measurement tool</title>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-3</guid>
+         <description><![CDATA[<p>I've added the vector load/store instructions to the throughput measurement tool, excluding the indexed load/store variants for now, as they don't work with the current benchmark abstraction.</p><p>Additionally there now is a new uarch measurement tool under single/uarch, which attempts to directly measure certain uarch properties.E.g. if reinterpreting a mask register results in additional overhead due to data repacking, but also some simpler things like VLEN and how the tail/mask policy is implemented.</p>]]></description>
+         <pubDate>Fir, 12 Sep 2025 03:30 GMT</pubDate>
+      </item>
+
+
    </channel>
 </rss>
