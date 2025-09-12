@@ -7,12 +7,12 @@
 		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
 		<link rel="stylesheet" href="../base.css">
 	</head>
-	<body>
-	<div id="main" class="base"><header><h1>SpacemiT X60 (Banana Pi BPI-F3, SpacemiT K1) uarch-tool benchmarks</h1></header></div>
+	<body class="base">
+	<div id="main"><header><h1>SpacemiT X60 (Banana Pi BPI-F3, SpacemiT K1) uarch-tool benchmarks</h1></header></div>
 	<script>let module = {};</script>
 	<script src="../templates/uarch-tool.js"></script>
 
-<div class="tblCont center" style="height:auto;resize:none">
+
 <pre>
 VLEN: 256
 
@@ -21,19 +21,31 @@ Tail agnostic policy: undisturbed
 Mask agnostic policy: undisturbed
 Is vl always set to min(AVL,VLMAX): yes
     Note: spec allows ceil(AVL/2)&lt;=vl<=VLMAX for VLMAX&lt;AVL&lt;2*VLMAX
-
-Measures how LMUL scheduling impacts when results are ready:
-LMUL=8 v0 overlap with LMUL=1 v0:     679.0857439 cycles/iter
-LMUL=8 v0 overlap with LMUL=1 v3:     676.0954847 cycles/iter
-LMUL=8 v0 overlap with LMUL=1 v7:     687.2748413 cycles/iter
-LMUL=8 v0 overlap with LMUL=1 v8:     676.8406858 cycles/iter
-LMUL=8 v0 overlap with LMUL=1 v0..v8: 558.8084592 cycles/iter
-
-Measures overhead of reinterpreting a mask as a vector:
-reinterpret:       42.0580959 cycles/iter
-don't reinterpret: 37.0485830 cycles/iter
 </pre>
-</div>
+
+<pre>
+Measures how LMUL scheduling impacts when results are ready:
+A) LMUL=8 v0 overlap with LMUL=1 v0:     679.0857439 cycles/iter
+B) LMUL=8 v0 overlap with LMUL=1 v3:     676.0954847 cycles/iter
+C) LMUL=8 v0 overlap with LMUL=1 v7:     687.2748413 cycles/iter
+D) LMUL=8 v0 overlap with LMUL=1 v8:     676.8406858 cycles/iter
+E) LMUL=8 v0 overlap with LMUL=1 v0..v8: 558.8084592 cycles/iter
+</pre>
+
+<ul>
+<li>The difference between A and C indices that results for the upper part of a vector register group gets completed later than the lower part, even when long dependencies are present.</li>
+<li>(E) is an unexpected outlier; it should've performed similarly to (D), but certainly not better than (A). Presumably the result has to do with worse chaining for instructions that read/write to the same register.</li>
+</ul>
+
+<pre>
+Measures overhead of reinterpreting a mask as a vector:
+A) reinterpret:       16.0153167 cycles/iter
+B) don't reinterpret: 15.0142419 cycles/iter
+</pre>
+
+<ul>
+<li>While B is slighly faster than A, the difference seems to only be a single cycle, which doesn't match up with what would be expected if the mask would need to be repacked. The difference presumably is due to scheduling.</li>
+</ul>
 
 </body>
 </html>
