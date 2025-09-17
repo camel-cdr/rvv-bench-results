@@ -6,6 +6,7 @@ let prefix = `
 	<li><b>rvv_align_dest:</b> aligns the destination pointer to vlenb</li>
 	<li><b>rvv_align_src:</b> aligns the source pointer to vlenb</li>
 	<li><b>rvv_align_dest_hybrid:</b> aligns the destination pointer to vlenb, but uses the basic <b>rvv</b> implementation for smaller inputs</li>
+	<li><b>rvv_vlmax:</b> handles tail in first iteration and uses vsetvli to set vl=vlmax in each subsequent loop iteration</li>
 	<li><b>rvv_tail:</b> uses manual tail handling, to avoid calling <code>vsetvl</code> in the loop</li>
 	<li><b>rvv_128:</b> like <b>rvv_tail</b>, but uses a fixed <code>vlenb=128/8</code> for every LMUL</li>
 </ul>

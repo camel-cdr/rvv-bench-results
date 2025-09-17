@@ -4,6 +4,7 @@ let prefix = `
 <ul>
 	<li><b>rvv:</b> reference implementation</li>
 	<li><b>rvv_align:</b> aligns the destination pointer to vlenb</li>
+	<li><b>rvv_vlmax:</b> handles tail in first iteration and uses vsetvli to set vl=vlmax in each subsequent loop iteration</li>
 	<li><b>rvv_tail:</b> uses manual tail handling, to avoid calling <code>vsetvl</code> in the loop</li>
 	<li><b>rvv_tail_4x:</b> like <b>rvv_tail</b>, but unrolled 4 times.</li>
 </ul>
