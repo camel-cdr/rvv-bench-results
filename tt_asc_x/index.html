@@ -27,6 +27,50 @@
     <li><a href="../index.html">Return to parent page</a></li>
 </ul>
 
+<h2>Microarchitecture speculations</h2>
+
+<p>Note: This part was not submitted by Tenstorrent, and is speculation on my part.</p>
+
+<details>
+<summary>Click to expand</summary>
+
+<h3>What's going on with the comparison instructions?</h3>
+
+<p>If you study the instruction throughput measurements below, you may notice something confusing: The LMUL&gt;1 vector-scalar/immediate (<tt>vmseq.vx</tt>/<tt>vmseq.vi</tt>) instructions are two times faster than the vector-vector comparison instructions (e.g. <tt>vmseq.vv</tt>).
+<br>
+I initially suspected a measuring artifact, but on further contemplation, this looks like a very smart uarch optimization.</p>
+
+<p>Ascalon likely has three VLEN-wide vector register file read ports, and a GPR read port.
+This can be seen from the measurements below.
+Notice how <tt>vadd.vv</tt> performs the same with vl=VLMAX ta/ma (would work with 2 vreg reads) as with vl=1 tu/mu (needs 3 vreg reads).</p>
+
+<p>Now consider the registers file accesses from the <tt>vmseq.vv</tt> instruction.
+It reads two LMUL wide vector registers and writes a single mask register.
+The <tt>vmseq.vx/vi</tt> instructions read one LMUL wide vector register, one GPR, and write a single mask register.
+So the <tt>vmseq.vx/vi</tt> instructions only utilize one of the three available read ports.
+But for LMUL&gt;1, why not use both of the available vreg read ports and double the ALU width for the comparison instructions?
+Widening the ALU is a lot cheaper compared to extra ports or execution units, the former scales linearly, the latter quadratically.
+This is a clever optimization I suspect Ascalon does, which results in 2x faster LMUL&gt;1 vector comparisons.
+</p>
+
+<p>
+The trick doesn't work for <tt>vmseq.vv</tt> because to process VLEN*2 elements at a time, you'd need to be able to read four VLEN-wide vector registers at once.
+<br>
+But why doesn't this trick work for other .vx/vi instructions like <tt>vadd.vx/vi</tt>? Because they need to write an LMUL-wide vector register.
+The comparison instructions write a mask result, and RVV stores all masks packed in the lower part of an LMUL=1 vector register, so even an LMUL=8 <tt>vmseq.v*</tt> instruction only needs to occupy the VLEN-wide write port once. (Although it may also write back partial results for improved ILP)</p>
+
+<p>There are actually a few other instructions that write back &lt;LMUL vector registers, namely <tt>vmadc.vxm/vim</tt>, <tt>vmadc.vxm/vim</tt>, the vector narrowing and reduction instructions.
+We can observe this optimization in those instructions as well, except for the reductions. (Maybe because reduction networks are more expensive as they don't scale linearly?)
+<br>
+This is very nice and, e.g. makes LMUL=n <tt>vnsrl.wv/wx/wi</tt> perform the same as LMUL=n/2 <tt>vsrl.vv</tt>.</p>
+
+<p>If the assumption about the three vreg ports and the above optimization is correct, then a tail agnostic <tt>vnsrl.wv/wx/wi</tt> instruction fully utilizes the three VLEN-wide vreg ports while processing VLEN*2 elements at a time, one for the shift amount and two for the wide vector we are narrowing. But for tail undisturbed, we additionally need to read the destination, so the optimization doesn't work out, and indeed we can see that <tt>vnsrl.wv/wx/wi</tt> is 2x slower with tail undisturbed vs agnostic in the measurements below.</p>
+
+<p><b>TLDR: Ascalon seems to use a clever uarch trick to make LMUL&gt;1 vector-scalar/immediate comparisons and narrowing instructions twice as fast.</b></p>
+
+<p>I'll start preferring .vx/.vi for LMUL&gt;1 comparisons from now on, even if the register pressure permits preloading a vector register.</p>
+
+</details>
 
 <h2>Instruction timings</h2>
 <p>The following are measured cycle averages when unrolling and looping over the given instruction, which should estimate the instruction throughput. The registers involved are randomized to usual values, that is floating point values are real numbers and not NaN/Inf, and instructions like vslide* stay within the vl range.</p>
