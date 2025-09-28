@@ -41,11 +41,18 @@
 
       <item>
       <title>Partial vector load/stores instruction throughput and new uarch measurement tool</title>
-         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-3</guid>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-5</guid>
          <description><![CDATA[<p>I've added the vector load/store instructions to the throughput measurement tool, excluding the indexed load/store variants for now, as they don't work with the current benchmark abstraction.</p><p>Additionally there now is a new uarch measurement tool under single/uarch, which attempts to directly measure certain uarch properties.E.g. if reinterpreting a mask register results in additional overhead due to data repacking, but also some simpler things like VLEN and how the tail/mask policy is implemented.</p>]]></description>
-         <pubDate>Fir, 12 Sep 2025 03:30 GMT</pubDate>
+         <pubDate>Fri, 12 Sep 2025 03:30 GMT</pubDate>
       </item>
 
+
+      <item>
+      <title>Tenstorrent Ascalon X™, hardware simulated instruction throughput measurements</title>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-6</guid>
+         <description><![CDATA[<p>Tenstorrent decided to <a href="https://github.com/camel-cdr/rvv-bench-results/pull/5">publish the first benchmark data for Ascalon's RVV implementation</a> using the instruction throughput benchmark of rvv-bench. &lt;3<br>So we now have the first glimpses of how an actual high performance RVV implementation behaves.</p><p>In preperation for when well be able to run the rest of the benchmark suite on Ascalon I'm working on expanding the benchmarks further. The latest additions were bench/memreverse, zero and -1 strided load/stores and a seg4 byteswap variant. If you have suggestions for benchmarks that fit into the project paradigm, feel free to open an issue.</p>]]></description>
+         <pubDate>Sun, 28 Sep 2025 09:45 GMT</pubDate>
+      </item>
 
    </channel>
 </rss>
