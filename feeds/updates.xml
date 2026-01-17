@@ -54,5 +54,13 @@
          <pubDate>Sun, 28 Sep 2025 09:45 GMT</pubDate>
       </item>
 
+
+      <item>
+      <title>SpacemiT X100, first RVA23 silicon</title>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-7</guid>
+         <description><![CDATA[<p>With the SpacemiT K3, the first RVA23 hardware now exists and is already available to a handful of developers.</p><p>Thanks to <a href="https://github.com/sanderjo">sandersjo</a>, we managed to run rvv-bench on the SpacemiT X100 cores in the SpacemiT K3: <a href="https://camel-cdr.github.io/rvv-bench-results/spacemit_x100/index.html">SpacemiT X100 rvv-bench page</a></p><p>Getting rvv-bench running properly was a bit of a struggle, so I ended up cleaning up a few things and added a new ./bench-all.sh script, which guides you through running all benchmarks and collecting the output logs.</p>]]></description>
+         <pubDate>Sun, 17 Jan 2026 14:00 GMT</pubDate>
+      </item>
+
    </channel>
 </rss>
