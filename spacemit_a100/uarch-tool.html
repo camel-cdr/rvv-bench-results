@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>SpacemiT A100 uarch-tool benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body class="base">
+	<div id="main"><header><h1>SpacemiT A100 (SpacemiT K3) uarch-tool benchmarks</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../templates/uarch-tool.js"></script>
+
+<pre>
+VLEN: 1024
+
+Detect all1s tail/mask policy with simple code snippet:
+Tail agnostic policy: undisturbed
+Mask agnostic policy: undisturbed
+Is vl always set to min(AVL,VLMAX): yes
+    Note: spec allows ceil(AVL/2)&lt;=vl&lt;=VLMAX for VLMAX&lt;AVL&lt;2*VLMAX
+</pre>
+
+<pre>
+
+Measures how LMUL scheduling impacts when results are ready:
+A) LMUL=8 v0 overlap with LMUL=1 v0:     963.3002700 cycles/iter
+B) LMUL=8 v0 overlap with LMUL=1 v3:     960.7684240 cycles/iter
+C) LMUL=8 v0 overlap with LMUL=1 v7:     972.4773225 cycles/iter
+D) LMUL=8 v0 overlap with LMUL=1 v8:     964.3978443 cycles/iter
+E) LMUL=8 v0 overlap with LMUL=1 v0..v8: 909.1791667 cycles/iter
+</pre>
+
+<ul>
+<li>The difference between A and C indices that results for the upper part of a vector register group gets completed later than the lower part, even when long dependencies are present.</li>
+</ul>
+
+<pre>
+Measures overhead of reinterpreting a mask as a vector:
+A) reinterpret:       20.4754600 cycles/iter
+B) don't reinterpret: 20.0241394 cycles/iter
+</pre>
+
+<ul>
+<li>There seems to be a minimal overhead in reinterpreting a mask register.</li>
+</ul>
+
+</body>
+</html>
