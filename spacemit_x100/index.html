@@ -11,7 +11,13 @@
 
 <header><h1>RVV benchmark SpacemiT X100 (SpacemiT K3)</h1></header>
 
-<p>The <a href="https://www.spacemit.com/en/spacemit-x100-core/">SpacemiT-X100</a> is an 4-issue out-of-order RVA23 compatible cores, running at 2.4GHz, with a VLEN of 256.</p>
+<p>The <a href="https://www.spacemit.com/products/ai-compute-core/x100">SpacemiT-X100</a> is a 4-issue out-of-order RVA23 compatible core, with a VLEN of 256, running at 2.4GHz in the <a href="https://www.spacemit.com/products/keystone/k3">SpacemiT K3</a> SOC.
+<br>
+It support the optional RVA23 extensions <a href="https://github.com/llvm/llvm-project/pull/173988">Zbc, Zbkc, Zcd, Zfbfmin, Zfh, Zvbc, Zvfbfwma, Zvfh, Zvkng, Zvknha, Zvksc, Zvksg</a>.
+</p>
+
+<a href="https://www.spacemit.com/products/keystone/k3">SpacemiT K3</a>
+<p>The <a href="https://www.spacemit.com/products/ai-compute-core/x100">SpacemiT-X100</a> is an 4-issue out-of-order RVA23 compatible cores, running at 2.4GHz, with a VLEN of 256.</p>
 
 <ul>
 	<li><a href="../index.html">Return to parent page</a></li>
@@ -63,6 +69,56 @@
 <li>Masked instruction variants are cheap. (see table below)</li>
 <li>The instruction throughput is independent of vl, the tail/mask policy, and .vx vs .vv instruction variants. (see table below)</li>
 </ul>
+
+
+<h2>Microarchitecture</h2>
+
+<p>SpacemiT published a paper covering the microarchitectural design of the SpacemiT K3: <a href="https://forum.spacemit.com/uploads/short-url/60aJ8cYNmrFWqHn4ddwwSzMLjlY.pdf">k3.pdf</a></p>
+
+<p>
+The X100 is based on the open-source CPU <a href="https://github.com/XUANTIE-RV/openc910">OpenC910</a> design published by XuanTie, but substantially upgraded.
+</p>
+
+<blockquote>
+"The major improvements include: increasing frontend fetch bandwidth and improving branch prediction accuracy; widening decode and dispatch and leveraging multiple techniques to enhance execution efficiency; restructuring the load/store subsystem to increase memory bandwidth while substantially reducing access latency; adding a vector execution unit compliant with the RISC-V Vector Extension v1.0"
+</blockquote>
+
+<p>
+It has the microarchitectural design:
+</p>
+
+<img src="res/x100-uarch.png" width="100%">
+
+<p>
+While the ROB has 64 entries, it can <a href="https://github.com/llvm/llvm-project/pull/178189">hold up to 3 uops in a single ROB entry</a> due to a ROB compression scheme.
+This presumably works for adjacent instructions, which can't cause exceptions or cause speculative execution.
+</p>
+
+<p>
+The decoder support instruction fusion, with <a href="https://github.com/llvm/llvm-project/pull/178594">the following fusion cases</a>:
+<ul>
+	<li><tt>and(i)/or(i)/xor(i) + and(i)/or(i)/xor(i)</tt></li>
+	<li><tt>mul(w) + add(w)</tt></li>
+	<li><tt>add + load/store</tt></li>
+	<li><tt>slli + srli/srai</tt></li>
+	<li>there might be more?</li>
+</ul>
+</p>
+
+<p>
+The vector unit is decoupled from the scalar core:
+</p>
+
+<blockquote>
+"After undergoing initial decoding and scalar operand renaming in the main pipeline, vector instructions are dispatched to a dedicated, independent vector unit for subsequent issue, split and execution."
+</blockquote>
+
+While the vector length is 256-bit, the core has two 128-bit-wide vector compute execution units, and two 128-bit-wide vector memory execution units.
+
+<blockquote>
+"for handling complex vector memory patterns such as segment accesses, the LSU incorporates a dedicated transpose buffer to accelerate data reorganization"
+</blockquote>
+
 
 
 <h2>Instruction timings</h2>
@@ -9855,8 +9911,7 @@
 </div>
 
 
-
-<p>Below are measurements for the scalar instructions, however they weren't measured without register interleaving, and might thus be closer to latency than throughput:<!--obtained using the same methodology as above:--></p>
+<p>Below are measurements for the scalar instructions, however they weren't measured without register interleaving, and might thus be closer to latency than throughput:</p>
 
 <div class="tblCont tblConts">
 

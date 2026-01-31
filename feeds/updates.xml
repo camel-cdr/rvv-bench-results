@@ -62,5 +62,12 @@
          <pubDate>Sun, 17 Jan 2026 14:00 GMT</pubDate>
       </item>
 
+      <item>
+      <title>SpacemiT A100</title>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-8</guid>
+         <description><![CDATA[<p>We now managed to access the SpacemiT A100 cores of the SpacemiT K3 board, which has 1024-bit wide vector registers and is meant for low-precision number crunshing applications</p>]]></description>
+         <pubDate>Sun, 17 Jan 2026 14:00 GMT</pubDate>
+      </item>
+
    </channel>
 </rss>
