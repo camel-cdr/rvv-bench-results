@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Tenstorrent Ascalon-S uarch-tool benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body class="base">
+	<div id="main"><header><h1>Tenstorrent Ascalon-S uarch-tool benchmarks</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../templates/uarch-tool.js"></script>
+
+<pre>
+VLEN: 256
+</pre>
+
+<pre>
+Detect all1s tail/mask policy with simple code snippet:
+Tail agnostic policy: all1s
+Mask agnostic policy: all1s
+Is vl always set to min(AVL,VLMAX): yes
+    Note: spec allows ceil(AVL/2)&lt;=vl&lt;=VLMAX for VLMAX&lt;AVL&lt;2*VLMAX
+</pre>
+
+<pre>
+Measures how LMUL scheduling impacts when results are ready:
+A) LMUL=8 v0 overlap with LMUL=1 v0:     161.0055236 cycles/iter
+B) LMUL=8 v0 overlap with LMUL=1 v3:     161.0059814 cycles/iter
+C) LMUL=8 v0 overlap with LMUL=1 v7:     232.0054626 cycles/iter
+D) LMUL=8 v0 overlap with LMUL=1 v8:     161.0035400 cycles/iter
+E) LMUL=8 v0 overlap with LMUL=1 v0..v8: 232.0050048 cycles/iter
+</pre>
+
+<pre>
+Measures overhead of reinterpreting a mask as a vector:
+A) reinterpret:       13.0040588 cycles/iter
+B) don't reinterpret: 13.0039062 cycles/iter
+</pre>
+
+	</body>
+</html>
