@@ -69,5 +69,12 @@
          <pubDate>Sun, 17 Jan 2026 14:00 GMT</pubDate>
       </item>
 
+      <item>
+      <title>XuanTie C920v2 (Zhihe A210)</title>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-9</guid>
+         <description><![CDATA[<p>Thanks to OctopusET, we now have benchmark results from the XuanTie C920v2 CPU with RVV 1.0.</p>]]></description>
+         <pubDate>Sat, 11 Jul 2026 14:00 GMT</pubDate>
+      </item>
+
    </channel>
 </rss>

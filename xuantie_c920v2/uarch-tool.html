@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>XuanTie C920v2 uarch-tool benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body class="base">
+	<div id="main"><header><h1>XuanTie C920v2 (Zhihe A210) uarch-tool benchmarks</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../templates/uarch-tool.js"></script>
+
+
+<pre>
+VLEN: 256
+
+Detect all1s tail/mask policy with simple code snippet:
+Tail agnostic policy: undisturbed
+Mask agnostic policy: undisturbed
+Is vl always set to min(AVL,VLMAX): yes
+    Note: spec allows ceil(AVL/2)&lt;=vl<=VLMAX for VLMAX&lt;AVL&lt;2*VLMAX
+</pre>
+
+<pre>
+Measures how LMUL scheduling impacts when results are ready:
+A) LMUL=8 v0 overlap with LMUL=1 v0:     216.0812559 cycles/iter
+B) LMUL=8 v0 overlap with LMUL=1 v3:     219.5722494 cycles/iter
+C) LMUL=8 v0 overlap with LMUL=1 v7:     262.6311197 cycles/iter
+D) LMUL=8 v0 overlap with LMUL=1 v8:     198.8904428 cycles/iter
+E) LMUL=8 v0 overlap with LMUL=1 v0..v7: 272.9776763 cycles/iter
+</pre>
+
+<ul>
+<li>The difference between A and C indices that results for the upper part of a vector register group gets completed later than the lower part, even when long dependencies are present.</li>
+</ul>
+
+<pre>
+Measures overhead of reinterpreting a mask as a vector:
+A) reinterpret:       15.0160255 cycles/iter
+B) don't reinterpret: 10.0081186 cycles/iter
+</pre>
+
+<ul>
+<li>While A is faster than B, which may indicate that the mask needed to be repacked or a scheduling issue.</li>
+</ul>
+
+</body>
+</html>
