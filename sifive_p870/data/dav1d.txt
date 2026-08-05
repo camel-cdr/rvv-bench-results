@@ -1,0 +1,2328 @@
+perf_event_open: No such file or directory
+checkasm:
+ - CPU: SiFive Inc, vendor arch 0x109, imp 0x14250606
+ - CPU: VLEN = 128 bits
+ - Timing source: gettime
+ - Bench duration: 1000 µs per function (1000000 nsecs)
+ - Random seed: 69649454
+C:
+ - msac.decode_symbol [OK]
+ - msac.decode_bool   [OK]
+ - msac.decode_hi_tok [OK]
+ - pal.pal_idx_finish [OK]
+ - refmvs.load_tmvs   [OK]
+ - refmvs.save_tmvs   [OK]
+ - refmvs.splat_mv    [OK]
+ - cdef_8bpc.cdef_dir [OK]
+ - cdef_8bpc.cdef_filter [OK]
+ - filmgrain_8bpc.gen_grain_y [OK]
+ - filmgrain_8bpc.gen_grain_uv [OK]
+ - filmgrain_8bpc.fgy_32x32xn  [OK]
+ - filmgrain_8bpc.fguv_32x32xn [OK]
+ - ipred_8bpc.intra_pred       [OK]
+ - ipred_8bpc.cfl_ac           [OK]
+ - ipred_8bpc.cfl_pred         [OK]
+ - ipred_8bpc.pal_pred         [OK]
+ - itx_8bpc.add_tx4            [OK]
+ - itx_8bpc.add_tx8            [OK]
+ - itx_8bpc.add_tx16           [OK]
+ - itx_8bpc.add_tx32           [OK]
+ - itx_8bpc.add_tx64           [OK]
+ - loopfilter_8bpc.lpf_h_sb_y  [OK]
+ - loopfilter_8bpc.lpf_v_sb_y  [OK]
+ - loopfilter_8bpc.lpf_h_sb_uv [OK]
+ - loopfilter_8bpc.lpf_v_sb_uv [OK]
+ - looprestoration_8bpc.wiener [OK]
+ - looprestoration_8bpc.sgr    [OK]
+ - mc_8bpc.mc                  [OK]
+ - mc_8bpc.mct                 [OK]
+ - mc_8bpc.mc_scaled           [OK]
+ - mc_8bpc.mct_scaled          [OK]
+ - mc_8bpc.avg                 [OK]
+ - mc_8bpc.w_avg               [OK]
+ - mc_8bpc.mask                [OK]
+ - mc_8bpc.w_mask              [OK]
+ - mc_8bpc.blend               [OK]
+ - mc_8bpc.blend_v             [OK]
+ - mc_8bpc.blend_h             [OK]
+ - mc_8bpc.warp8x8             [OK]
+ - mc_8bpc.warp8x8t            [OK]
+ - mc_8bpc.emu_edge            [OK]
+ - mc_8bpc.resize              [OK]
+ - cdef_16bpc.cdef_dir         [OK]
+ - cdef_16bpc.cdef_filter      [OK]
+ - filmgrain_16bpc.gen_grain_y [OK]
+ - filmgrain_16bpc.gen_grain_uv [OK]
+ - filmgrain_16bpc.fgy_32x32xn  [OK]
+ - filmgrain_16bpc.fguv_32x32xn [OK]
+ - ipred_16bpc.intra_pred       [OK]
+ - ipred_16bpc.cfl_ac           [OK]
+ - ipred_16bpc.cfl_pred         [OK]
+ - ipred_16bpc.pal_pred         [OK]
+ - itx_16bpc.add_tx4            [OK]
+ - itx_16bpc.add_tx8            [OK]
+ - itx_16bpc.add_tx16           [OK]
+ - itx_16bpc.add_tx32           [OK]
+ - itx_16bpc.add_tx64           [OK]
+ - loopfilter_16bpc.lpf_h_sb_y  [OK]
+ - loopfilter_16bpc.lpf_v_sb_y  [OK]
+ - loopfilter_16bpc.lpf_h_sb_uv [OK]
+ - loopfilter_16bpc.lpf_v_sb_uv [OK]
+ - looprestoration_16bpc.wiener [OK]
+ - looprestoration_16bpc.sgr    [OK]
+ - mc_16bpc.mc                  [OK]
+ - mc_16bpc.mct                 [OK]
+ - mc_16bpc.mc_scaled           [OK]
+ - mc_16bpc.mct_scaled          [OK]
+ - mc_16bpc.avg                 [OK]
+ - mc_16bpc.w_avg               [OK]
+ - mc_16bpc.mask                [OK]
+ - mc_16bpc.w_mask              [OK]
+ - mc_16bpc.blend               [OK]
+ - mc_16bpc.blend_v             [OK]
+ - mc_16bpc.blend_h             [OK]
+ - mc_16bpc.warp8x8             [OK]
+ - mc_16bpc.warp8x8t            [OK]
+ - mc_16bpc.emu_edge            [OK]
+ - mc_16bpc.resize              [OK]
+RVV:
+ - pal.pal_idx_finish           [OK]
+ - cdef_8bpc.cdef_filter        [OK]
+ - ipred_8bpc.intra_pred        [OK]
+ - ipred_8bpc.cfl_pred          [OK]
+ - ipred_8bpc.pal_pred          [OK]
+ - itx_8bpc.add_tx4             [OK]
+ - itx_8bpc.add_tx8             [OK]
+ - itx_8bpc.add_tx16            [OK]
+ - mc_8bpc.avg                  [OK]
+ - mc_8bpc.w_avg                [OK]
+ - mc_8bpc.mask                 [OK]
+ - mc_8bpc.w_mask               [OK]
+ - mc_8bpc.blend                [OK]
+ - mc_8bpc.blend_v              [OK]
+ - mc_8bpc.blend_h              [OK]
+ - mc_8bpc.warp8x8              [OK]
+ - mc_8bpc.warp8x8t             [OK]
+ - mc_8bpc.emu_edge             [OK]
+ - cdef_16bpc.cdef_filter       [OK]
+ - ipred_16bpc.intra_pred       [OK]
+ - ipred_16bpc.cfl_pred         [OK]
+ - ipred_16bpc.pal_pred         [OK]
+ - mc_16bpc.blend               [OK]
+ - mc_16bpc.blend_v             [OK]
+checkasm: all 410 tests passed
+Benchmark results:
+  name                                                nsecs (vs ref)
+  avg_w4_8bpc_c:                                       67.6
+  avg_w4_8bpc_rvv:                                     14.9 ( 4.53x)
+  avg_w4_16bpc_c:                                      66.0
+  avg_w8_8bpc_c:                                      172.6
+  avg_w8_8bpc_rvv:                                     62.9 ( 2.74x)
+  avg_w8_16bpc_c:                                     138.4
+  avg_w16_8bpc_c:                                     697.2
+  avg_w16_8bpc_rvv:                                    88.5 ( 7.88x)
+  avg_w16_16bpc_c:                                    350.8
+  avg_w32_8bpc_c:                                    3659.9
+  avg_w32_8bpc_rvv:                                   172.6 (21.20x)
+  avg_w32_16bpc_c:                                   1329.4
+  avg_w64_8bpc_c:                                   12233.5
+  avg_w64_8bpc_rvv:                                   261.7 (46.74x)
+  avg_w64_16bpc_c:                                   4799.1
+  avg_w128_8bpc_c:                                  33287.2
+  avg_w128_8bpc_rvv:                                  718.2 (46.33x)
+  avg_w128_16bpc_c:                                 16769.8
+  blend_h_w2_8bpc_c:                                   17.2
+  blend_h_w2_8bpc_rvv:                                 21.5 ( 0.80x)
+  blend_h_w2_16bpc_c:                                  19.0
+  blend_h_w4_8bpc_c:                                   36.5
+  blend_h_w4_8bpc_rvv:                                 21.5 ( 1.69x)
+  blend_h_w4_16bpc_c:                                  42.4
+  blend_h_w8_8bpc_c:                                   59.5
+  blend_h_w8_8bpc_rvv:                                 21.5 ( 2.77x)
+  blend_h_w8_16bpc_c:                                  84.7
+  blend_h_w16_8bpc_c:                                 113.2
+  blend_h_w16_8bpc_rvv:                                21.5 ( 5.25x)
+  blend_h_w16_16bpc_c:                                123.7
+  blend_h_w32_8bpc_c:                                 241.1
+  blend_h_w32_8bpc_rvv:                                27.2 ( 8.87x)
+  blend_h_w32_16bpc_c:                                232.3
+  blend_h_w64_8bpc_c:                                 549.1
+  blend_h_w64_8bpc_rvv:                                39.7 (13.84x)
+  blend_h_w64_16bpc_c:                                537.2
+  blend_h_w128_8bpc_c:                               1670.3
+  blend_h_w128_8bpc_rvv:                               87.5 (19.07x)
+  blend_h_w128_16bpc_c:                              1789.9
+  blend_v_w2_8bpc_c:                                   22.7
+  blend_v_w2_8bpc_rvv:                                 30.1 ( 0.76x)
+  blend_v_w2_16bpc_c:                                  24.3
+  blend_v_w2_16bpc_rvv:                                30.2 ( 0.80x)
+  blend_v_w4_8bpc_c:                                   85.6
+  blend_v_w4_8bpc_rvv:                                 39.1 ( 2.19x)
+  blend_v_w4_16bpc_c:                                  93.1
+  blend_v_w4_16bpc_rvv:                                42.7 ( 2.18x)
+  blend_v_w8_8bpc_c:                                  149.9
+  blend_v_w8_8bpc_rvv:                                 39.3 ( 3.82x)
+  blend_v_w8_16bpc_c:                                 173.1
+  blend_v_w8_16bpc_rvv:                                39.0 ( 4.44x)
+  blend_v_w16_8bpc_c:                                 301.2
+  blend_v_w16_8bpc_rvv:                                39.0 ( 7.72x)
+  blend_v_w16_16bpc_c:                                355.1
+  blend_v_w16_16bpc_rvv:                               52.5 ( 6.75x)
+  blend_v_w32_8bpc_c:                                 661.5
+  blend_v_w32_8bpc_rvv:                                51.2 (12.93x)
+  blend_v_w32_16bpc_c:                                741.5
+  blend_v_w32_16bpc_rvv:                               71.7 (10.35x)
+  blend_w4_8bpc_c:                                     34.9
+  blend_w4_8bpc_rvv:                                   18.4 ( 1.89x)
+  blend_w4_16bpc_c:                                    39.8
+  blend_w4_16bpc_rvv:                                  21.3 ( 1.86x)
+  blend_w8_8bpc_c:                                    100.1
+  blend_w8_8bpc_rvv:                                   22.5 ( 4.42x)
+  blend_w8_16bpc_c:                                   112.8
+  blend_w8_16bpc_rvv:                                  26.3 ( 4.29x)
+  blend_w16_8bpc_c:                                   426.0
+  blend_w16_8bpc_rvv:                                  34.2 (12.44x)
+  blend_w16_16bpc_c:                                  446.0
+  blend_w16_16bpc_rvv:                                 68.0 ( 6.56x)
+  blend_w32_8bpc_c:                                  1303.1
+  blend_w32_8bpc_rvv:                                  73.6 (17.71x)
+  blend_w32_16bpc_c:                                 1186.5
+  blend_w32_16bpc_rvv:                                169.0 ( 7.02x)
+  cdef_dir_8bpc_c:                                    408.4
+  cdef_dir_16bpc_c:                                   293.7
+  cdef_filter_4x4_01_8bpc_c:                          302.0
+  cdef_filter_4x4_01_8bpc_rvv:                        140.7 ( 2.15x)
+  cdef_filter_4x4_01_16bpc_c:                         310.8
+  cdef_filter_4x4_01_16bpc_rvv:                       131.2 ( 2.37x)
+  cdef_filter_4x4_10_8bpc_c:                          198.8
+  cdef_filter_4x4_10_8bpc_rvv:                         94.3 ( 2.11x)
+  cdef_filter_4x4_10_16bpc_c:                         212.7
+  cdef_filter_4x4_10_16bpc_rvv:                        84.9 ( 2.50x)
+  cdef_filter_4x4_11_8bpc_c:                          618.9
+  cdef_filter_4x4_11_8bpc_rvv:                        227.1 ( 2.69x)
+  cdef_filter_4x4_11_16bpc_c:                         672.0
+  cdef_filter_4x4_11_16bpc_rvv:                       215.6 ( 3.09x)
+  cdef_filter_4x8_01_8bpc_c:                          558.0
+  cdef_filter_4x8_01_8bpc_rvv:                        261.4 ( 2.13x)
+  cdef_filter_4x8_01_16bpc_c:                         566.1
+  cdef_filter_4x8_01_16bpc_rvv:                       242.8 ( 2.33x)
+  cdef_filter_4x8_10_8bpc_c:                          363.0
+  cdef_filter_4x8_10_8bpc_rvv:                        176.7 ( 2.05x)
+  cdef_filter_4x8_10_16bpc_c:                         371.1
+  cdef_filter_4x8_10_16bpc_rvv:                       143.4 ( 2.59x)
+  cdef_filter_4x8_11_8bpc_c:                         1202.2
+  cdef_filter_4x8_11_8bpc_rvv:                        431.6 ( 2.79x)
+  cdef_filter_4x8_11_16bpc_c:                        1297.4
+  cdef_filter_4x8_11_16bpc_rvv:                       413.4 ( 3.14x)
+  cdef_filter_8x8_01_8bpc_c:                         1188.4
+  cdef_filter_8x8_01_8bpc_rvv:                        405.1 ( 2.93x)
+  cdef_filter_8x8_01_16bpc_c:                        1090.0
+  cdef_filter_8x8_01_16bpc_rvv:                       391.1 ( 2.79x)
+  cdef_filter_8x8_10_8bpc_c:                          701.3
+  cdef_filter_8x8_10_8bpc_rvv:                        231.8 ( 3.02x)
+  cdef_filter_8x8_10_16bpc_c:                         690.8
+  cdef_filter_8x8_10_16bpc_rvv:                       214.1 ( 3.23x)
+  cdef_filter_8x8_11_8bpc_c:                         2523.8
+  cdef_filter_8x8_11_8bpc_rvv:                        630.1 ( 4.01x)
+  cdef_filter_8x8_11_16bpc_c:                        2468.2
+  cdef_filter_8x8_11_16bpc_rvv:                       613.3 ( 4.02x)
+  cfl_ac_420_w4_8bpc_c:                               141.6
+  cfl_ac_420_w4_16bpc_c:                              164.6
+  cfl_ac_420_w8_8bpc_c:                               225.0
+  cfl_ac_420_w8_16bpc_c:                              265.1
+  cfl_ac_420_w16_8bpc_c:                              404.8
+  cfl_ac_420_w16_16bpc_c:                             478.9
+  cfl_ac_422_w4_8bpc_c:                               127.1
+  cfl_ac_422_w4_16bpc_c:                              156.5
+  cfl_ac_422_w8_8bpc_c:                               269.7
+  cfl_ac_422_w8_16bpc_c:                              336.9
+  cfl_ac_422_w16_8bpc_c:                              487.4
+  cfl_ac_422_w16_16bpc_c:                             604.2
+  cfl_ac_444_w4_8bpc_c:                               125.1
+  cfl_ac_444_w4_16bpc_c:                              125.7
+  cfl_ac_444_w8_8bpc_c:                               232.8
+  cfl_ac_444_w8_16bpc_c:                              222.7
+  cfl_ac_444_w16_8bpc_c:                              430.4
+  cfl_ac_444_w16_16bpc_c:                             368.2
+  cfl_ac_444_w32_8bpc_c:                             1023.5
+  cfl_ac_444_w32_16bpc_c:                             932.4
+  cfl_pred_cfl_128_w4_8bpc_c:                          84.8
+  cfl_pred_cfl_128_w4_8bpc_rvv:                        53.6 ( 1.58x)
+  cfl_pred_cfl_128_w4_16bpc_c:                         79.0
+  cfl_pred_cfl_128_w4_16bpc_rvv:                       55.5 ( 1.42x)
+  cfl_pred_cfl_128_w8_8bpc_c:                         216.6
+  cfl_pred_cfl_128_w8_8bpc_rvv:                        81.8 ( 2.65x)
+  cfl_pred_cfl_128_w8_16bpc_c:                        188.9
+  cfl_pred_cfl_128_w8_16bpc_rvv:                       82.3 ( 2.29x)
+  cfl_pred_cfl_128_w16_8bpc_c:                        423.2
+  cfl_pred_cfl_128_w16_8bpc_rvv:                      130.6 ( 3.24x)
+  cfl_pred_cfl_128_w16_16bpc_c:                       355.0
+  cfl_pred_cfl_128_w16_16bpc_rvv:                     134.0 ( 2.65x)
+  cfl_pred_cfl_128_w32_8bpc_c:                       1184.3
+  cfl_pred_cfl_128_w32_8bpc_rvv:                      341.5 ( 3.47x)
+  cfl_pred_cfl_128_w32_16bpc_c:                       931.6
+  cfl_pred_cfl_128_w32_16bpc_rvv:                     350.3 ( 2.66x)
+  cfl_pred_cfl_left_w4_8bpc_c:                         99.0
+  cfl_pred_cfl_left_w4_8bpc_rvv:                       59.1 ( 1.67x)
+  cfl_pred_cfl_left_w4_16bpc_c:                        92.9
+  cfl_pred_cfl_left_w4_16bpc_rvv:                      60.8 ( 1.53x)
+  cfl_pred_cfl_left_w8_8bpc_c:                        228.5
+  cfl_pred_cfl_left_w8_8bpc_rvv:                       87.4 ( 2.61x)
+  cfl_pred_cfl_left_w8_16bpc_c:                       203.5
+  cfl_pred_cfl_left_w8_16bpc_rvv:                      88.9 ( 2.29x)
+  cfl_pred_cfl_left_w16_8bpc_c:                       439.6
+  cfl_pred_cfl_left_w16_8bpc_rvv:                     134.8 ( 3.26x)
+  cfl_pred_cfl_left_w16_16bpc_c:                      376.4
+  cfl_pred_cfl_left_w16_16bpc_rvv:                    140.8 ( 2.67x)
+  cfl_pred_cfl_left_w32_8bpc_c:                      1193.6
+  cfl_pred_cfl_left_w32_8bpc_rvv:                     342.4 ( 3.49x)
+  cfl_pred_cfl_left_w32_16bpc_c:                      971.1
+  cfl_pred_cfl_left_w32_16bpc_rvv:                    357.5 ( 2.72x)
+  cfl_pred_cfl_top_w4_8bpc_c:                          96.4
+  cfl_pred_cfl_top_w4_8bpc_rvv:                        59.7 ( 1.62x)
+  cfl_pred_cfl_top_w4_16bpc_c:                         94.6
+  cfl_pred_cfl_top_w4_16bpc_rvv:                       58.8 ( 1.61x)
+  cfl_pred_cfl_top_w8_8bpc_c:                         233.6
+  cfl_pred_cfl_top_w8_8bpc_rvv:                        86.9 ( 2.69x)
+  cfl_pred_cfl_top_w8_16bpc_c:                        195.4
+  cfl_pred_cfl_top_w8_16bpc_rvv:                       88.3 ( 2.21x)
+  cfl_pred_cfl_top_w16_8bpc_c:                        456.0
+  cfl_pred_cfl_top_w16_8bpc_rvv:                      134.8 ( 3.38x)
+  cfl_pred_cfl_top_w16_16bpc_c:                       379.7
+  cfl_pred_cfl_top_w16_16bpc_rvv:                     143.4 ( 2.65x)
+  cfl_pred_cfl_top_w32_8bpc_c:                       1194.4
+  cfl_pred_cfl_top_w32_8bpc_rvv:                      343.3 ( 3.48x)
+  cfl_pred_cfl_top_w32_16bpc_c:                       976.7
+  cfl_pred_cfl_top_w32_16bpc_rvv:                     364.3 ( 2.68x)
+  cfl_pred_cfl_w4_8bpc_c:                             103.0
+  cfl_pred_cfl_w4_8bpc_rvv:                            66.6 ( 1.55x)
+  cfl_pred_cfl_w4_16bpc_c:                            108.0
+  cfl_pred_cfl_w4_16bpc_rvv:                           65.8 ( 1.64x)
+  cfl_pred_cfl_w8_8bpc_c:                             239.0
+  cfl_pred_cfl_w8_8bpc_rvv:                            94.0 ( 2.54x)
+  cfl_pred_cfl_w8_16bpc_c:                            223.9
+  cfl_pred_cfl_w8_16bpc_rvv:                           96.1 ( 2.33x)
+  cfl_pred_cfl_w16_8bpc_c:                            455.4
+  cfl_pred_cfl_w16_8bpc_rvv:                          141.9 ( 3.21x)
+  cfl_pred_cfl_w16_16bpc_c:                           398.2
+  cfl_pred_cfl_w16_16bpc_rvv:                         148.7 ( 2.68x)
+  cfl_pred_cfl_w32_8bpc_c:                           1207.4
+  cfl_pred_cfl_w32_8bpc_rvv:                          352.4 ( 3.43x)
+  cfl_pred_cfl_w32_16bpc_c:                           974.7
+  cfl_pred_cfl_w32_16bpc_rvv:                         369.6 ( 2.64x)
+  emu_edge_w4_8bpc_c:                                 160.5
+  emu_edge_w4_8bpc_rvv:                                28.4 ( 5.65x)
+  emu_edge_w4_16bpc_c:                                174.4
+  emu_edge_w8_8bpc_c:                                 263.1
+  emu_edge_w8_8bpc_rvv:                                31.0 ( 8.50x)
+  emu_edge_w8_16bpc_c:                                249.2
+  emu_edge_w16_8bpc_c:                                439.1
+  emu_edge_w16_8bpc_rvv:                               56.1 ( 7.83x)
+  emu_edge_w16_16bpc_c:                               378.1
+  emu_edge_w32_8bpc_c:                                837.8
+  emu_edge_w32_8bpc_rvv:                              134.9 ( 6.20x)
+  emu_edge_w32_16bpc_c:                               772.0
+  emu_edge_w64_8bpc_c:                               1908.4
+  emu_edge_w64_8bpc_rvv:                              385.1 ( 4.95x)
+  emu_edge_w64_16bpc_c:                              1705.0
+  emu_edge_w128_8bpc_c:                              3359.4
+  emu_edge_w128_8bpc_rvv:                            1107.4 ( 3.03x)
+  emu_edge_w128_16bpc_c:                             3615.8
+  fguv_32x32xn_8bpc_420_csfl0_c:                     3353.3
+  fguv_32x32xn_8bpc_420_csfl1_c:                     2126.0
+  fguv_32x32xn_8bpc_422_csfl0_c:                     6704.1
+  fguv_32x32xn_8bpc_422_csfl1_c:                     4140.5
+  fguv_32x32xn_8bpc_444_csfl0_c:                    12278.6
+  fguv_32x32xn_8bpc_444_csfl1_c:                     6742.0
+  fguv_32x32xn_16bpc_420_csfl0_c:                    2489.7
+  fguv_32x32xn_16bpc_420_csfl1_c:                    2180.3
+  fguv_32x32xn_16bpc_422_csfl0_c:                    4856.2
+  fguv_32x32xn_16bpc_422_csfl1_c:                    4203.8
+  fguv_32x32xn_16bpc_444_csfl0_c:                    7563.0
+  fguv_32x32xn_16bpc_444_csfl1_c:                    6213.2
+  fgy_32x32xn_8bpc_c:                                4809.3
+  fgy_32x32xn_16bpc_c:                               4684.0
+  gen_grain_uv_ar0_8bpc_420_c:                      15121.1
+  gen_grain_uv_ar0_8bpc_422_c:                      28081.7
+  gen_grain_uv_ar0_8bpc_444_c:                      59792.2
+  gen_grain_uv_ar0_16bpc_420_c:                     14936.0
+  gen_grain_uv_ar0_16bpc_422_c:                     27731.6
+  gen_grain_uv_ar0_16bpc_444_c:                     52550.1
+  gen_grain_uv_ar1_8bpc_420_c:                      23584.5
+  gen_grain_uv_ar1_8bpc_422_c:                      46415.5
+  gen_grain_uv_ar1_8bpc_444_c:                      89870.8
+  gen_grain_uv_ar1_16bpc_420_c:                     22806.7
+  gen_grain_uv_ar1_16bpc_422_c:                     44930.0
+  gen_grain_uv_ar1_16bpc_444_c:                     87251.5
+  gen_grain_uv_ar2_8bpc_420_c:                      40404.9
+  gen_grain_uv_ar2_8bpc_422_c:                      78962.1
+  gen_grain_uv_ar2_8bpc_444_c:                     157428.9
+  gen_grain_uv_ar2_16bpc_420_c:                     36766.2
+  gen_grain_uv_ar2_16bpc_422_c:                     74741.5
+  gen_grain_uv_ar2_16bpc_444_c:                    142005.8
+  gen_grain_uv_ar3_8bpc_420_c:                      58060.8
+  gen_grain_uv_ar3_8bpc_422_c:                     113417.5
+  gen_grain_uv_ar3_8bpc_444_c:                     227131.9
+  gen_grain_uv_ar3_16bpc_420_c:                     50197.5
+  gen_grain_uv_ar3_16bpc_422_c:                     97783.2
+  gen_grain_uv_ar3_16bpc_444_c:                    193958.1
+  gen_grain_y_ar0_8bpc_c:                           47958.0
+  gen_grain_y_ar0_16bpc_c:                          41799.3
+  gen_grain_y_ar1_8bpc_c:                           82402.1
+  gen_grain_y_ar1_16bpc_c:                          76369.9
+  gen_grain_y_ar2_8bpc_c:                          144649.7
+  gen_grain_y_ar2_16bpc_c:                         126869.3
+  gen_grain_y_ar3_8bpc_c:                          201870.0
+  gen_grain_y_ar3_16bpc_c:                         209324.8
+  intra_pred_dc_128_w4_8bpc_c:                          7.6
+  intra_pred_dc_128_w4_16bpc_c:                         7.4
+  intra_pred_dc_128_w8_8bpc_c:                         10.1
+  intra_pred_dc_128_w8_16bpc_c:                        16.3
+  intra_pred_dc_128_w16_8bpc_c:                        23.5
+  intra_pred_dc_128_w16_16bpc_c:                       72.7
+  intra_pred_dc_128_w32_8bpc_c:                       134.9
+  intra_pred_dc_128_w32_16bpc_c:                      143.2
+  intra_pred_dc_128_w64_8bpc_c:                       495.7
+  intra_pred_dc_128_w64_16bpc_c:                      350.8
+  intra_pred_dc_left_w4_8bpc_c:                        19.8
+  intra_pred_dc_left_w4_16bpc_c:                       19.5
+  intra_pred_dc_left_w8_8bpc_c:                        24.4
+  intra_pred_dc_left_w8_16bpc_c:                       31.2
+  intra_pred_dc_left_w16_8bpc_c:                       44.7
+  intra_pred_dc_left_w16_16bpc_c:                     105.5
+  intra_pred_dc_left_w32_8bpc_c:                      132.7
+  intra_pred_dc_left_w32_16bpc_c:                     162.7
+  intra_pred_dc_left_w64_8bpc_c:                      234.6
+  intra_pred_dc_left_w64_16bpc_c:                     361.2
+  intra_pred_dc_top_w4_8bpc_c:                         17.7
+  intra_pred_dc_top_w4_16bpc_c:                        17.4
+  intra_pred_dc_top_w8_8bpc_c:                         22.1
+  intra_pred_dc_top_w8_16bpc_c:                        29.3
+  intra_pred_dc_top_w16_8bpc_c:                        44.4
+  intra_pred_dc_top_w16_16bpc_c:                       94.9
+  intra_pred_dc_top_w32_8bpc_c:                       143.1
+  intra_pred_dc_top_w32_16bpc_c:                      170.1
+  intra_pred_dc_top_w64_8bpc_c:                       264.8
+  intra_pred_dc_top_w64_16bpc_c:                      409.1
+  intra_pred_dc_w4_8bpc_c:                             24.5
+  intra_pred_dc_w4_16bpc_c:                            24.8
+  intra_pred_dc_w8_8bpc_c:                             30.7
+  intra_pred_dc_w8_16bpc_c:                            38.6
+  intra_pred_dc_w16_8bpc_c:                            53.3
+  intra_pred_dc_w16_16bpc_c:                          129.3
+  intra_pred_dc_w32_8bpc_c:                           149.5
+  intra_pred_dc_w32_16bpc_c:                          188.3
+  intra_pred_dc_w64_8bpc_c:                           548.1
+  intra_pred_dc_w64_16bpc_c:                          512.7
+  intra_pred_filter_w4_8bpc_c:                        126.9
+  intra_pred_filter_w4_10bpc_c:                       111.0
+  intra_pred_filter_w4_12bpc_c:                       110.9
+  intra_pred_filter_w8_8bpc_c:                        347.2
+  intra_pred_filter_w8_10bpc_c:                       317.7
+  intra_pred_filter_w8_12bpc_c:                       318.8
+  intra_pred_filter_w16_8bpc_c:                       677.7
+  intra_pred_filter_w16_10bpc_c:                      670.3
+  intra_pred_filter_w16_12bpc_c:                      668.1
+  intra_pred_filter_w32_8bpc_c:                      1982.4
+  intra_pred_filter_w32_10bpc_c:                     1785.2
+  intra_pred_filter_w32_12bpc_c:                     1786.8
+  intra_pred_h_w4_8bpc_c:                              65.0
+  intra_pred_h_w4_8bpc_rvv:                             4.0 (16.17x)
+  intra_pred_h_w4_16bpc_c:                             18.6
+  intra_pred_h_w8_8bpc_c:                              69.2
+  intra_pred_h_w8_8bpc_rvv:                             6.7 (10.19x)
+  intra_pred_h_w8_16bpc_c:                             38.2
+  intra_pred_h_w16_8bpc_c:                            104.7
+  intra_pred_h_w16_8bpc_rvv:                            9.4 (11.08x)
+  intra_pred_h_w16_16bpc_c:                            95.5
+  intra_pred_h_w32_8bpc_c:                            220.9
+  intra_pred_h_w32_8bpc_rvv:                           13.7 (16.18x)
+  intra_pred_h_w32_16bpc_c:                           169.8
+  intra_pred_h_w64_8bpc_c:                            241.4
+  intra_pred_h_w64_8bpc_rvv:                           31.8 ( 7.59x)
+  intra_pred_h_w64_16bpc_c:                           363.2
+  intra_pred_paeth_w4_8bpc_c:                          86.5
+  intra_pred_paeth_w4_8bpc_rvv:                        83.1 ( 1.04x)
+  intra_pred_paeth_w4_16bpc_c:                         89.4
+  intra_pred_paeth_w4_16bpc_rvv:                       76.1 ( 1.17x)
+  intra_pred_paeth_w8_8bpc_c:                         222.1
+  intra_pred_paeth_w8_8bpc_rvv:                       139.5 ( 1.59x)
+  intra_pred_paeth_w8_16bpc_c:                        247.7
+  intra_pred_paeth_w8_16bpc_rvv:                      136.0 ( 1.82x)
+  intra_pred_paeth_w16_8bpc_c:                        634.6
+  intra_pred_paeth_w16_8bpc_rvv:                      345.6 ( 1.84x)
+  intra_pred_paeth_w16_16bpc_c:                       636.5
+  intra_pred_paeth_w16_16bpc_rvv:                     357.1 ( 1.78x)
+  intra_pred_paeth_w32_8bpc_c:                       1798.4
+  intra_pred_paeth_w32_8bpc_rvv:                      943.9 ( 1.91x)
+  intra_pred_paeth_w32_16bpc_c:                      1796.1
+  intra_pred_paeth_w32_16bpc_rvv:                     985.1 ( 1.82x)
+  intra_pred_paeth_w64_8bpc_c:                       5415.1
+  intra_pred_paeth_w64_8bpc_rvv:                     2639.3 ( 2.05x)
+  intra_pred_paeth_w64_16bpc_c:                      5435.5
+  intra_pred_paeth_w64_16bpc_rvv:                    2769.2 ( 1.96x)
+  intra_pred_smooth_h_w4_8bpc_c:                       51.5
+  intra_pred_smooth_h_w4_8bpc_rvv:                     24.1 ( 2.13x)
+  intra_pred_smooth_h_w4_16bpc_c:                      50.3
+  intra_pred_smooth_h_w4_16bpc_rvv:                    31.0 ( 1.62x)
+  intra_pred_smooth_h_w8_8bpc_c:                      121.5
+  intra_pred_smooth_h_w8_8bpc_rvv:                     31.0 ( 3.92x)
+  intra_pred_smooth_h_w8_16bpc_c:                     128.4
+  intra_pred_smooth_h_w8_16bpc_rvv:                    48.1 ( 2.67x)
+  intra_pred_smooth_h_w16_8bpc_c:                     340.6
+  intra_pred_smooth_h_w16_8bpc_rvv:                    41.2 ( 8.26x)
+  intra_pred_smooth_h_w16_16bpc_c:                    365.1
+  intra_pred_smooth_h_w16_16bpc_rvv:                  111.0 ( 3.29x)
+  intra_pred_smooth_h_w32_8bpc_c:                     899.7
+  intra_pred_smooth_h_w32_8bpc_rvv:                    91.7 ( 9.81x)
+  intra_pred_smooth_h_w32_16bpc_c:                    984.8
+  intra_pred_smooth_h_w32_16bpc_rvv:                  284.6 ( 3.46x)
+  intra_pred_smooth_h_w64_8bpc_c:                    3092.2
+  intra_pred_smooth_h_w64_8bpc_rvv:                   235.4 (13.13x)
+  intra_pred_smooth_h_w64_16bpc_c:                   2694.1
+  intra_pred_smooth_h_w64_16bpc_rvv:                  780.6 ( 3.45x)
+  intra_pred_smooth_v_w4_8bpc_c:                       50.8
+  intra_pred_smooth_v_w4_8bpc_rvv:                     29.3 ( 1.73x)
+  intra_pred_smooth_v_w4_16bpc_c:                      50.3
+  intra_pred_smooth_v_w4_16bpc_rvv:                    38.2 ( 1.32x)
+  intra_pred_smooth_v_w8_8bpc_c:                      118.6
+  intra_pred_smooth_v_w8_8bpc_rvv:                     55.1 ( 2.15x)
+  intra_pred_smooth_v_w8_16bpc_c:                     133.0
+  intra_pred_smooth_v_w8_16bpc_rvv:                    54.6 ( 2.44x)
+  intra_pred_smooth_v_w16_8bpc_c:                     347.4
+  intra_pred_smooth_v_w16_8bpc_rvv:                    78.8 ( 4.41x)
+  intra_pred_smooth_v_w16_16bpc_c:                    386.4
+  intra_pred_smooth_v_w16_16bpc_rvv:                   76.1 ( 5.08x)
+  intra_pred_smooth_v_w32_8bpc_c:                     997.6
+  intra_pred_smooth_v_w32_8bpc_rvv:                   136.4 ( 7.32x)
+  intra_pred_smooth_v_w32_16bpc_c:                   1100.3
+  intra_pred_smooth_v_w32_16bpc_rvv:                  134.2 ( 8.19x)
+  intra_pred_smooth_v_w64_8bpc_c:                    2950.8
+  intra_pred_smooth_v_w64_8bpc_rvv:                   350.4 ( 8.42x)
+  intra_pred_smooth_v_w64_16bpc_c:                   3069.6
+  intra_pred_smooth_v_w64_16bpc_rvv:                  343.1 ( 8.95x)
+  intra_pred_smooth_w4_8bpc_c:                         74.3
+  intra_pred_smooth_w4_8bpc_rvv:                       40.5 ( 1.83x)
+  intra_pred_smooth_w4_16bpc_c:                        76.9
+  intra_pred_smooth_w4_16bpc_rvv:                      47.2 ( 1.63x)
+  intra_pred_smooth_w8_8bpc_c:                        206.7
+  intra_pred_smooth_w8_8bpc_rvv:                       61.7 ( 3.35x)
+  intra_pred_smooth_w8_16bpc_c:                       216.9
+  intra_pred_smooth_w8_16bpc_rvv:                      69.0 ( 3.15x)
+  intra_pred_smooth_w16_8bpc_c:                       585.6
+  intra_pred_smooth_w16_8bpc_rvv:                      88.8 ( 6.59x)
+  intra_pred_smooth_w16_16bpc_c:                      602.5
+  intra_pred_smooth_w16_16bpc_rvv:                    153.3 ( 3.93x)
+  intra_pred_smooth_w32_8bpc_c:                      1617.4
+  intra_pred_smooth_w32_8bpc_rvv:                     195.6 ( 8.27x)
+  intra_pred_smooth_w32_16bpc_c:                     1633.6
+  intra_pred_smooth_w32_16bpc_rvv:                    400.9 ( 4.07x)
+  intra_pred_smooth_w64_8bpc_c:                      4734.4
+  intra_pred_smooth_w64_8bpc_rvv:                     527.0 ( 8.98x)
+  intra_pred_smooth_w64_16bpc_c:                     4784.9
+  intra_pred_smooth_w64_16bpc_rvv:                   1102.4 ( 4.34x)
+  intra_pred_v_w4_8bpc_c:                              65.3
+  intra_pred_v_w4_8bpc_rvv:                             4.2 (15.41x)
+  intra_pred_v_w4_16bpc_c:                             79.8
+  intra_pred_v_w8_8bpc_c:                             113.1
+  intra_pred_v_w8_8bpc_rvv:                             6.6 (17.06x)
+  intra_pred_v_w8_16bpc_c:                            118.8
+  intra_pred_v_w16_8bpc_c:                            166.5
+  intra_pred_v_w16_8bpc_rvv:                            9.4 (17.66x)
+  intra_pred_v_w16_16bpc_c:                           174.2
+  intra_pred_v_w32_8bpc_c:                            248.0
+  intra_pred_v_w32_8bpc_rvv:                           12.4 (19.95x)
+  intra_pred_v_w32_16bpc_c:                           333.7
+  intra_pred_v_w64_8bpc_c:                            462.9
+  intra_pred_v_w64_8bpc_rvv:                           46.2 (10.00x)
+  intra_pred_v_w64_16bpc_c:                           590.7
+  intra_pred_z1_w4_8bpc_c:                             91.9
+  intra_pred_z1_w4_16bpc_c:                            81.8
+  intra_pred_z1_w8_8bpc_c:                            187.0
+  intra_pred_z1_w8_16bpc_c:                           189.0
+  intra_pred_z1_w16_8bpc_c:                           490.9
+  intra_pred_z1_w16_16bpc_c:                          438.0
+  intra_pred_z1_w32_8bpc_c:                          1176.3
+  intra_pred_z1_w32_16bpc_c:                         1031.6
+  intra_pred_z1_w64_8bpc_c:                          3122.9
+  intra_pred_z1_w64_16bpc_c:                         3130.5
+  intra_pred_z2_w4_8bpc_c:                            136.1
+  intra_pred_z2_w4_16bpc_c:                           147.0
+  intra_pred_z2_w8_8bpc_c:                            284.2
+  intra_pred_z2_w8_16bpc_c:                           316.9
+  intra_pred_z2_w16_8bpc_c:                           642.3
+  intra_pred_z2_w16_16bpc_c:                          779.5
+  intra_pred_z2_w32_8bpc_c:                          1715.3
+  intra_pred_z2_w32_16bpc_c:                         1831.3
+  intra_pred_z2_w64_8bpc_c:                          4451.2
+  intra_pred_z2_w64_16bpc_c:                         4673.0
+  intra_pred_z3_w4_8bpc_c:                             80.3
+  intra_pred_z3_w4_16bpc_c:                            84.6
+  intra_pred_z3_w8_8bpc_c:                            175.4
+  intra_pred_z3_w8_16bpc_c:                           218.8
+  intra_pred_z3_w16_8bpc_c:                           572.2
+  intra_pred_z3_w16_16bpc_c:                          537.8
+  intra_pred_z3_w32_8bpc_c:                          1265.1
+  intra_pred_z3_w32_16bpc_c:                         1507.4
+  intra_pred_z3_w64_8bpc_c:                          3275.1
+  intra_pred_z3_w64_16bpc_c:                         4001.4
+  inv_txfm_add_4x4_adst_adst_1_8bpc_c:                156.9
+  inv_txfm_add_4x4_adst_adst_1_8bpc_rvv:               44.9 ( 3.49x)
+  inv_txfm_add_4x4_adst_adst_1_10bpc_c:               157.3
+  inv_txfm_add_4x4_adst_adst_1_12bpc_c:               156.3
+  inv_txfm_add_4x4_adst_dct_1_8bpc_c:                 195.2
+  inv_txfm_add_4x4_adst_dct_1_8bpc_rvv:                43.6 ( 4.48x)
+  inv_txfm_add_4x4_adst_dct_1_10bpc_c:                157.8
+  inv_txfm_add_4x4_adst_dct_1_12bpc_c:                157.8
+  inv_txfm_add_4x4_adst_flipadst_1_8bpc_c:            161.4
+  inv_txfm_add_4x4_adst_flipadst_1_8bpc_rvv:           45.3 ( 3.57x)
+  inv_txfm_add_4x4_adst_flipadst_1_10bpc_c:           167.5
+  inv_txfm_add_4x4_adst_flipadst_1_12bpc_c:           164.4
+  inv_txfm_add_4x4_adst_identity_1_8bpc_c:            140.6
+  inv_txfm_add_4x4_adst_identity_1_8bpc_rvv:           39.8 ( 3.54x)
+  inv_txfm_add_4x4_adst_identity_1_10bpc_c:           130.0
+  inv_txfm_add_4x4_adst_identity_1_12bpc_c:           133.1
+  inv_txfm_add_4x4_dct_adst_1_8bpc_c:                 154.3
+  inv_txfm_add_4x4_dct_adst_1_8bpc_rvv:                43.3 ( 3.56x)
+  inv_txfm_add_4x4_dct_adst_1_10bpc_c:                149.2
+  inv_txfm_add_4x4_dct_adst_1_12bpc_c:                151.2
+  inv_txfm_add_4x4_dct_dct_0_8bpc_c:                   28.3
+  inv_txfm_add_4x4_dct_dct_0_8bpc_rvv:                 20.6 ( 1.37x)
+  inv_txfm_add_4x4_dct_dct_0_10bpc_c:                  30.6
+  inv_txfm_add_4x4_dct_dct_0_12bpc_c:                  30.7
+  inv_txfm_add_4x4_dct_dct_1_8bpc_c:                  198.0
+  inv_txfm_add_4x4_dct_dct_1_8bpc_rvv:                 42.4 ( 4.67x)
+  inv_txfm_add_4x4_dct_dct_1_10bpc_c:                 151.6
+  inv_txfm_add_4x4_dct_dct_1_12bpc_c:                 151.1
+  inv_txfm_add_4x4_dct_flipadst_1_8bpc_c:             155.0
+  inv_txfm_add_4x4_dct_flipadst_1_8bpc_rvv:            43.9 ( 3.53x)
+  inv_txfm_add_4x4_dct_flipadst_1_10bpc_c:            151.5
+  inv_txfm_add_4x4_dct_flipadst_1_12bpc_c:            152.7
+  inv_txfm_add_4x4_dct_identity_1_8bpc_c:             139.6
+  inv_txfm_add_4x4_dct_identity_1_8bpc_rvv:            37.4 ( 3.39x)
+  inv_txfm_add_4x4_dct_identity_1_10bpc_c:            124.4
+  inv_txfm_add_4x4_dct_identity_1_12bpc_c:            124.0
+  inv_txfm_add_4x4_flipadst_adst_1_8bpc_c:            161.1
+  inv_txfm_add_4x4_flipadst_adst_1_8bpc_rvv:           44.9 ( 3.57x)
+  inv_txfm_add_4x4_flipadst_adst_1_10bpc_c:           165.7
+  inv_txfm_add_4x4_flipadst_adst_1_12bpc_c:           163.3
+  inv_txfm_add_4x4_flipadst_dct_1_8bpc_c:             199.8
+  inv_txfm_add_4x4_flipadst_dct_1_8bpc_rvv:            43.6 ( 4.58x)
+  inv_txfm_add_4x4_flipadst_dct_1_10bpc_c:            162.6
+  inv_txfm_add_4x4_flipadst_dct_1_12bpc_c:            163.2
+  inv_txfm_add_4x4_flipadst_flipadst_1_8bpc_c:        158.9
+  inv_txfm_add_4x4_flipadst_flipadst_1_8bpc_rvv:       45.1 ( 3.52x)
+  inv_txfm_add_4x4_flipadst_flipadst_1_10bpc_c:       169.4
+  inv_txfm_add_4x4_flipadst_flipadst_1_12bpc_c:       166.8
+  inv_txfm_add_4x4_flipadst_identity_1_8bpc_c:        141.3
+  inv_txfm_add_4x4_flipadst_identity_1_8bpc_rvv:       39.7 ( 3.54x)
+  inv_txfm_add_4x4_flipadst_identity_1_10bpc_c:       131.7
+  inv_txfm_add_4x4_flipadst_identity_1_12bpc_c:       130.2
+  inv_txfm_add_4x4_identity_adst_1_8bpc_c:            142.9
+  inv_txfm_add_4x4_identity_adst_1_8bpc_rvv:           39.4 ( 3.63x)
+  inv_txfm_add_4x4_identity_adst_1_10bpc_c:           130.2
+  inv_txfm_add_4x4_identity_adst_1_12bpc_c:           130.8
+  inv_txfm_add_4x4_identity_dct_1_8bpc_c:             137.2
+  inv_txfm_add_4x4_identity_dct_1_8bpc_rvv:            38.1 ( 3.60x)
+  inv_txfm_add_4x4_identity_dct_1_10bpc_c:            139.3
+  inv_txfm_add_4x4_identity_dct_1_12bpc_c:            139.3
+  inv_txfm_add_4x4_identity_flipadst_1_8bpc_c:        144.6
+  inv_txfm_add_4x4_identity_flipadst_1_8bpc_rvv:       39.9 ( 3.62x)
+  inv_txfm_add_4x4_identity_flipadst_1_10bpc_c:       141.2
+  inv_txfm_add_4x4_identity_flipadst_1_12bpc_c:       141.1
+  inv_txfm_add_4x4_identity_identity_1_8bpc_c:        132.0
+  inv_txfm_add_4x4_identity_identity_1_8bpc_rvv:       34.6 ( 3.81x)
+  inv_txfm_add_4x4_identity_identity_1_10bpc_c:       114.1
+  inv_txfm_add_4x4_identity_identity_1_12bpc_c:       117.8
+  inv_txfm_add_4x4_wht_wht_1_8bpc_c:                   50.4
+  inv_txfm_add_4x4_wht_wht_1_8bpc_rvv:                 34.6 ( 1.46x)
+  inv_txfm_add_4x4_wht_wht_1_10bpc_c:                  46.1
+  inv_txfm_add_4x4_wht_wht_1_12bpc_c:                  47.3
+  inv_txfm_add_4x8_adst_adst_1_8bpc_c:                362.8
+  inv_txfm_add_4x8_adst_adst_1_8bpc_rvv:               69.4 ( 5.23x)
+  inv_txfm_add_4x8_adst_adst_1_10bpc_c:               347.1
+  inv_txfm_add_4x8_adst_adst_1_12bpc_c:               337.7
+  inv_txfm_add_4x8_adst_dct_1_8bpc_c:                 351.7
+  inv_txfm_add_4x8_adst_dct_1_8bpc_rvv:                61.5 ( 5.72x)
+  inv_txfm_add_4x8_adst_dct_1_10bpc_c:                329.3
+  inv_txfm_add_4x8_adst_dct_1_12bpc_c:                323.7
+  inv_txfm_add_4x8_adst_flipadst_1_8bpc_c:            365.0
+  inv_txfm_add_4x8_adst_flipadst_1_8bpc_rvv:           69.8 ( 5.22x)
+  inv_txfm_add_4x8_adst_flipadst_1_10bpc_c:           345.0
+  inv_txfm_add_4x8_adst_flipadst_1_12bpc_c:           346.7
+  inv_txfm_add_4x8_adst_identity_1_8bpc_c:            271.7
+  inv_txfm_add_4x8_adst_identity_1_8bpc_rvv:           45.6 ( 5.96x)
+  inv_txfm_add_4x8_adst_identity_1_10bpc_c:           246.5
+  inv_txfm_add_4x8_adst_identity_1_12bpc_c:           246.6
+  inv_txfm_add_4x8_dct_adst_1_8bpc_c:                 349.8
+  inv_txfm_add_4x8_dct_adst_1_8bpc_rvv:                66.3 ( 5.22x)
+  inv_txfm_add_4x8_dct_adst_1_10bpc_c:                315.9
+  inv_txfm_add_4x8_dct_adst_1_12bpc_c:                309.2
+  inv_txfm_add_4x8_dct_dct_0_8bpc_c:                   49.0
+  inv_txfm_add_4x8_dct_dct_0_8bpc_rvv:                 59.4 ( 0.82x)
+  inv_txfm_add_4x8_dct_dct_0_10bpc_c:                  50.1
+  inv_txfm_add_4x8_dct_dct_0_12bpc_c:                  50.1
+  inv_txfm_add_4x8_dct_dct_1_8bpc_c:                  382.1
+  inv_txfm_add_4x8_dct_dct_1_8bpc_rvv:                 59.4 ( 6.43x)
+  inv_txfm_add_4x8_dct_dct_1_10bpc_c:                 339.5
+  inv_txfm_add_4x8_dct_dct_1_12bpc_c:                 302.6
+  inv_txfm_add_4x8_dct_flipadst_1_8bpc_c:             332.8
+  inv_txfm_add_4x8_dct_flipadst_1_8bpc_rvv:            66.9 ( 4.97x)
+  inv_txfm_add_4x8_dct_flipadst_1_10bpc_c:            315.8
+  inv_txfm_add_4x8_dct_flipadst_1_12bpc_c:            318.3
+  inv_txfm_add_4x8_dct_identity_1_8bpc_c:             248.3
+  inv_txfm_add_4x8_dct_identity_1_8bpc_rvv:            43.0 ( 5.77x)
+  inv_txfm_add_4x8_dct_identity_1_10bpc_c:            231.7
+  inv_txfm_add_4x8_dct_identity_1_12bpc_c:            231.6
+  inv_txfm_add_4x8_flipadst_adst_1_8bpc_c:            360.6
+  inv_txfm_add_4x8_flipadst_adst_1_8bpc_rvv:           69.4 ( 5.20x)
+  inv_txfm_add_4x8_flipadst_adst_1_10bpc_c:           347.5
+  inv_txfm_add_4x8_flipadst_adst_1_12bpc_c:           343.5
+  inv_txfm_add_4x8_flipadst_dct_1_8bpc_c:             332.1
+  inv_txfm_add_4x8_flipadst_dct_1_8bpc_rvv:            61.5 ( 5.39x)
+  inv_txfm_add_4x8_flipadst_dct_1_10bpc_c:            336.7
+  inv_txfm_add_4x8_flipadst_dct_1_12bpc_c:            329.8
+  inv_txfm_add_4x8_flipadst_flipadst_1_8bpc_c:        363.9
+  inv_txfm_add_4x8_flipadst_flipadst_1_8bpc_rvv:       69.6 ( 5.23x)
+  inv_txfm_add_4x8_flipadst_flipadst_1_10bpc_c:       352.5
+  inv_txfm_add_4x8_flipadst_flipadst_1_12bpc_c:       345.2
+  inv_txfm_add_4x8_flipadst_identity_1_8bpc_c:        276.2
+  inv_txfm_add_4x8_flipadst_identity_1_8bpc_rvv:       45.5 ( 6.07x)
+  inv_txfm_add_4x8_flipadst_identity_1_10bpc_c:       254.5
+  inv_txfm_add_4x8_flipadst_identity_1_12bpc_c:       247.8
+  inv_txfm_add_4x8_identity_adst_1_8bpc_c:            301.4
+  inv_txfm_add_4x8_identity_adst_1_8bpc_rvv:           63.4 ( 4.75x)
+  inv_txfm_add_4x8_identity_adst_1_10bpc_c:           285.4
+  inv_txfm_add_4x8_identity_adst_1_12bpc_c:           280.4
+  inv_txfm_add_4x8_identity_dct_1_8bpc_c:             279.6
+  inv_txfm_add_4x8_identity_dct_1_8bpc_rvv:            56.0 ( 5.00x)
+  inv_txfm_add_4x8_identity_dct_1_10bpc_c:            268.7
+  inv_txfm_add_4x8_identity_dct_1_12bpc_c:            268.1
+  inv_txfm_add_4x8_identity_flipadst_1_8bpc_c:        306.5
+  inv_txfm_add_4x8_identity_flipadst_1_8bpc_rvv:       63.9 ( 4.80x)
+  inv_txfm_add_4x8_identity_flipadst_1_10bpc_c:       289.4
+  inv_txfm_add_4x8_identity_flipadst_1_12bpc_c:       282.8
+  inv_txfm_add_4x8_identity_identity_1_8bpc_c:        217.3
+  inv_txfm_add_4x8_identity_identity_1_8bpc_rvv:       39.5 ( 5.51x)
+  inv_txfm_add_4x8_identity_identity_1_10bpc_c:       191.1
+  inv_txfm_add_4x8_identity_identity_1_12bpc_c:       191.3
+  inv_txfm_add_4x16_adst_adst_1_8bpc_c:               673.5
+  inv_txfm_add_4x16_adst_adst_1_8bpc_rvv:             106.2 ( 6.34x)
+  inv_txfm_add_4x16_adst_adst_1_10bpc_c:              616.0
+  inv_txfm_add_4x16_adst_adst_1_12bpc_c:              605.8
+  inv_txfm_add_4x16_adst_adst_2_8bpc_c:               808.6
+  inv_txfm_add_4x16_adst_adst_2_8bpc_rvv:             112.3 ( 7.17x)
+  inv_txfm_add_4x16_adst_adst_2_10bpc_c:              721.1
+  inv_txfm_add_4x16_adst_adst_2_12bpc_c:              715.5
+  inv_txfm_add_4x16_adst_dct_1_8bpc_c:                626.6
+  inv_txfm_add_4x16_adst_dct_1_8bpc_rvv:               96.4 ( 6.50x)
+  inv_txfm_add_4x16_adst_dct_1_10bpc_c:               573.1
+  inv_txfm_add_4x16_adst_dct_1_12bpc_c:               575.3
+  inv_txfm_add_4x16_adst_dct_2_8bpc_c:                750.5
+  inv_txfm_add_4x16_adst_dct_2_8bpc_rvv:              102.1 ( 7.35x)
+  inv_txfm_add_4x16_adst_dct_2_10bpc_c:               683.4
+  inv_txfm_add_4x16_adst_dct_2_12bpc_c:               683.8
+  inv_txfm_add_4x16_adst_flipadst_1_8bpc_c:           668.9
+  inv_txfm_add_4x16_adst_flipadst_1_8bpc_rvv:         107.3 ( 6.23x)
+  inv_txfm_add_4x16_adst_flipadst_1_10bpc_c:          620.3
+  inv_txfm_add_4x16_adst_flipadst_1_12bpc_c:          620.2
+  inv_txfm_add_4x16_adst_flipadst_2_8bpc_c:           761.8
+  inv_txfm_add_4x16_adst_flipadst_2_8bpc_rvv:         112.7 ( 6.76x)
+  inv_txfm_add_4x16_adst_flipadst_2_10bpc_c:          749.6
+  inv_txfm_add_4x16_adst_flipadst_2_12bpc_c:          715.5
+  inv_txfm_add_4x16_adst_identity_1_8bpc_c:           425.2
+  inv_txfm_add_4x16_adst_identity_1_8bpc_rvv:          60.8 ( 6.61x)
+  inv_txfm_add_4x16_adst_identity_1_10bpc_c:          379.3
+  inv_txfm_add_4x16_adst_identity_1_12bpc_c:          378.2
+  inv_txfm_add_4x16_adst_identity_2_8bpc_c:           530.2
+  inv_txfm_add_4x16_adst_identity_2_8bpc_rvv:          67.1 ( 7.90x)
+  inv_txfm_add_4x16_adst_identity_2_10bpc_c:          484.6
+  inv_txfm_add_4x16_adst_identity_2_12bpc_c:          485.2
+  inv_txfm_add_4x16_dct_adst_1_8bpc_c:                645.7
+  inv_txfm_add_4x16_dct_adst_1_8bpc_rvv:              103.5 ( 6.24x)
+  inv_txfm_add_4x16_dct_adst_1_10bpc_c:               589.9
+  inv_txfm_add_4x16_dct_adst_1_12bpc_c:               589.5
+  inv_txfm_add_4x16_dct_adst_2_8bpc_c:                737.6
+  inv_txfm_add_4x16_dct_adst_2_8bpc_rvv:              108.7 ( 6.76x)
+  inv_txfm_add_4x16_dct_adst_2_10bpc_c:               685.1
+  inv_txfm_add_4x16_dct_adst_2_12bpc_c:               677.7
+  inv_txfm_add_4x16_dct_dct_0_8bpc_c:                  94.8
+  inv_txfm_add_4x16_dct_dct_0_8bpc_rvv:                95.0 ( 0.99x)
+  inv_txfm_add_4x16_dct_dct_0_10bpc_c:                 96.5
+  inv_txfm_add_4x16_dct_dct_0_12bpc_c:                 95.8
+  inv_txfm_add_4x16_dct_dct_1_8bpc_c:                 606.8
+  inv_txfm_add_4x16_dct_dct_1_8bpc_rvv:                94.6 ( 6.41x)
+  inv_txfm_add_4x16_dct_dct_1_10bpc_c:                557.1
+  inv_txfm_add_4x16_dct_dct_1_12bpc_c:                559.0
+  inv_txfm_add_4x16_dct_dct_2_8bpc_c:                 703.1
+  inv_txfm_add_4x16_dct_dct_2_8bpc_rvv:                98.2 ( 7.16x)
+  inv_txfm_add_4x16_dct_dct_2_10bpc_c:                645.5
+  inv_txfm_add_4x16_dct_dct_2_12bpc_c:                675.5
+  inv_txfm_add_4x16_dct_flipadst_1_8bpc_c:            646.3
+  inv_txfm_add_4x16_dct_flipadst_1_8bpc_rvv:          103.4 ( 6.25x)
+  inv_txfm_add_4x16_dct_flipadst_1_10bpc_c:           589.4
+  inv_txfm_add_4x16_dct_flipadst_1_12bpc_c:           592.1
+  inv_txfm_add_4x16_dct_flipadst_2_8bpc_c:            764.2
+  inv_txfm_add_4x16_dct_flipadst_2_8bpc_rvv:          109.0 ( 7.01x)
+  inv_txfm_add_4x16_dct_flipadst_2_10bpc_c:           677.2
+  inv_txfm_add_4x16_dct_flipadst_2_12bpc_c:           677.3
+  inv_txfm_add_4x16_dct_identity_1_8bpc_c:            415.0
+  inv_txfm_add_4x16_dct_identity_1_8bpc_rvv:           59.4 ( 6.95x)
+  inv_txfm_add_4x16_dct_identity_1_10bpc_c:           366.3
+  inv_txfm_add_4x16_dct_identity_1_12bpc_c:           364.9
+  inv_txfm_add_4x16_dct_identity_2_8bpc_c:            505.7
+  inv_txfm_add_4x16_dct_identity_2_8bpc_rvv:           62.8 ( 8.05x)
+  inv_txfm_add_4x16_dct_identity_2_10bpc_c:           452.5
+  inv_txfm_add_4x16_dct_identity_2_12bpc_c:           455.7
+  inv_txfm_add_4x16_flipadst_adst_1_8bpc_c:           659.5
+  inv_txfm_add_4x16_flipadst_adst_1_8bpc_rvv:         106.7 ( 6.17x)
+  inv_txfm_add_4x16_flipadst_adst_1_10bpc_c:          628.1
+  inv_txfm_add_4x16_flipadst_adst_1_12bpc_c:          610.5
+  inv_txfm_add_4x16_flipadst_adst_2_8bpc_c:           776.5
+  inv_txfm_add_4x16_flipadst_adst_2_8bpc_rvv:         110.9 ( 7.00x)
+  inv_txfm_add_4x16_flipadst_adst_2_10bpc_c:          761.7
+  inv_txfm_add_4x16_flipadst_adst_2_12bpc_c:          728.3
+  inv_txfm_add_4x16_flipadst_dct_1_8bpc_c:            631.5
+  inv_txfm_add_4x16_flipadst_dct_1_8bpc_rvv:           96.4 ( 6.55x)
+  inv_txfm_add_4x16_flipadst_dct_1_10bpc_c:           577.7
+  inv_txfm_add_4x16_flipadst_dct_1_12bpc_c:           574.4
+  inv_txfm_add_4x16_flipadst_dct_2_8bpc_c:            749.4
+  inv_txfm_add_4x16_flipadst_dct_2_8bpc_rvv:          102.1 ( 7.31x)
+  inv_txfm_add_4x16_flipadst_dct_2_10bpc_c:           708.3
+  inv_txfm_add_4x16_flipadst_dct_2_12bpc_c:           713.2
+  inv_txfm_add_4x16_flipadst_flipadst_1_8bpc_c:       660.8
+  inv_txfm_add_4x16_flipadst_flipadst_1_8bpc_rvv:     107.2 ( 6.16x)
+  inv_txfm_add_4x16_flipadst_flipadst_1_10bpc_c:      625.1
+  inv_txfm_add_4x16_flipadst_flipadst_1_12bpc_c:      611.0
+  inv_txfm_add_4x16_flipadst_flipadst_2_8bpc_c:       775.2
+  inv_txfm_add_4x16_flipadst_flipadst_2_8bpc_rvv:     112.1 ( 6.91x)
+  inv_txfm_add_4x16_flipadst_flipadst_2_10bpc_c:      761.7
+  inv_txfm_add_4x16_flipadst_flipadst_2_12bpc_c:      725.4
+  inv_txfm_add_4x16_flipadst_identity_1_8bpc_c:       439.2
+  inv_txfm_add_4x16_flipadst_identity_1_8bpc_rvv:      61.6 ( 7.09x)
+  inv_txfm_add_4x16_flipadst_identity_1_10bpc_c:      383.1
+  inv_txfm_add_4x16_flipadst_identity_1_12bpc_c:      391.1
+  inv_txfm_add_4x16_flipadst_identity_2_8bpc_c:       569.4
+  inv_txfm_add_4x16_flipadst_identity_2_8bpc_rvv:      67.2 ( 8.47x)
+  inv_txfm_add_4x16_flipadst_identity_2_10bpc_c:      491.4
+  inv_txfm_add_4x16_flipadst_identity_2_12bpc_c:      537.8
+  inv_txfm_add_4x16_identity_adst_1_8bpc_c:           624.4
+  inv_txfm_add_4x16_identity_adst_1_8bpc_rvv:         101.1 ( 6.17x)
+  inv_txfm_add_4x16_identity_adst_1_10bpc_c:          566.1
+  inv_txfm_add_4x16_identity_adst_1_12bpc_c:          566.0
+  inv_txfm_add_4x16_identity_adst_2_8bpc_c:           690.1
+  inv_txfm_add_4x16_identity_adst_2_8bpc_rvv:         105.8 ( 6.52x)
+  inv_txfm_add_4x16_identity_adst_2_10bpc_c:          644.5
+  inv_txfm_add_4x16_identity_adst_2_12bpc_c:          635.3
+  inv_txfm_add_4x16_identity_dct_1_8bpc_c:            582.1
+  inv_txfm_add_4x16_identity_dct_1_8bpc_rvv:           90.6 ( 6.42x)
+  inv_txfm_add_4x16_identity_dct_1_10bpc_c:           533.8
+  inv_txfm_add_4x16_identity_dct_1_12bpc_c:           532.7
+  inv_txfm_add_4x16_identity_dct_2_8bpc_c:            654.3
+  inv_txfm_add_4x16_identity_dct_2_8bpc_rvv:           91.5 ( 7.15x)
+  inv_txfm_add_4x16_identity_dct_2_10bpc_c:           602.9
+  inv_txfm_add_4x16_identity_dct_2_12bpc_c:           602.4
+  inv_txfm_add_4x16_identity_flipadst_1_8bpc_c:       626.1
+  inv_txfm_add_4x16_identity_flipadst_1_8bpc_rvv:     100.4 ( 6.24x)
+  inv_txfm_add_4x16_identity_flipadst_1_10bpc_c:      565.6
+  inv_txfm_add_4x16_identity_flipadst_1_12bpc_c:      565.5
+  inv_txfm_add_4x16_identity_flipadst_2_8bpc_c:       689.2
+  inv_txfm_add_4x16_identity_flipadst_2_8bpc_rvv:     105.3 ( 6.54x)
+  inv_txfm_add_4x16_identity_flipadst_2_10bpc_c:      634.9
+  inv_txfm_add_4x16_identity_flipadst_2_12bpc_c:      635.1
+  inv_txfm_add_4x16_identity_identity_1_8bpc_c:       390.8
+  inv_txfm_add_4x16_identity_identity_1_8bpc_rvv:      55.2 ( 7.07x)
+  inv_txfm_add_4x16_identity_identity_1_10bpc_c:      341.4
+  inv_txfm_add_4x16_identity_identity_1_12bpc_c:      339.8
+  inv_txfm_add_4x16_identity_identity_2_8bpc_c:       459.8
+  inv_txfm_add_4x16_identity_identity_2_8bpc_rvv:      55.3 ( 8.31x)
+  inv_txfm_add_4x16_identity_identity_2_10bpc_c:      409.4
+  inv_txfm_add_4x16_identity_identity_2_12bpc_c:      411.1
+  inv_txfm_add_8x4_adst_adst_1_8bpc_c:                348.1
+  inv_txfm_add_8x4_adst_adst_1_8bpc_rvv:               73.4 ( 4.66x)
+  inv_txfm_add_8x4_adst_adst_1_10bpc_c:               331.9
+  inv_txfm_add_8x4_adst_adst_1_12bpc_c:               325.2
+  inv_txfm_add_8x4_adst_dct_1_8bpc_c:                 332.4
+  inv_txfm_add_8x4_adst_dct_1_8bpc_rvv:                71.5 ( 4.65x)
+  inv_txfm_add_8x4_adst_dct_1_10bpc_c:                326.2
+  inv_txfm_add_8x4_adst_dct_1_12bpc_c:                326.3
+  inv_txfm_add_8x4_adst_flipadst_1_8bpc_c:            354.0
+  inv_txfm_add_8x4_adst_flipadst_1_8bpc_rvv:           73.8 ( 4.79x)
+  inv_txfm_add_8x4_adst_flipadst_1_10bpc_c:           344.1
+  inv_txfm_add_8x4_adst_flipadst_1_12bpc_c:           343.5
+  inv_txfm_add_8x4_adst_identity_1_8bpc_c:            318.8
+  inv_txfm_add_8x4_adst_identity_1_8bpc_rvv:           67.6 ( 4.72x)
+  inv_txfm_add_8x4_adst_identity_1_10bpc_c:           306.8
+  inv_txfm_add_8x4_adst_identity_1_12bpc_c:           294.8
+  inv_txfm_add_8x4_dct_adst_1_8bpc_c:                 321.7
+  inv_txfm_add_8x4_dct_adst_1_8bpc_rvv:                63.9 ( 5.03x)
+  inv_txfm_add_8x4_dct_adst_1_10bpc_c:                358.1
+  inv_txfm_add_8x4_dct_adst_1_12bpc_c:                359.4
+  inv_txfm_add_8x4_dct_dct_0_8bpc_c:                   43.9
+  inv_txfm_add_8x4_dct_dct_0_8bpc_rvv:                 62.2 ( 0.71x)
+  inv_txfm_add_8x4_dct_dct_0_10bpc_c:                  46.9
+  inv_txfm_add_8x4_dct_dct_0_12bpc_c:                  46.8
+  inv_txfm_add_8x4_dct_dct_1_8bpc_c:                  307.1
+  inv_txfm_add_8x4_dct_dct_1_8bpc_rvv:                 62.0 ( 4.95x)
+  inv_txfm_add_8x4_dct_dct_1_10bpc_c:                 359.2
+  inv_txfm_add_8x4_dct_dct_1_12bpc_c:                 357.9
+  inv_txfm_add_8x4_dct_flipadst_1_8bpc_c:             326.3
+  inv_txfm_add_8x4_dct_flipadst_1_8bpc_rvv:            64.9 ( 5.03x)
+  inv_txfm_add_8x4_dct_flipadst_1_10bpc_c:            363.7
+  inv_txfm_add_8x4_dct_flipadst_1_12bpc_c:            363.5
+  inv_txfm_add_8x4_dct_identity_1_8bpc_c:             284.8
+  inv_txfm_add_8x4_dct_identity_1_8bpc_rvv:            59.9 ( 4.75x)
+  inv_txfm_add_8x4_dct_identity_1_10bpc_c:            331.0
+  inv_txfm_add_8x4_dct_identity_1_12bpc_c:            323.7
+  inv_txfm_add_8x4_flipadst_adst_1_8bpc_c:            349.5
+  inv_txfm_add_8x4_flipadst_adst_1_8bpc_rvv:           73.3 ( 4.70x)
+  inv_txfm_add_8x4_flipadst_adst_1_10bpc_c:           339.4
+  inv_txfm_add_8x4_flipadst_adst_1_12bpc_c:           343.4
+  inv_txfm_add_8x4_flipadst_dct_1_8bpc_c:             334.5
+  inv_txfm_add_8x4_flipadst_dct_1_8bpc_rvv:            71.5 ( 4.68x)
+  inv_txfm_add_8x4_flipadst_dct_1_10bpc_c:            328.3
+  inv_txfm_add_8x4_flipadst_dct_1_12bpc_c:            329.8
+  inv_txfm_add_8x4_flipadst_flipadst_1_8bpc_c:        355.6
+  inv_txfm_add_8x4_flipadst_flipadst_1_8bpc_rvv:       73.8 ( 4.82x)
+  inv_txfm_add_8x4_flipadst_flipadst_1_10bpc_c:       347.6
+  inv_txfm_add_8x4_flipadst_flipadst_1_12bpc_c:       344.7
+  inv_txfm_add_8x4_flipadst_identity_1_8bpc_c:        314.4
+  inv_txfm_add_8x4_flipadst_identity_1_8bpc_rvv:       67.6 ( 4.65x)
+  inv_txfm_add_8x4_flipadst_identity_1_10bpc_c:       308.7
+  inv_txfm_add_8x4_flipadst_identity_1_12bpc_c:       297.1
+  inv_txfm_add_8x4_identity_adst_1_8bpc_c:            236.1
+  inv_txfm_add_8x4_identity_adst_1_8bpc_rvv:           41.6 ( 5.68x)
+  inv_txfm_add_8x4_identity_adst_1_10bpc_c:           215.1
+  inv_txfm_add_8x4_identity_adst_1_12bpc_c:           215.1
+  inv_txfm_add_8x4_identity_dct_1_8bpc_c:             221.2
+  inv_txfm_add_8x4_identity_dct_1_8bpc_rvv:            39.5 ( 5.58x)
+  inv_txfm_add_8x4_identity_dct_1_10bpc_c:            216.4
+  inv_txfm_add_8x4_identity_dct_1_12bpc_c:            215.2
+  inv_txfm_add_8x4_identity_flipadst_1_8bpc_c:        242.1
+  inv_txfm_add_8x4_identity_flipadst_1_8bpc_rvv:       42.0 ( 5.75x)
+  inv_txfm_add_8x4_identity_flipadst_1_10bpc_c:       221.5
+  inv_txfm_add_8x4_identity_flipadst_1_12bpc_c:       220.5
+  inv_txfm_add_8x4_identity_identity_1_8bpc_c:        205.4
+  inv_txfm_add_8x4_identity_identity_1_8bpc_rvv:       36.4 ( 5.65x)
+  inv_txfm_add_8x4_identity_identity_1_10bpc_c:       186.3
+  inv_txfm_add_8x4_identity_identity_1_12bpc_c:       179.5
+  inv_txfm_add_8x8_adst_adst_1_8bpc_c:                760.3
+  inv_txfm_add_8x8_adst_adst_1_8bpc_rvv:               88.2 ( 8.62x)
+  inv_txfm_add_8x8_adst_adst_1_10bpc_c:               710.4
+  inv_txfm_add_8x8_adst_adst_1_12bpc_c:               708.0
+  inv_txfm_add_8x8_adst_dct_1_8bpc_c:                 731.4
+  inv_txfm_add_8x8_adst_dct_1_8bpc_rvv:                80.3 ( 9.11x)
+  inv_txfm_add_8x8_adst_dct_1_10bpc_c:                672.5
+  inv_txfm_add_8x8_adst_dct_1_12bpc_c:                673.4
+  inv_txfm_add_8x8_adst_flipadst_1_8bpc_c:            766.3
+  inv_txfm_add_8x8_adst_flipadst_1_8bpc_rvv:           88.4 ( 8.67x)
+  inv_txfm_add_8x8_adst_flipadst_1_10bpc_c:           711.1
+  inv_txfm_add_8x8_adst_flipadst_1_12bpc_c:           711.7
+  inv_txfm_add_8x8_adst_identity_1_8bpc_c:            583.4
+  inv_txfm_add_8x8_adst_identity_1_8bpc_rvv:           65.7 ( 8.88x)
+  inv_txfm_add_8x8_adst_identity_1_10bpc_c:           530.7
+  inv_txfm_add_8x8_adst_identity_1_12bpc_c:           531.3
+  inv_txfm_add_8x8_dct_adst_1_8bpc_c:                 713.1
+  inv_txfm_add_8x8_dct_adst_1_8bpc_rvv:                82.7 ( 8.60x)
+  inv_txfm_add_8x8_dct_adst_1_10bpc_c:                658.9
+  inv_txfm_add_8x8_dct_adst_1_12bpc_c:                661.7
+  inv_txfm_add_8x8_dct_dct_0_8bpc_c:                   84.2
+  inv_txfm_add_8x8_dct_dct_0_8bpc_rvv:                 25.7 ( 3.27x)
+  inv_txfm_add_8x8_dct_dct_0_10bpc_c:                  82.0
+  inv_txfm_add_8x8_dct_dct_0_12bpc_c:                  81.7
+  inv_txfm_add_8x8_dct_dct_1_8bpc_c:                  680.2
+  inv_txfm_add_8x8_dct_dct_1_8bpc_rvv:                 73.5 ( 9.26x)
+  inv_txfm_add_8x8_dct_dct_1_10bpc_c:                 623.8
+  inv_txfm_add_8x8_dct_dct_1_12bpc_c:                 623.3
+  inv_txfm_add_8x8_dct_flipadst_1_8bpc_c:             716.9
+  inv_txfm_add_8x8_dct_flipadst_1_8bpc_rvv:            82.6 ( 8.68x)
+  inv_txfm_add_8x8_dct_flipadst_1_10bpc_c:            662.7
+  inv_txfm_add_8x8_dct_flipadst_1_12bpc_c:            663.0
+  inv_txfm_add_8x8_dct_identity_1_8bpc_c:             535.4
+  inv_txfm_add_8x8_dct_identity_1_8bpc_rvv:            59.6 ( 8.98x)
+  inv_txfm_add_8x8_dct_identity_1_10bpc_c:            482.0
+  inv_txfm_add_8x8_dct_identity_1_12bpc_c:            481.0
+  inv_txfm_add_8x8_flipadst_adst_1_8bpc_c:            762.1
+  inv_txfm_add_8x8_flipadst_adst_1_8bpc_rvv:           88.1 ( 8.65x)
+  inv_txfm_add_8x8_flipadst_adst_1_10bpc_c:           714.1
+  inv_txfm_add_8x8_flipadst_adst_1_12bpc_c:           711.2
+  inv_txfm_add_8x8_flipadst_dct_1_8bpc_c:             726.8
+  inv_txfm_add_8x8_flipadst_dct_1_8bpc_rvv:            80.1 ( 9.04x)
+  inv_txfm_add_8x8_flipadst_dct_1_10bpc_c:            675.5
+  inv_txfm_add_8x8_flipadst_dct_1_12bpc_c:            678.4
+  inv_txfm_add_8x8_flipadst_flipadst_1_8bpc_c:        768.1
+  inv_txfm_add_8x8_flipadst_flipadst_1_8bpc_rvv:       88.4 ( 8.69x)
+  inv_txfm_add_8x8_flipadst_flipadst_1_10bpc_c:       714.2
+  inv_txfm_add_8x8_flipadst_flipadst_1_12bpc_c:       714.6
+  inv_txfm_add_8x8_flipadst_identity_1_8bpc_c:        587.3
+  inv_txfm_add_8x8_flipadst_identity_1_8bpc_rvv:       65.5 ( 8.96x)
+  inv_txfm_add_8x8_flipadst_identity_1_10bpc_c:       533.4
+  inv_txfm_add_8x8_flipadst_identity_1_12bpc_c:       533.9
+  inv_txfm_add_8x8_identity_adst_1_8bpc_c:            551.3
+  inv_txfm_add_8x8_identity_adst_1_8bpc_rvv:           47.4 (11.62x)
+  inv_txfm_add_8x8_identity_adst_1_10bpc_c:           499.5
+  inv_txfm_add_8x8_identity_adst_1_12bpc_c:           499.4
+  inv_txfm_add_8x8_identity_dct_1_8bpc_c:             520.9
+  inv_txfm_add_8x8_identity_dct_1_8bpc_rvv:            41.6 (12.51x)
+  inv_txfm_add_8x8_identity_dct_1_10bpc_c:            463.5
+  inv_txfm_add_8x8_identity_dct_1_12bpc_c:            463.8
+  inv_txfm_add_8x8_identity_flipadst_1_8bpc_c:        558.9
+  inv_txfm_add_8x8_identity_flipadst_1_8bpc_rvv:       48.8 (11.44x)
+  inv_txfm_add_8x8_identity_flipadst_1_10bpc_c:       503.2
+  inv_txfm_add_8x8_identity_flipadst_1_12bpc_c:       503.5
+  inv_txfm_add_8x8_identity_identity_1_8bpc_c:        381.9
+  inv_txfm_add_8x8_identity_identity_1_8bpc_rvv:       24.7 (15.36x)
+  inv_txfm_add_8x8_identity_identity_1_10bpc_c:       321.9
+  inv_txfm_add_8x8_identity_identity_1_12bpc_c:       324.6
+  inv_txfm_add_8x16_adst_adst_1_8bpc_c:              1368.0
+  inv_txfm_add_8x16_adst_adst_1_8bpc_rvv:             133.4 (10.26x)
+  inv_txfm_add_8x16_adst_adst_1_10bpc_c:             1301.3
+  inv_txfm_add_8x16_adst_adst_1_12bpc_c:             1301.0
+  inv_txfm_add_8x16_adst_adst_2_8bpc_c:              1682.6
+  inv_txfm_add_8x16_adst_adst_2_8bpc_rvv:             165.4 (10.17x)
+  inv_txfm_add_8x16_adst_adst_2_10bpc_c:             1606.5
+  inv_txfm_add_8x16_adst_adst_2_12bpc_c:             1605.3
+  inv_txfm_add_8x16_adst_dct_1_8bpc_c:               1318.8
+  inv_txfm_add_8x16_adst_dct_1_8bpc_rvv:              123.7 (10.66x)
+  inv_txfm_add_8x16_adst_dct_1_10bpc_c:              1243.9
+  inv_txfm_add_8x16_adst_dct_1_12bpc_c:              1243.0
+  inv_txfm_add_8x16_adst_dct_2_8bpc_c:               1619.2
+  inv_txfm_add_8x16_adst_dct_2_8bpc_rvv:              157.0 (10.27x)
+  inv_txfm_add_8x16_adst_dct_2_10bpc_c:              1540.1
+  inv_txfm_add_8x16_adst_dct_2_12bpc_c:              1540.9
+  inv_txfm_add_8x16_adst_flipadst_1_8bpc_c:          1383.6
+  inv_txfm_add_8x16_adst_flipadst_1_8bpc_rvv:         134.5 (10.27x)
+  inv_txfm_add_8x16_adst_flipadst_1_10bpc_c:         1301.3
+  inv_txfm_add_8x16_adst_flipadst_1_12bpc_c:         1305.4
+  inv_txfm_add_8x16_adst_flipadst_2_8bpc_c:          1685.0
+  inv_txfm_add_8x16_adst_flipadst_2_8bpc_rvv:         165.5 (10.18x)
+  inv_txfm_add_8x16_adst_flipadst_2_10bpc_c:         1598.8
+  inv_txfm_add_8x16_adst_flipadst_2_12bpc_c:         1602.3
+  inv_txfm_add_8x16_adst_identity_1_8bpc_c:           918.5
+  inv_txfm_add_8x16_adst_identity_1_8bpc_rvv:          84.2 (10.90x)
+  inv_txfm_add_8x16_adst_identity_1_10bpc_c:          845.3
+  inv_txfm_add_8x16_adst_identity_1_12bpc_c:          846.1
+  inv_txfm_add_8x16_adst_identity_2_8bpc_c:          1221.6
+  inv_txfm_add_8x16_adst_identity_2_8bpc_rvv:         116.7 (10.46x)
+  inv_txfm_add_8x16_adst_identity_2_10bpc_c:         1142.9
+  inv_txfm_add_8x16_adst_identity_2_12bpc_c:         1143.7
+  inv_txfm_add_8x16_dct_adst_1_8bpc_c:               1312.3
+  inv_txfm_add_8x16_dct_adst_1_8bpc_rvv:              125.2 (10.23x)
+  inv_txfm_add_8x16_dct_adst_1_10bpc_c:              1362.9
+  inv_txfm_add_8x16_dct_adst_1_12bpc_c:              1361.9
+  inv_txfm_add_8x16_dct_adst_2_8bpc_c:               1574.3
+  inv_txfm_add_8x16_dct_adst_2_8bpc_rvv:              148.9 (10.57x)
+  inv_txfm_add_8x16_dct_adst_2_10bpc_c:              1730.4
+  inv_txfm_add_8x16_dct_adst_2_12bpc_c:              1732.8
+  inv_txfm_add_8x16_dct_dct_0_8bpc_c:                 152.2
+  inv_txfm_add_8x16_dct_dct_0_8bpc_rvv:               116.3 ( 1.31x)
+  inv_txfm_add_8x16_dct_dct_0_10bpc_c:                163.2
+  inv_txfm_add_8x16_dct_dct_0_12bpc_c:                164.0
+  inv_txfm_add_8x16_dct_dct_1_8bpc_c:                1259.8
+  inv_txfm_add_8x16_dct_dct_1_8bpc_rvv:               116.3 (10.83x)
+  inv_txfm_add_8x16_dct_dct_1_10bpc_c:               1314.7
+  inv_txfm_add_8x16_dct_dct_1_12bpc_c:               1309.8
+  inv_txfm_add_8x16_dct_dct_2_8bpc_c:                1495.8
+  inv_txfm_add_8x16_dct_dct_2_8bpc_rvv:               139.2 (10.74x)
+  inv_txfm_add_8x16_dct_dct_2_10bpc_c:               1664.7
+  inv_txfm_add_8x16_dct_dct_2_12bpc_c:               1661.9
+  inv_txfm_add_8x16_dct_flipadst_1_8bpc_c:           1321.5
+  inv_txfm_add_8x16_dct_flipadst_1_8bpc_rvv:          126.7 (10.43x)
+  inv_txfm_add_8x16_dct_flipadst_1_10bpc_c:          1365.7
+  inv_txfm_add_8x16_dct_flipadst_1_12bpc_c:          1367.8
+  inv_txfm_add_8x16_dct_flipadst_2_8bpc_c:           1564.6
+  inv_txfm_add_8x16_dct_flipadst_2_8bpc_rvv:          150.1 (10.39x)
+  inv_txfm_add_8x16_dct_flipadst_2_10bpc_c:          1723.3
+  inv_txfm_add_8x16_dct_flipadst_2_12bpc_c:          1724.1
+  inv_txfm_add_8x16_dct_identity_1_8bpc_c:            864.8
+  inv_txfm_add_8x16_dct_identity_1_8bpc_rvv:           76.8 (11.26x)
+  inv_txfm_add_8x16_dct_identity_1_10bpc_c:           911.4
+  inv_txfm_add_8x16_dct_identity_1_12bpc_c:           914.0
+  inv_txfm_add_8x16_dct_identity_2_8bpc_c:           1105.2
+  inv_txfm_add_8x16_dct_identity_2_8bpc_rvv:           99.4 (11.12x)
+  inv_txfm_add_8x16_dct_identity_2_10bpc_c:          1264.4
+  inv_txfm_add_8x16_dct_identity_2_12bpc_c:          1267.7
+  inv_txfm_add_8x16_flipadst_adst_1_8bpc_c:          1377.3
+  inv_txfm_add_8x16_flipadst_adst_1_8bpc_rvv:         133.4 (10.32x)
+  inv_txfm_add_8x16_flipadst_adst_1_10bpc_c:         1311.7
+  inv_txfm_add_8x16_flipadst_adst_1_12bpc_c:         1310.1
+  inv_txfm_add_8x16_flipadst_adst_2_8bpc_c:          1671.9
+  inv_txfm_add_8x16_flipadst_adst_2_8bpc_rvv:         165.2 (10.12x)
+  inv_txfm_add_8x16_flipadst_adst_2_10bpc_c:         1607.3
+  inv_txfm_add_8x16_flipadst_adst_2_12bpc_c:         1606.7
+  inv_txfm_add_8x16_flipadst_dct_1_8bpc_c:           1322.5
+  inv_txfm_add_8x16_flipadst_dct_1_8bpc_rvv:          123.7 (10.69x)
+  inv_txfm_add_8x16_flipadst_dct_1_10bpc_c:          1247.8
+  inv_txfm_add_8x16_flipadst_dct_1_12bpc_c:          1246.4
+  inv_txfm_add_8x16_flipadst_dct_2_8bpc_c:           1617.5
+  inv_txfm_add_8x16_flipadst_dct_2_8bpc_rvv:          156.2 (10.36x)
+  inv_txfm_add_8x16_flipadst_dct_2_10bpc_c:          1553.8
+  inv_txfm_add_8x16_flipadst_dct_2_12bpc_c:          1556.1
+  inv_txfm_add_8x16_flipadst_flipadst_1_8bpc_c:      1379.1
+  inv_txfm_add_8x16_flipadst_flipadst_1_8bpc_rvv:     134.0 (10.29x)
+  inv_txfm_add_8x16_flipadst_flipadst_1_10bpc_c:     1303.1
+  inv_txfm_add_8x16_flipadst_flipadst_1_12bpc_c:     1306.1
+  inv_txfm_add_8x16_flipadst_flipadst_2_8bpc_c:      1682.5
+  inv_txfm_add_8x16_flipadst_flipadst_2_8bpc_rvv:     165.4 (10.17x)
+  inv_txfm_add_8x16_flipadst_flipadst_2_10bpc_c:     1609.2
+  inv_txfm_add_8x16_flipadst_flipadst_2_12bpc_c:     1610.5
+  inv_txfm_add_8x16_flipadst_identity_1_8bpc_c:       919.7
+  inv_txfm_add_8x16_flipadst_identity_1_8bpc_rvv:      84.1 (10.94x)
+  inv_txfm_add_8x16_flipadst_identity_1_10bpc_c:      850.2
+  inv_txfm_add_8x16_flipadst_identity_1_12bpc_c:      848.6
+  inv_txfm_add_8x16_flipadst_identity_2_8bpc_c:      1224.3
+  inv_txfm_add_8x16_flipadst_identity_2_8bpc_rvv:     116.5 (10.48x)
+  inv_txfm_add_8x16_flipadst_identity_2_10bpc_c:     1152.6
+  inv_txfm_add_8x16_flipadst_identity_2_12bpc_c:     1151.3
+  inv_txfm_add_8x16_identity_adst_1_8bpc_c:          1135.2
+  inv_txfm_add_8x16_identity_adst_1_8bpc_rvv:         103.7 (10.91x)
+  inv_txfm_add_8x16_identity_adst_1_10bpc_c:         1071.6
+  inv_txfm_add_8x16_identity_adst_1_12bpc_c:         1073.2
+  inv_txfm_add_8x16_identity_adst_2_8bpc_c:          1245.0
+  inv_txfm_add_8x16_identity_adst_2_8bpc_rvv:         106.3 (11.72x)
+  inv_txfm_add_8x16_identity_adst_2_10bpc_c:         1148.2
+  inv_txfm_add_8x16_identity_adst_2_12bpc_c:         1156.4
+  inv_txfm_add_8x16_identity_dct_1_8bpc_c:           1085.7
+  inv_txfm_add_8x16_identity_dct_1_8bpc_rvv:           90.1 (12.02x)
+  inv_txfm_add_8x16_identity_dct_1_10bpc_c:          1015.2
+  inv_txfm_add_8x16_identity_dct_1_12bpc_c:          1014.7
+  inv_txfm_add_8x16_identity_dct_2_8bpc_c:           1184.1
+  inv_txfm_add_8x16_identity_dct_2_8bpc_rvv:           93.2 (12.71x)
+  inv_txfm_add_8x16_identity_dct_2_10bpc_c:          1084.9
+  inv_txfm_add_8x16_identity_dct_2_12bpc_c:          1084.8
+  inv_txfm_add_8x16_identity_flipadst_1_8bpc_c:      1154.2
+  inv_txfm_add_8x16_identity_flipadst_1_8bpc_rvv:     104.7 (11.03x)
+  inv_txfm_add_8x16_identity_flipadst_1_10bpc_c:     1071.9
+  inv_txfm_add_8x16_identity_flipadst_1_12bpc_c:     1075.8
+  inv_txfm_add_8x16_identity_flipadst_2_8bpc_c:      1242.6
+  inv_txfm_add_8x16_identity_flipadst_2_8bpc_rvv:     107.0 (11.62x)
+  inv_txfm_add_8x16_identity_flipadst_2_10bpc_c:     1148.0
+  inv_txfm_add_8x16_identity_flipadst_2_12bpc_c:     1154.4
+  inv_txfm_add_8x16_identity_identity_1_8bpc_c:       676.9
+  inv_txfm_add_8x16_identity_identity_1_8bpc_rvv:      53.2 (12.71x)
+  inv_txfm_add_8x16_identity_identity_1_10bpc_c:      619.1
+  inv_txfm_add_8x16_identity_identity_1_12bpc_c:      620.5
+  inv_txfm_add_8x16_identity_identity_2_8bpc_c:       787.8
+  inv_txfm_add_8x16_identity_identity_2_8bpc_rvv:      55.7 (14.13x)
+  inv_txfm_add_8x16_identity_identity_2_10bpc_c:      686.8
+  inv_txfm_add_8x16_identity_identity_2_12bpc_c:      686.5
+  inv_txfm_add_8x32_dct_dct_0_8bpc_c:                 286.5
+  inv_txfm_add_8x32_dct_dct_0_10bpc_c:                307.3
+  inv_txfm_add_8x32_dct_dct_0_12bpc_c:                308.0
+  inv_txfm_add_8x32_dct_dct_1_8bpc_c:                2840.1
+  inv_txfm_add_8x32_dct_dct_1_10bpc_c:               2550.8
+  inv_txfm_add_8x32_dct_dct_1_12bpc_c:               2488.2
+  inv_txfm_add_8x32_dct_dct_2_8bpc_c:                3066.3
+  inv_txfm_add_8x32_dct_dct_2_10bpc_c:               2764.2
+  inv_txfm_add_8x32_dct_dct_2_12bpc_c:               2721.9
+  inv_txfm_add_8x32_dct_dct_3_8bpc_c:                3309.2
+  inv_txfm_add_8x32_dct_dct_3_10bpc_c:               3001.2
+  inv_txfm_add_8x32_dct_dct_3_12bpc_c:               2962.7
+  inv_txfm_add_8x32_dct_dct_4_8bpc_c:                3497.8
+  inv_txfm_add_8x32_dct_dct_4_10bpc_c:               3226.4
+  inv_txfm_add_8x32_dct_dct_4_12bpc_c:               3180.1
+  inv_txfm_add_8x32_identity_identity_1_8bpc_c:      1126.7
+  inv_txfm_add_8x32_identity_identity_1_10bpc_c:     1006.7
+  inv_txfm_add_8x32_identity_identity_1_12bpc_c:     1000.2
+  inv_txfm_add_8x32_identity_identity_2_8bpc_c:      1227.4
+  inv_txfm_add_8x32_identity_identity_2_10bpc_c:     1077.3
+  inv_txfm_add_8x32_identity_identity_2_12bpc_c:     1078.7
+  inv_txfm_add_8x32_identity_identity_3_8bpc_c:      1265.8
+  inv_txfm_add_8x32_identity_identity_3_10bpc_c:     1155.6
+  inv_txfm_add_8x32_identity_identity_3_12bpc_c:     1156.6
+  inv_txfm_add_8x32_identity_identity_4_8bpc_c:      1363.5
+  inv_txfm_add_8x32_identity_identity_4_10bpc_c:     1222.4
+  inv_txfm_add_8x32_identity_identity_4_12bpc_c:     1222.0
+  inv_txfm_add_16x4_adst_adst_1_8bpc_c:               764.1
+  inv_txfm_add_16x4_adst_adst_1_8bpc_rvv:             109.0 ( 7.01x)
+  inv_txfm_add_16x4_adst_adst_1_10bpc_c:              674.7
+  inv_txfm_add_16x4_adst_adst_1_12bpc_c:              677.5
+  inv_txfm_add_16x4_adst_adst_2_8bpc_c:               760.6
+  inv_txfm_add_16x4_adst_adst_2_8bpc_rvv:             109.1 ( 6.97x)
+  inv_txfm_add_16x4_adst_adst_2_10bpc_c:              675.0
+  inv_txfm_add_16x4_adst_adst_2_12bpc_c:              674.2
+  inv_txfm_add_16x4_adst_dct_1_8bpc_c:                718.4
+  inv_txfm_add_16x4_adst_dct_1_8bpc_rvv:              103.7 ( 6.90x)
+  inv_txfm_add_16x4_adst_dct_1_10bpc_c:               660.0
+  inv_txfm_add_16x4_adst_dct_1_12bpc_c:               659.8
+  inv_txfm_add_16x4_adst_dct_2_8bpc_c:                718.4
+  inv_txfm_add_16x4_adst_dct_2_8bpc_rvv:              103.3 ( 6.96x)
+  inv_txfm_add_16x4_adst_dct_2_10bpc_c:               661.8
+  inv_txfm_add_16x4_adst_dct_2_12bpc_c:               659.1
+  inv_txfm_add_16x4_adst_flipadst_1_8bpc_c:           727.7
+  inv_txfm_add_16x4_adst_flipadst_1_8bpc_rvv:         109.5 ( 6.60x)
+  inv_txfm_add_16x4_adst_flipadst_1_10bpc_c:          687.1
+  inv_txfm_add_16x4_adst_flipadst_1_12bpc_c:          685.0
+  inv_txfm_add_16x4_adst_flipadst_2_8bpc_c:           733.7
+  inv_txfm_add_16x4_adst_flipadst_2_8bpc_rvv:         109.4 ( 6.71x)
+  inv_txfm_add_16x4_adst_flipadst_2_10bpc_c:          684.4
+  inv_txfm_add_16x4_adst_flipadst_2_12bpc_c:          684.7
+  inv_txfm_add_16x4_adst_identity_1_8bpc_c:           658.9
+  inv_txfm_add_16x4_adst_identity_1_8bpc_rvv:          96.3 ( 6.84x)
+  inv_txfm_add_16x4_adst_identity_1_10bpc_c:          607.1
+  inv_txfm_add_16x4_adst_identity_1_12bpc_c:          607.5
+  inv_txfm_add_16x4_adst_identity_2_8bpc_c:           659.2
+  inv_txfm_add_16x4_adst_identity_2_8bpc_rvv:          96.6 ( 6.80x)
+  inv_txfm_add_16x4_adst_identity_2_10bpc_c:          607.3
+  inv_txfm_add_16x4_adst_identity_2_12bpc_c:          608.7
+  inv_txfm_add_16x4_dct_adst_1_8bpc_c:                702.1
+  inv_txfm_add_16x4_dct_adst_1_8bpc_rvv:               98.0 ( 7.16x)
+  inv_txfm_add_16x4_dct_adst_1_10bpc_c:               680.5
+  inv_txfm_add_16x4_dct_adst_1_12bpc_c:               687.0
+  inv_txfm_add_16x4_dct_adst_2_8bpc_c:                699.5
+  inv_txfm_add_16x4_dct_adst_2_8bpc_rvv:               98.1 ( 7.13x)
+  inv_txfm_add_16x4_dct_adst_2_10bpc_c:               680.2
+  inv_txfm_add_16x4_dct_adst_2_12bpc_c:               683.4
+  inv_txfm_add_16x4_dct_dct_0_8bpc_c:                  78.8
+  inv_txfm_add_16x4_dct_dct_0_8bpc_rvv:                92.6 ( 0.85x)
+  inv_txfm_add_16x4_dct_dct_0_10bpc_c:                 68.9
+  inv_txfm_add_16x4_dct_dct_0_12bpc_c:                 68.9
+  inv_txfm_add_16x4_dct_dct_1_8bpc_c:                 657.4
+  inv_txfm_add_16x4_dct_dct_1_8bpc_rvv:                93.0 ( 7.06x)
+  inv_txfm_add_16x4_dct_dct_1_10bpc_c:                666.5
+  inv_txfm_add_16x4_dct_dct_1_12bpc_c:                666.3
+  inv_txfm_add_16x4_dct_dct_2_8bpc_c:                 656.8
+  inv_txfm_add_16x4_dct_dct_2_8bpc_rvv:                92.6 ( 7.09x)
+  inv_txfm_add_16x4_dct_dct_2_10bpc_c:                669.3
+  inv_txfm_add_16x4_dct_dct_2_12bpc_c:                666.3
+  inv_txfm_add_16x4_dct_flipadst_1_8bpc_c:            703.4
+  inv_txfm_add_16x4_dct_flipadst_1_8bpc_rvv:           98.8 ( 7.09x)
+  inv_txfm_add_16x4_dct_flipadst_1_10bpc_c:           690.8
+  inv_txfm_add_16x4_dct_flipadst_1_12bpc_c:           690.7
+  inv_txfm_add_16x4_dct_flipadst_2_8bpc_c:            703.4
+  inv_txfm_add_16x4_dct_flipadst_2_8bpc_rvv:           98.6 ( 7.13x)
+  inv_txfm_add_16x4_dct_flipadst_2_10bpc_c:           693.2
+  inv_txfm_add_16x4_dct_flipadst_2_12bpc_c:           690.6
+  inv_txfm_add_16x4_dct_identity_1_8bpc_c:            634.6
+  inv_txfm_add_16x4_dct_identity_1_8bpc_rvv:           85.6 ( 7.42x)
+  inv_txfm_add_16x4_dct_identity_1_10bpc_c:           614.6
+  inv_txfm_add_16x4_dct_identity_1_12bpc_c:           615.0
+  inv_txfm_add_16x4_dct_identity_2_8bpc_c:            635.8
+  inv_txfm_add_16x4_dct_identity_2_8bpc_rvv:           85.8 ( 7.40x)
+  inv_txfm_add_16x4_dct_identity_2_10bpc_c:           614.6
+  inv_txfm_add_16x4_dct_identity_2_12bpc_c:           615.1
+  inv_txfm_add_16x4_flipadst_adst_1_8bpc_c:           772.7
+  inv_txfm_add_16x4_flipadst_adst_1_8bpc_rvv:         110.3 ( 7.01x)
+  inv_txfm_add_16x4_flipadst_adst_1_10bpc_c:          666.1
+  inv_txfm_add_16x4_flipadst_adst_1_12bpc_c:          669.9
+  inv_txfm_add_16x4_flipadst_adst_2_8bpc_c:           770.9
+  inv_txfm_add_16x4_flipadst_adst_2_8bpc_rvv:         110.3 ( 6.99x)
+  inv_txfm_add_16x4_flipadst_adst_2_10bpc_c:          666.4
+  inv_txfm_add_16x4_flipadst_adst_2_12bpc_c:          667.2
+  inv_txfm_add_16x4_flipadst_dct_1_8bpc_c:            723.0
+  inv_txfm_add_16x4_flipadst_dct_1_8bpc_rvv:          105.6 ( 6.85x)
+  inv_txfm_add_16x4_flipadst_dct_1_10bpc_c:           651.9
+  inv_txfm_add_16x4_flipadst_dct_1_12bpc_c:           656.4
+  inv_txfm_add_16x4_flipadst_dct_2_8bpc_c:            720.2
+  inv_txfm_add_16x4_flipadst_dct_2_8bpc_rvv:          105.6 ( 6.82x)
+  inv_txfm_add_16x4_flipadst_dct_2_10bpc_c:           652.4
+  inv_txfm_add_16x4_flipadst_dct_2_12bpc_c:           652.4
+  inv_txfm_add_16x4_flipadst_flipadst_1_8bpc_c:       765.6
+  inv_txfm_add_16x4_flipadst_flipadst_1_8bpc_rvv:     111.9 ( 6.82x)
+  inv_txfm_add_16x4_flipadst_flipadst_1_10bpc_c:      676.2
+  inv_txfm_add_16x4_flipadst_flipadst_1_12bpc_c:      677.2
+  inv_txfm_add_16x4_flipadst_flipadst_2_8bpc_c:       765.3
+  inv_txfm_add_16x4_flipadst_flipadst_2_8bpc_rvv:     111.7 ( 6.85x)
+  inv_txfm_add_16x4_flipadst_flipadst_2_10bpc_c:      678.2
+  inv_txfm_add_16x4_flipadst_flipadst_2_12bpc_c:      677.2
+  inv_txfm_add_16x4_flipadst_identity_1_8bpc_c:       659.7
+  inv_txfm_add_16x4_flipadst_identity_1_8bpc_rvv:      97.9 ( 6.74x)
+  inv_txfm_add_16x4_flipadst_identity_1_10bpc_c:      598.3
+  inv_txfm_add_16x4_flipadst_identity_1_12bpc_c:      598.4
+  inv_txfm_add_16x4_flipadst_identity_2_8bpc_c:       659.5
+  inv_txfm_add_16x4_flipadst_identity_2_8bpc_rvv:      98.1 ( 6.70x)
+  inv_txfm_add_16x4_flipadst_identity_2_10bpc_c:      597.8
+  inv_txfm_add_16x4_flipadst_identity_2_12bpc_c:      598.9
+  inv_txfm_add_16x4_identity_adst_1_8bpc_c:           428.8
+  inv_txfm_add_16x4_identity_adst_1_8bpc_rvv:          59.1 ( 7.25x)
+  inv_txfm_add_16x4_identity_adst_1_10bpc_c:          374.6
+  inv_txfm_add_16x4_identity_adst_1_12bpc_c:          372.8
+  inv_txfm_add_16x4_identity_adst_2_8bpc_c:           500.6
+  inv_txfm_add_16x4_identity_adst_2_8bpc_rvv:          59.2 ( 8.46x)
+  inv_txfm_add_16x4_identity_adst_2_10bpc_c:          442.8
+  inv_txfm_add_16x4_identity_adst_2_12bpc_c:          445.4
+  inv_txfm_add_16x4_identity_dct_1_8bpc_c:            389.5
+  inv_txfm_add_16x4_identity_dct_1_8bpc_rvv:           55.0 ( 7.08x)
+  inv_txfm_add_16x4_identity_dct_1_10bpc_c:           359.3
+  inv_txfm_add_16x4_identity_dct_1_12bpc_c:           358.0
+  inv_txfm_add_16x4_identity_dct_2_8bpc_c:            460.3
+  inv_txfm_add_16x4_identity_dct_2_8bpc_rvv:           55.0 ( 8.37x)
+  inv_txfm_add_16x4_identity_dct_2_10bpc_c:           427.9
+  inv_txfm_add_16x4_identity_dct_2_12bpc_c:           429.4
+  inv_txfm_add_16x4_identity_flipadst_1_8bpc_c:       435.5
+  inv_txfm_add_16x4_identity_flipadst_1_8bpc_rvv:      60.0 ( 7.26x)
+  inv_txfm_add_16x4_identity_flipadst_1_10bpc_c:      384.4
+  inv_txfm_add_16x4_identity_flipadst_1_12bpc_c:      383.4
+  inv_txfm_add_16x4_identity_flipadst_2_8bpc_c:       504.9
+  inv_txfm_add_16x4_identity_flipadst_2_8bpc_rvv:      60.0 ( 8.41x)
+  inv_txfm_add_16x4_identity_flipadst_2_10bpc_c:      452.8
+  inv_txfm_add_16x4_identity_flipadst_2_12bpc_c:      454.5
+  inv_txfm_add_16x4_identity_identity_1_8bpc_c:       421.3
+  inv_txfm_add_16x4_identity_identity_1_8bpc_rvv:      48.3 ( 8.72x)
+  inv_txfm_add_16x4_identity_identity_1_10bpc_c:      375.6
+  inv_txfm_add_16x4_identity_identity_1_12bpc_c:      375.6
+  inv_txfm_add_16x4_identity_identity_2_8bpc_c:       421.4
+  inv_txfm_add_16x4_identity_identity_2_8bpc_rvv:      48.4 ( 8.69x)
+  inv_txfm_add_16x4_identity_identity_2_10bpc_c:      375.7
+  inv_txfm_add_16x4_identity_identity_2_12bpc_c:      377.7
+  inv_txfm_add_16x8_adst_adst_1_8bpc_c:              1613.9
+  inv_txfm_add_16x8_adst_adst_1_8bpc_rvv:             158.5 (10.13x)
+  inv_txfm_add_16x8_adst_adst_1_10bpc_c:             1506.5
+  inv_txfm_add_16x8_adst_adst_1_12bpc_c:             1506.1
+  inv_txfm_add_16x8_adst_adst_2_8bpc_c:              1618.7
+  inv_txfm_add_16x8_adst_adst_2_8bpc_rvv:             158.5 (10.21x)
+  inv_txfm_add_16x8_adst_adst_2_10bpc_c:             1514.2
+  inv_txfm_add_16x8_adst_adst_2_12bpc_c:             1514.8
+  inv_txfm_add_16x8_adst_dct_1_8bpc_c:               1559.0
+  inv_txfm_add_16x8_adst_dct_1_8bpc_rvv:              145.2 (10.74x)
+  inv_txfm_add_16x8_adst_dct_1_10bpc_c:              1427.8
+  inv_txfm_add_16x8_adst_dct_1_12bpc_c:              1427.7
+  inv_txfm_add_16x8_adst_dct_2_8bpc_c:               1560.3
+  inv_txfm_add_16x8_adst_dct_2_8bpc_rvv:              145.2 (10.75x)
+  inv_txfm_add_16x8_adst_dct_2_10bpc_c:              1428.3
+  inv_txfm_add_16x8_adst_dct_2_12bpc_c:              1428.6
+  inv_txfm_add_16x8_adst_flipadst_1_8bpc_c:          1619.8
+  inv_txfm_add_16x8_adst_flipadst_1_8bpc_rvv:         159.2 (10.18x)
+  inv_txfm_add_16x8_adst_flipadst_1_10bpc_c:         1516.5
+  inv_txfm_add_16x8_adst_flipadst_1_12bpc_c:         1515.2
+  inv_txfm_add_16x8_adst_flipadst_2_8bpc_c:          1620.6
+  inv_txfm_add_16x8_adst_flipadst_2_8bpc_rvv:         159.3 (10.14x)
+  inv_txfm_add_16x8_adst_flipadst_2_10bpc_c:         1516.8
+  inv_txfm_add_16x8_adst_flipadst_2_12bpc_c:         1516.5
+  inv_txfm_add_16x8_adst_identity_1_8bpc_c:          1245.9
+  inv_txfm_add_16x8_adst_identity_1_8bpc_rvv:         115.4 (10.80x)
+  inv_txfm_add_16x8_adst_identity_1_10bpc_c:         1146.4
+  inv_txfm_add_16x8_adst_identity_1_12bpc_c:         1146.2
+  inv_txfm_add_16x8_adst_identity_2_8bpc_c:          1247.5
+  inv_txfm_add_16x8_adst_identity_2_8bpc_rvv:         115.3 (10.81x)
+  inv_txfm_add_16x8_adst_identity_2_10bpc_c:         1143.2
+  inv_txfm_add_16x8_adst_identity_2_12bpc_c:         1142.9
+  inv_txfm_add_16x8_dct_adst_1_8bpc_c:               1563.4
+  inv_txfm_add_16x8_dct_adst_1_8bpc_rvv:              148.1 (10.53x)
+  inv_txfm_add_16x8_dct_adst_1_10bpc_c:              1540.4
+  inv_txfm_add_16x8_dct_adst_1_12bpc_c:              1539.1
+  inv_txfm_add_16x8_dct_adst_2_8bpc_c:               1569.3
+  inv_txfm_add_16x8_dct_adst_2_8bpc_rvv:              147.7 (10.62x)
+  inv_txfm_add_16x8_dct_adst_2_10bpc_c:              1544.4
+  inv_txfm_add_16x8_dct_adst_2_12bpc_c:              1540.0
+  inv_txfm_add_16x8_dct_dct_0_8bpc_c:                 156.9
+  inv_txfm_add_16x8_dct_dct_0_8bpc_rvv:               134.2 ( 1.17x)
+  inv_txfm_add_16x8_dct_dct_0_10bpc_c:                134.0
+  inv_txfm_add_16x8_dct_dct_0_12bpc_c:                134.2
+  inv_txfm_add_16x8_dct_dct_1_8bpc_c:                1524.3
+  inv_txfm_add_16x8_dct_dct_1_8bpc_rvv:               134.2 (11.36x)
+  inv_txfm_add_16x8_dct_dct_1_10bpc_c:               1467.5
+  inv_txfm_add_16x8_dct_dct_1_12bpc_c:               1467.1
+  inv_txfm_add_16x8_dct_dct_2_8bpc_c:                1510.1
+  inv_txfm_add_16x8_dct_dct_2_8bpc_rvv:               134.2 (11.26x)
+  inv_txfm_add_16x8_dct_dct_2_10bpc_c:               1461.8
+  inv_txfm_add_16x8_dct_dct_2_12bpc_c:               1462.0
+  inv_txfm_add_16x8_dct_flipadst_1_8bpc_c:           1570.7
+  inv_txfm_add_16x8_dct_flipadst_1_8bpc_rvv:          148.0 (10.61x)
+  inv_txfm_add_16x8_dct_flipadst_1_10bpc_c:          1549.8
+  inv_txfm_add_16x8_dct_flipadst_1_12bpc_c:          1550.6
+  inv_txfm_add_16x8_dct_flipadst_2_8bpc_c:           1569.3
+  inv_txfm_add_16x8_dct_flipadst_2_8bpc_rvv:          148.5 (10.55x)
+  inv_txfm_add_16x8_dct_flipadst_2_10bpc_c:          1549.9
+  inv_txfm_add_16x8_dct_flipadst_2_12bpc_c:          1550.5
+  inv_txfm_add_16x8_dct_identity_1_8bpc_c:           1198.2
+  inv_txfm_add_16x8_dct_identity_1_8bpc_rvv:          104.4 (11.48x)
+  inv_txfm_add_16x8_dct_identity_1_10bpc_c:          1178.0
+  inv_txfm_add_16x8_dct_identity_1_12bpc_c:          1179.3
+  inv_txfm_add_16x8_dct_identity_2_8bpc_c:           1194.6
+  inv_txfm_add_16x8_dct_identity_2_8bpc_rvv:          104.4 (11.44x)
+  inv_txfm_add_16x8_dct_identity_2_10bpc_c:          1176.0
+  inv_txfm_add_16x8_dct_identity_2_12bpc_c:          1175.6
+  inv_txfm_add_16x8_flipadst_adst_1_8bpc_c:          1623.6
+  inv_txfm_add_16x8_flipadst_adst_1_8bpc_rvv:         160.7 (10.10x)
+  inv_txfm_add_16x8_flipadst_adst_1_10bpc_c:         1524.7
+  inv_txfm_add_16x8_flipadst_adst_1_12bpc_c:         1523.2
+  inv_txfm_add_16x8_flipadst_adst_2_8bpc_c:          1617.6
+  inv_txfm_add_16x8_flipadst_adst_2_8bpc_rvv:         160.7 (10.07x)
+  inv_txfm_add_16x8_flipadst_adst_2_10bpc_c:         1518.3
+  inv_txfm_add_16x8_flipadst_adst_2_12bpc_c:         1517.3
+  inv_txfm_add_16x8_flipadst_dct_1_8bpc_c:           1568.0
+  inv_txfm_add_16x8_flipadst_dct_1_8bpc_rvv:          147.4 (10.63x)
+  inv_txfm_add_16x8_flipadst_dct_1_10bpc_c:          1438.9
+  inv_txfm_add_16x8_flipadst_dct_1_12bpc_c:          1439.0
+  inv_txfm_add_16x8_flipadst_dct_2_8bpc_c:           1564.9
+  inv_txfm_add_16x8_flipadst_dct_2_8bpc_rvv:          147.4 (10.61x)
+  inv_txfm_add_16x8_flipadst_dct_2_10bpc_c:          1443.6
+  inv_txfm_add_16x8_flipadst_dct_2_12bpc_c:          1443.3
+  inv_txfm_add_16x8_flipadst_flipadst_1_8bpc_c:      1624.4
+  inv_txfm_add_16x8_flipadst_flipadst_1_8bpc_rvv:     161.2 (10.08x)
+  inv_txfm_add_16x8_flipadst_flipadst_1_10bpc_c:     1527.5
+  inv_txfm_add_16x8_flipadst_flipadst_1_12bpc_c:     1527.4
+  inv_txfm_add_16x8_flipadst_flipadst_2_8bpc_c:      1623.3
+  inv_txfm_add_16x8_flipadst_flipadst_2_8bpc_rvv:     161.6 (10.03x)
+  inv_txfm_add_16x8_flipadst_flipadst_2_10bpc_c:     1527.8
+  inv_txfm_add_16x8_flipadst_flipadst_2_12bpc_c:     1526.9
+  inv_txfm_add_16x8_flipadst_identity_1_8bpc_c:      1249.4
+  inv_txfm_add_16x8_flipadst_identity_1_8bpc_rvv:     118.4 (10.55x)
+  inv_txfm_add_16x8_flipadst_identity_1_10bpc_c:     1153.4
+  inv_txfm_add_16x8_flipadst_identity_1_12bpc_c:     1152.8
+  inv_txfm_add_16x8_flipadst_identity_2_8bpc_c:      1249.9
+  inv_txfm_add_16x8_flipadst_identity_2_8bpc_rvv:     118.4 (10.56x)
+  inv_txfm_add_16x8_flipadst_identity_2_10bpc_c:     1154.2
+  inv_txfm_add_16x8_flipadst_identity_2_12bpc_c:     1152.8
+  inv_txfm_add_16x8_identity_adst_1_8bpc_c:           967.8
+  inv_txfm_add_16x8_identity_adst_1_8bpc_rvv:         109.3 ( 8.83x)
+  inv_txfm_add_16x8_identity_adst_1_10bpc_c:          866.7
+  inv_txfm_add_16x8_identity_adst_1_12bpc_c:          866.2
+  inv_txfm_add_16x8_identity_adst_2_8bpc_c:          1176.1
+  inv_txfm_add_16x8_identity_adst_2_8bpc_rvv:         108.9 (10.80x)
+  inv_txfm_add_16x8_identity_adst_2_10bpc_c:         1073.8
+  inv_txfm_add_16x8_identity_adst_2_12bpc_c:         1073.9
+  inv_txfm_add_16x8_identity_dct_1_8bpc_c:            923.7
+  inv_txfm_add_16x8_identity_dct_1_8bpc_rvv:           95.4 ( 9.67x)
+  inv_txfm_add_16x8_identity_dct_1_10bpc_c:           788.4
+  inv_txfm_add_16x8_identity_dct_1_12bpc_c:           789.0
+  inv_txfm_add_16x8_identity_dct_2_8bpc_c:           1120.5
+  inv_txfm_add_16x8_identity_dct_2_8bpc_rvv:           95.1 (11.78x)
+  inv_txfm_add_16x8_identity_dct_2_10bpc_c:           995.3
+  inv_txfm_add_16x8_identity_dct_2_12bpc_c:           995.2
+  inv_txfm_add_16x8_identity_flipadst_1_8bpc_c:       973.4
+  inv_txfm_add_16x8_identity_flipadst_1_8bpc_rvv:     109.9 ( 8.83x)
+  inv_txfm_add_16x8_identity_flipadst_1_10bpc_c:      876.2
+  inv_txfm_add_16x8_identity_flipadst_1_12bpc_c:      876.3
+  inv_txfm_add_16x8_identity_flipadst_2_8bpc_c:      1184.1
+  inv_txfm_add_16x8_identity_flipadst_2_8bpc_rvv:     109.6 (10.80x)
+  inv_txfm_add_16x8_identity_flipadst_2_10bpc_c:     1087.2
+  inv_txfm_add_16x8_identity_flipadst_2_12bpc_c:     1086.4
+  inv_txfm_add_16x8_identity_identity_1_8bpc_c:       807.9
+  inv_txfm_add_16x8_identity_identity_1_8bpc_rvv:      65.2 (12.39x)
+  inv_txfm_add_16x8_identity_identity_1_10bpc_c:      710.5
+  inv_txfm_add_16x8_identity_identity_1_12bpc_c:      715.0
+  inv_txfm_add_16x8_identity_identity_2_8bpc_c:       805.2
+  inv_txfm_add_16x8_identity_identity_2_8bpc_rvv:      65.2 (12.35x)
+  inv_txfm_add_16x8_identity_identity_2_10bpc_c:      710.9
+  inv_txfm_add_16x8_identity_identity_2_12bpc_c:      710.4
+  inv_txfm_add_16x16_adst_adst_1_8bpc_c:             2739.0
+  inv_txfm_add_16x16_adst_adst_1_8bpc_rvv:            273.6 (10.01x)
+  inv_txfm_add_16x16_adst_adst_1_10bpc_c:            2537.2
+  inv_txfm_add_16x16_adst_adst_1_12bpc_c:            2544.1
+  inv_txfm_add_16x16_adst_adst_2_8bpc_c:             3381.9
+  inv_txfm_add_16x16_adst_adst_2_8bpc_rvv:            368.7 ( 9.17x)
+  inv_txfm_add_16x16_adst_adst_2_10bpc_c:            3174.8
+  inv_txfm_add_16x16_adst_adst_2_12bpc_c:            3174.8
+  inv_txfm_add_16x16_adst_dct_1_8bpc_c:              2628.3
+  inv_txfm_add_16x16_adst_dct_1_8bpc_rvv:             249.2 (10.54x)
+  inv_txfm_add_16x16_adst_dct_1_10bpc_c:             2422.4
+  inv_txfm_add_16x16_adst_dct_1_12bpc_c:             2421.5
+  inv_txfm_add_16x16_adst_dct_2_8bpc_c:              3268.8
+  inv_txfm_add_16x16_adst_dct_2_8bpc_rvv:             347.5 ( 9.39x)
+  inv_txfm_add_16x16_adst_dct_2_10bpc_c:             3068.6
+  inv_txfm_add_16x16_adst_dct_2_12bpc_c:             3060.5
+  inv_txfm_add_16x16_adst_flipadst_1_8bpc_c:         2743.6
+  inv_txfm_add_16x16_adst_flipadst_1_8bpc_rvv:        274.5 ( 9.91x)
+  inv_txfm_add_16x16_adst_flipadst_1_10bpc_c:        2551.5
+  inv_txfm_add_16x16_adst_flipadst_1_12bpc_c:        2535.7
+  inv_txfm_add_16x16_adst_flipadst_2_8bpc_c:         3377.2
+  inv_txfm_add_16x16_adst_flipadst_2_8bpc_rvv:        371.2 ( 9.10x)
+  inv_txfm_add_16x16_adst_flipadst_2_10bpc_c:        3173.7
+  inv_txfm_add_16x16_adst_flipadst_2_12bpc_c:        3195.6
+  inv_txfm_add_16x16_dct_adst_1_8bpc_c:              2697.3
+  inv_txfm_add_16x16_dct_adst_1_8bpc_rvv:             255.9 ( 9.40x)
+  inv_txfm_add_16x16_dct_adst_1_10bpc_c:             2570.9
+  inv_txfm_add_16x16_dct_adst_1_12bpc_c:             2571.7
+  inv_txfm_add_16x16_dct_adst_2_8bpc_c:              3273.9
+  inv_txfm_add_16x16_dct_adst_2_8bpc_rvv:             347.6 ( 9.42x)
+  inv_txfm_add_16x16_dct_adst_2_10bpc_c:             3237.3
+  inv_txfm_add_16x16_dct_adst_2_12bpc_c:             3242.3
+  inv_txfm_add_16x16_dct_dct_0_8bpc_c:                295.7
+  inv_txfm_add_16x16_dct_dct_0_8bpc_rvv:               31.1 ( 9.45x)
+  inv_txfm_add_16x16_dct_dct_0_10bpc_c:               243.0
+  inv_txfm_add_16x16_dct_dct_0_12bpc_c:               243.0
+  inv_txfm_add_16x16_dct_dct_1_8bpc_c:               2563.2
+  inv_txfm_add_16x16_dct_dct_1_8bpc_rvv:              238.7 (10.74x)
+  inv_txfm_add_16x16_dct_dct_1_10bpc_c:              2465.1
+  inv_txfm_add_16x16_dct_dct_1_12bpc_c:              2455.8
+  inv_txfm_add_16x16_dct_dct_2_8bpc_c:               3159.4
+  inv_txfm_add_16x16_dct_dct_2_8bpc_rvv:              324.3 ( 9.74x)
+  inv_txfm_add_16x16_dct_dct_2_10bpc_c:              3117.6
+  inv_txfm_add_16x16_dct_dct_2_12bpc_c:              3127.4
+  inv_txfm_add_16x16_dct_flipadst_1_8bpc_c:          2682.1
+  inv_txfm_add_16x16_dct_flipadst_1_8bpc_rvv:         263.5 (10.18x)
+  inv_txfm_add_16x16_dct_flipadst_1_10bpc_c:         2577.4
+  inv_txfm_add_16x16_dct_flipadst_1_12bpc_c:         2570.3
+  inv_txfm_add_16x16_dct_flipadst_2_8bpc_c:          3272.6
+  inv_txfm_add_16x16_dct_flipadst_2_8bpc_rvv:         350.2 ( 9.32x)
+  inv_txfm_add_16x16_dct_flipadst_2_10bpc_c:         3231.1
+  inv_txfm_add_16x16_dct_flipadst_2_12bpc_c:         3238.1
+  inv_txfm_add_16x16_dct_identity_1_8bpc_c:          1796.3
+  inv_txfm_add_16x16_dct_identity_1_8bpc_rvv:         171.0 (10.51x)
+  inv_txfm_add_16x16_dct_identity_1_10bpc_c:         1679.7
+  inv_txfm_add_16x16_dct_identity_1_12bpc_c:         1679.7
+  inv_txfm_add_16x16_dct_identity_2_8bpc_c:          2381.0
+  inv_txfm_add_16x16_dct_identity_2_8bpc_rvv:         255.6 ( 9.29x)
+  inv_txfm_add_16x16_dct_identity_2_10bpc_c:         2349.4
+  inv_txfm_add_16x16_dct_identity_2_12bpc_c:         2340.9
+  inv_txfm_add_16x16_flipadst_adst_1_8bpc_c:         2741.8
+  inv_txfm_add_16x16_flipadst_adst_1_8bpc_rvv:        275.2 ( 9.96x)
+  inv_txfm_add_16x16_flipadst_adst_1_10bpc_c:        2537.5
+  inv_txfm_add_16x16_flipadst_adst_1_12bpc_c:        2548.5
+  inv_txfm_add_16x16_flipadst_adst_2_8bpc_c:         3384.7
+  inv_txfm_add_16x16_flipadst_adst_2_8bpc_rvv:        374.4 ( 9.04x)
+  inv_txfm_add_16x16_flipadst_adst_2_10bpc_c:        3176.7
+  inv_txfm_add_16x16_flipadst_adst_2_12bpc_c:        3175.1
+  inv_txfm_add_16x16_flipadst_dct_1_8bpc_c:          2640.4
+  inv_txfm_add_16x16_flipadst_dct_1_8bpc_rvv:         251.6 (10.49x)
+  inv_txfm_add_16x16_flipadst_dct_1_10bpc_c:         2421.3
+  inv_txfm_add_16x16_flipadst_dct_1_12bpc_c:         2422.6
+  inv_txfm_add_16x16_flipadst_dct_2_8bpc_c:          3266.6
+  inv_txfm_add_16x16_flipadst_dct_2_8bpc_rvv:         350.5 ( 9.32x)
+  inv_txfm_add_16x16_flipadst_dct_2_10bpc_c:         3062.7
+  inv_txfm_add_16x16_flipadst_dct_2_12bpc_c:         3060.6
+  inv_txfm_add_16x16_flipadst_flipadst_1_8bpc_c:     2748.0
+  inv_txfm_add_16x16_flipadst_flipadst_1_8bpc_rvv:    278.1 ( 9.84x)
+  inv_txfm_add_16x16_flipadst_flipadst_1_10bpc_c:    2536.4
+  inv_txfm_add_16x16_flipadst_flipadst_1_12bpc_c:    2537.5
+  inv_txfm_add_16x16_flipadst_flipadst_2_8bpc_c:     3383.5
+  inv_txfm_add_16x16_flipadst_flipadst_2_8bpc_rvv:    375.8 ( 9.00x)
+  inv_txfm_add_16x16_flipadst_flipadst_2_10bpc_c:    3187.3
+  inv_txfm_add_16x16_flipadst_flipadst_2_12bpc_c:    3174.0
+  inv_txfm_add_16x16_identity_dct_1_8bpc_c:          2004.8
+  inv_txfm_add_16x16_identity_dct_1_8bpc_rvv:         203.6 ( 9.84x)
+  inv_txfm_add_16x16_identity_dct_1_10bpc_c:         1793.6
+  inv_txfm_add_16x16_identity_dct_1_12bpc_c:         1802.4
+  inv_txfm_add_16x16_identity_dct_2_8bpc_c:          2375.4
+  inv_txfm_add_16x16_identity_dct_2_8bpc_rvv:         281.7 ( 8.43x)
+  inv_txfm_add_16x16_identity_dct_2_10bpc_c:         2167.6
+  inv_txfm_add_16x16_identity_dct_2_12bpc_c:         2167.7
+  inv_txfm_add_16x16_identity_identity_1_8bpc_c:     1405.0
+  inv_txfm_add_16x16_identity_identity_1_8bpc_rvv:    133.6 (10.52x)
+  inv_txfm_add_16x16_identity_identity_1_10bpc_c:    1202.5
+  inv_txfm_add_16x16_identity_identity_1_12bpc_c:    1202.2
+  inv_txfm_add_16x16_identity_identity_2_8bpc_c:     1588.2
+  inv_txfm_add_16x16_identity_identity_2_8bpc_rvv:    205.8 ( 7.70x)
+  inv_txfm_add_16x16_identity_identity_2_10bpc_c:    1398.4
+  inv_txfm_add_16x16_identity_identity_2_12bpc_c:    1393.9
+  inv_txfm_add_16x32_dct_dct_0_8bpc_c:                573.2
+  inv_txfm_add_16x32_dct_dct_0_10bpc_c:               466.3
+  inv_txfm_add_16x32_dct_dct_0_12bpc_c:               466.2
+  inv_txfm_add_16x32_dct_dct_1_8bpc_c:               5864.5
+  inv_txfm_add_16x32_dct_dct_1_10bpc_c:              5088.9
+  inv_txfm_add_16x32_dct_dct_1_12bpc_c:              5086.0
+  inv_txfm_add_16x32_dct_dct_2_8bpc_c:               6458.0
+  inv_txfm_add_16x32_dct_dct_2_10bpc_c:              5785.2
+  inv_txfm_add_16x32_dct_dct_2_12bpc_c:              5793.9
+  inv_txfm_add_16x32_dct_dct_3_8bpc_c:               7164.4
+  inv_txfm_add_16x32_dct_dct_3_10bpc_c:              6503.6
+  inv_txfm_add_16x32_dct_dct_3_12bpc_c:              6494.5
+  inv_txfm_add_16x32_dct_dct_4_8bpc_c:               7643.2
+  inv_txfm_add_16x32_dct_dct_4_10bpc_c:              7183.9
+  inv_txfm_add_16x32_dct_dct_4_12bpc_c:              7184.4
+  inv_txfm_add_16x32_identity_identity_1_8bpc_c:     2653.7
+  inv_txfm_add_16x32_identity_identity_1_10bpc_c:    1967.9
+  inv_txfm_add_16x32_identity_identity_1_12bpc_c:    1969.2
+  inv_txfm_add_16x32_identity_identity_2_8bpc_c:     2524.0
+  inv_txfm_add_16x32_identity_identity_2_10bpc_c:    2204.3
+  inv_txfm_add_16x32_identity_identity_2_12bpc_c:    2201.7
+  inv_txfm_add_16x32_identity_identity_3_8bpc_c:     2761.4
+  inv_txfm_add_16x32_identity_identity_3_10bpc_c:    2426.9
+  inv_txfm_add_16x32_identity_identity_3_12bpc_c:    2443.9
+  inv_txfm_add_16x32_identity_identity_4_8bpc_c:     3037.9
+  inv_txfm_add_16x32_identity_identity_4_10bpc_c:    2658.6
+  inv_txfm_add_16x32_identity_identity_4_12bpc_c:    2657.5
+  inv_txfm_add_16x64_dct_dct_0_8bpc_c:               1128.5
+  inv_txfm_add_16x64_dct_dct_0_10bpc_c:               904.3
+  inv_txfm_add_16x64_dct_dct_0_12bpc_c:               904.6
+  inv_txfm_add_16x64_dct_dct_1_8bpc_c:              10527.4
+  inv_txfm_add_16x64_dct_dct_1_10bpc_c:              9591.1
+  inv_txfm_add_16x64_dct_dct_1_12bpc_c:              9528.8
+  inv_txfm_add_16x64_dct_dct_2_8bpc_c:              11102.2
+  inv_txfm_add_16x64_dct_dct_2_10bpc_c:             10228.9
+  inv_txfm_add_16x64_dct_dct_2_12bpc_c:             10042.8
+  inv_txfm_add_16x64_dct_dct_3_8bpc_c:              11696.2
+  inv_txfm_add_16x64_dct_dct_3_10bpc_c:             10925.8
+  inv_txfm_add_16x64_dct_dct_3_12bpc_c:             10722.1
+  inv_txfm_add_16x64_dct_dct_4_8bpc_c:              12278.3
+  inv_txfm_add_16x64_dct_dct_4_10bpc_c:             11565.8
+  inv_txfm_add_16x64_dct_dct_4_12bpc_c:             11385.7
+  inv_txfm_add_32x8_dct_dct_0_8bpc_c:                 297.7
+  inv_txfm_add_32x8_dct_dct_0_10bpc_c:                254.2
+  inv_txfm_add_32x8_dct_dct_0_12bpc_c:                253.9
+  inv_txfm_add_32x8_dct_dct_1_8bpc_c:                3872.5
+  inv_txfm_add_32x8_dct_dct_1_10bpc_c:               3071.4
+  inv_txfm_add_32x8_dct_dct_1_12bpc_c:               3071.6
+  inv_txfm_add_32x8_dct_dct_2_8bpc_c:                3881.5
+  inv_txfm_add_32x8_dct_dct_2_10bpc_c:               3071.9
+  inv_txfm_add_32x8_dct_dct_2_12bpc_c:               3072.4
+  inv_txfm_add_32x8_dct_dct_3_8bpc_c:                3874.8
+  inv_txfm_add_32x8_dct_dct_3_10bpc_c:               3087.7
+  inv_txfm_add_32x8_dct_dct_3_12bpc_c:               3078.2
+  inv_txfm_add_32x8_dct_dct_4_8bpc_c:                3884.0
+  inv_txfm_add_32x8_dct_dct_4_10bpc_c:               3080.2
+  inv_txfm_add_32x8_dct_dct_4_12bpc_c:               3078.8
+  inv_txfm_add_32x8_identity_identity_1_8bpc_c:      1355.1
+  inv_txfm_add_32x8_identity_identity_1_10bpc_c:     1181.3
+  inv_txfm_add_32x8_identity_identity_1_12bpc_c:     1189.4
+  inv_txfm_add_32x8_identity_identity_2_8bpc_c:      1353.6
+  inv_txfm_add_32x8_identity_identity_2_10bpc_c:     1177.1
+  inv_txfm_add_32x8_identity_identity_2_12bpc_c:     1176.5
+  inv_txfm_add_32x8_identity_identity_3_8bpc_c:      1353.8
+  inv_txfm_add_32x8_identity_identity_3_10bpc_c:     1176.1
+  inv_txfm_add_32x8_identity_identity_3_12bpc_c:     1175.7
+  inv_txfm_add_32x8_identity_identity_4_8bpc_c:      1361.8
+  inv_txfm_add_32x8_identity_identity_4_10bpc_c:     1176.1
+  inv_txfm_add_32x8_identity_identity_4_12bpc_c:     1175.4
+  inv_txfm_add_32x16_dct_dct_0_8bpc_c:                580.1
+  inv_txfm_add_32x16_dct_dct_0_10bpc_c:               485.7
+  inv_txfm_add_32x16_dct_dct_0_12bpc_c:               488.1
+  inv_txfm_add_32x16_dct_dct_1_8bpc_c:               5951.9
+  inv_txfm_add_32x16_dct_dct_1_10bpc_c:              5188.5
+  inv_txfm_add_32x16_dct_dct_1_12bpc_c:              5188.1
+  inv_txfm_add_32x16_dct_dct_2_8bpc_c:               7670.4
+  inv_txfm_add_32x16_dct_dct_2_10bpc_c:              6885.0
+  inv_txfm_add_32x16_dct_dct_2_12bpc_c:              6888.4
+  inv_txfm_add_32x16_dct_dct_3_8bpc_c:               7676.0
+  inv_txfm_add_32x16_dct_dct_3_10bpc_c:              6886.4
+  inv_txfm_add_32x16_dct_dct_3_12bpc_c:              6886.5
+  inv_txfm_add_32x16_dct_dct_4_8bpc_c:               7674.5
+  inv_txfm_add_32x16_dct_dct_4_10bpc_c:              6886.8
+  inv_txfm_add_32x16_dct_dct_4_12bpc_c:              6886.2
+  inv_txfm_add_32x16_identity_identity_1_8bpc_c:     2632.4
+  inv_txfm_add_32x16_identity_identity_1_10bpc_c:    2280.3
+  inv_txfm_add_32x16_identity_identity_1_12bpc_c:    2280.3
+  inv_txfm_add_32x16_identity_identity_2_8bpc_c:     2987.8
+  inv_txfm_add_32x16_identity_identity_2_10bpc_c:    2639.0
+  inv_txfm_add_32x16_identity_identity_2_12bpc_c:    2619.4
+  inv_txfm_add_32x16_identity_identity_3_8bpc_c:     2989.6
+  inv_txfm_add_32x16_identity_identity_3_10bpc_c:    2602.6
+  inv_txfm_add_32x16_identity_identity_3_12bpc_c:    2599.1
+  inv_txfm_add_32x16_identity_identity_4_8bpc_c:     2995.8
+  inv_txfm_add_32x16_identity_identity_4_10bpc_c:    2600.4
+  inv_txfm_add_32x16_identity_identity_4_12bpc_c:    2601.3
+  inv_txfm_add_32x32_dct_dct_0_8bpc_c:               1138.6
+  inv_txfm_add_32x32_dct_dct_0_10bpc_c:               948.1
+  inv_txfm_add_32x32_dct_dct_0_12bpc_c:               947.8
+  inv_txfm_add_32x32_dct_dct_1_8bpc_c:              12067.9
+  inv_txfm_add_32x32_dct_dct_1_10bpc_c:             10460.0
+  inv_txfm_add_32x32_dct_dct_1_12bpc_c:             10519.3
+  inv_txfm_add_32x32_dct_dct_2_8bpc_c:              13689.1
+  inv_txfm_add_32x32_dct_dct_2_10bpc_c:             12082.2
+  inv_txfm_add_32x32_dct_dct_2_12bpc_c:             12083.6
+  inv_txfm_add_32x32_dct_dct_3_8bpc_c:              15342.3
+  inv_txfm_add_32x32_dct_dct_3_10bpc_c:             13696.9
+  inv_txfm_add_32x32_dct_dct_3_12bpc_c:             13709.2
+  inv_txfm_add_32x32_dct_dct_4_8bpc_c:              16896.7
+  inv_txfm_add_32x32_dct_dct_4_10bpc_c:             15310.7
+  inv_txfm_add_32x32_dct_dct_4_12bpc_c:             15302.4
+  inv_txfm_add_32x32_identity_identity_1_8bpc_c:     5338.2
+  inv_txfm_add_32x32_identity_identity_1_10bpc_c:    3748.8
+  inv_txfm_add_32x32_identity_identity_1_12bpc_c:    3735.1
+  inv_txfm_add_32x32_identity_identity_2_8bpc_c:     4632.4
+  inv_txfm_add_32x32_identity_identity_2_10bpc_c:    4016.5
+  inv_txfm_add_32x32_identity_identity_2_12bpc_c:    4010.4
+  inv_txfm_add_32x32_identity_identity_3_8bpc_c:     4932.3
+  inv_txfm_add_32x32_identity_identity_3_10bpc_c:    4310.3
+  inv_txfm_add_32x32_identity_identity_3_12bpc_c:    4337.2
+  inv_txfm_add_32x32_identity_identity_4_8bpc_c:     5256.7
+  inv_txfm_add_32x32_identity_identity_4_10bpc_c:    4561.9
+  inv_txfm_add_32x32_identity_identity_4_12bpc_c:    4565.1
+  inv_txfm_add_32x64_dct_dct_0_8bpc_c:               2261.3
+  inv_txfm_add_32x64_dct_dct_0_10bpc_c:              1874.9
+  inv_txfm_add_32x64_dct_dct_0_12bpc_c:              1882.2
+  inv_txfm_add_32x64_dct_dct_1_8bpc_c:              21470.7
+  inv_txfm_add_32x64_dct_dct_1_10bpc_c:             19217.7
+  inv_txfm_add_32x64_dct_dct_1_12bpc_c:             19221.0
+  inv_txfm_add_32x64_dct_dct_2_8bpc_c:              23010.9
+  inv_txfm_add_32x64_dct_dct_2_10bpc_c:             20926.2
+  inv_txfm_add_32x64_dct_dct_2_12bpc_c:             20925.0
+  inv_txfm_add_32x64_dct_dct_3_8bpc_c:              24694.9
+  inv_txfm_add_32x64_dct_dct_3_10bpc_c:             22602.9
+  inv_txfm_add_32x64_dct_dct_3_12bpc_c:             22643.3
+  inv_txfm_add_32x64_dct_dct_4_8bpc_c:              26485.4
+  inv_txfm_add_32x64_dct_dct_4_10bpc_c:             24309.5
+  inv_txfm_add_32x64_dct_dct_4_12bpc_c:             24334.3
+  inv_txfm_add_64x16_dct_dct_0_8bpc_c:               1401.5
+  inv_txfm_add_64x16_dct_dct_0_10bpc_c:              1124.5
+  inv_txfm_add_64x16_dct_dct_0_12bpc_c:              1220.4
+  inv_txfm_add_64x16_dct_dct_1_8bpc_c:              12509.0
+  inv_txfm_add_64x16_dct_dct_1_10bpc_c:             10579.1
+  inv_txfm_add_64x16_dct_dct_1_12bpc_c:             10684.6
+  inv_txfm_add_64x16_dct_dct_2_8bpc_c:              15977.2
+  inv_txfm_add_64x16_dct_dct_2_10bpc_c:             13962.5
+  inv_txfm_add_64x16_dct_dct_2_12bpc_c:             13979.7
+  inv_txfm_add_64x16_dct_dct_3_8bpc_c:              16018.8
+  inv_txfm_add_64x16_dct_dct_3_10bpc_c:             13965.0
+  inv_txfm_add_64x16_dct_dct_3_12bpc_c:             13978.2
+  inv_txfm_add_64x16_dct_dct_4_8bpc_c:              15929.1
+  inv_txfm_add_64x16_dct_dct_4_10bpc_c:             13968.7
+  inv_txfm_add_64x16_dct_dct_4_12bpc_c:             13979.1
+  inv_txfm_add_64x32_dct_dct_0_8bpc_c:               2766.3
+  inv_txfm_add_64x32_dct_dct_0_10bpc_c:              2176.4
+  inv_txfm_add_64x32_dct_dct_0_12bpc_c:              2186.2
+  inv_txfm_add_64x32_dct_dct_1_8bpc_c:              25193.9
+  inv_txfm_add_64x32_dct_dct_1_10bpc_c:             21492.8
+  inv_txfm_add_64x32_dct_dct_1_12bpc_c:             20957.6
+  inv_txfm_add_64x32_dct_dct_2_8bpc_c:              28751.1
+  inv_txfm_add_64x32_dct_dct_2_10bpc_c:             24925.6
+  inv_txfm_add_64x32_dct_dct_2_12bpc_c:             24721.0
+  inv_txfm_add_64x32_dct_dct_3_8bpc_c:              32283.7
+  inv_txfm_add_64x32_dct_dct_3_10bpc_c:             28328.1
+  inv_txfm_add_64x32_dct_dct_3_12bpc_c:             28463.8
+  inv_txfm_add_64x32_dct_dct_4_8bpc_c:              35794.5
+  inv_txfm_add_64x32_dct_dct_4_10bpc_c:             31751.5
+  inv_txfm_add_64x32_dct_dct_4_12bpc_c:             32125.5
+  inv_txfm_add_64x64_dct_dct_0_8bpc_c:               5511.1
+  inv_txfm_add_64x64_dct_dct_0_10bpc_c:              4293.5
+  inv_txfm_add_64x64_dct_dct_0_12bpc_c:              4307.5
+  inv_txfm_add_64x64_dct_dct_1_8bpc_c:              43777.8
+  inv_txfm_add_64x64_dct_dct_1_10bpc_c:             38979.5
+  inv_txfm_add_64x64_dct_dct_1_12bpc_c:             39003.0
+  inv_txfm_add_64x64_dct_dct_2_8bpc_c:              47327.9
+  inv_txfm_add_64x64_dct_dct_2_10bpc_c:             42371.2
+  inv_txfm_add_64x64_dct_dct_2_12bpc_c:             42364.5
+  inv_txfm_add_64x64_dct_dct_3_8bpc_c:              50771.8
+  inv_txfm_add_64x64_dct_dct_3_10bpc_c:             45674.5
+  inv_txfm_add_64x64_dct_dct_3_12bpc_c:             45679.1
+  inv_txfm_add_64x64_dct_dct_4_8bpc_c:              54225.5
+  inv_txfm_add_64x64_dct_dct_4_10bpc_c:             49059.8
+  inv_txfm_add_64x64_dct_dct_4_12bpc_c:             49034.8
+  load_tmvs_c:                                      77000.3
+  lpf_h_sb_uv_w4_8bpc_c:                               74.3
+  lpf_h_sb_uv_w4_16bpc_c:                             106.4
+  lpf_h_sb_uv_w6_8bpc_c:                              243.6
+  lpf_h_sb_uv_w6_16bpc_c:                             326.0
+  lpf_h_sb_y_w4_8bpc_c:                               273.0
+  lpf_h_sb_y_w4_16bpc_c:                              359.2
+  lpf_h_sb_y_w8_8bpc_c:                               789.8
+  lpf_h_sb_y_w8_16bpc_c:                              998.0
+  lpf_h_sb_y_w16_8bpc_c:                              860.8
+  lpf_h_sb_y_w16_16bpc_c:                             967.8
+  lpf_v_sb_uv_w4_8bpc_c:                               82.5
+  lpf_v_sb_uv_w4_16bpc_c:                             111.0
+  lpf_v_sb_uv_w6_8bpc_c:                              300.6
+  lpf_v_sb_uv_w6_16bpc_c:                             408.8
+  lpf_v_sb_y_w4_8bpc_c:                               206.5
+  lpf_v_sb_y_w4_16bpc_c:                              285.7
+  lpf_v_sb_y_w8_8bpc_c:                               626.0
+  lpf_v_sb_y_w8_16bpc_c:                              719.4
+  lpf_v_sb_y_w16_8bpc_c:                              696.8
+  lpf_v_sb_y_w16_16bpc_c:                             784.4
+  mask_w4_8bpc_c:                                      77.2
+  mask_w4_8bpc_rvv:                                    22.1 ( 3.49x)
+  mask_w4_16bpc_c:                                     72.6
+  mask_w8_8bpc_c:                                     220.1
+  mask_w8_8bpc_rvv:                                    69.4 ( 3.17x)
+  mask_w8_16bpc_c:                                    176.9
+  mask_w16_8bpc_c:                                    615.6
+  mask_w16_8bpc_rvv:                                   98.1 ( 6.27x)
+  mask_w16_16bpc_c:                                   499.1
+  mask_w32_8bpc_c:                                   2613.4
+  mask_w32_8bpc_rvv:                                  273.3 ( 9.56x)
+  mask_w32_16bpc_c:                                  1979.5
+  mask_w64_8bpc_c:                                   7117.6
+  mask_w64_8bpc_rvv:                                  741.1 ( 9.60x)
+  mask_w64_16bpc_c:                                  6265.8
+  mask_w128_8bpc_c:                                 19887.0
+  mask_w128_8bpc_rvv:                                2074.3 ( 9.59x)
+  mask_w128_16bpc_c:                                17202.8
+  mc_8tap_regular_w2_0_8bpc_c:                         55.7
+  mc_8tap_regular_w2_0_16bpc_c:                        93.5
+  mc_8tap_regular_w2_h_8bpc_c:                        101.9
+  mc_8tap_regular_w2_h_16bpc_c:                       105.7
+  mc_8tap_regular_w2_hv_8bpc_c:                       246.1
+  mc_8tap_regular_w2_hv_16bpc_c:                      267.8
+  mc_8tap_regular_w2_v_8bpc_c:                        119.8
+  mc_8tap_regular_w2_v_16bpc_c:                       122.7
+  mc_8tap_regular_w4_0_8bpc_c:                         82.7
+  mc_8tap_regular_w4_0_16bpc_c:                       110.8
+  mc_8tap_regular_w4_h_8bpc_c:                        190.2
+  mc_8tap_regular_w4_h_16bpc_c:                       188.0
+  mc_8tap_regular_w4_hv_8bpc_c:                       457.7
+  mc_8tap_regular_w4_hv_16bpc_c:                      488.5
+  mc_8tap_regular_w4_v_8bpc_c:                        214.7
+  mc_8tap_regular_w4_v_16bpc_c:                       215.0
+  mc_8tap_regular_w8_0_8bpc_c:                        100.3
+  mc_8tap_regular_w8_0_16bpc_c:                       118.1
+  mc_8tap_regular_w8_h_8bpc_c:                        373.2
+  mc_8tap_regular_w8_h_16bpc_c:                       370.7
+  mc_8tap_regular_w8_hv_8bpc_c:                       877.9
+  mc_8tap_regular_w8_hv_16bpc_c:                      885.1
+  mc_8tap_regular_w8_v_8bpc_c:                        411.0
+  mc_8tap_regular_w8_v_16bpc_c:                       397.7
+  mc_8tap_regular_w16_0_8bpc_c:                       133.6
+  mc_8tap_regular_w16_0_16bpc_c:                      149.7
+  mc_8tap_regular_w16_h_8bpc_c:                       907.8
+  mc_8tap_regular_w16_h_16bpc_c:                      894.5
+  mc_8tap_regular_w16_hv_8bpc_c:                     2037.0
+  mc_8tap_regular_w16_hv_16bpc_c:                    2101.3
+  mc_8tap_regular_w16_v_8bpc_c:                       993.9
+  mc_8tap_regular_w16_v_16bpc_c:                      952.7
+  mc_8tap_regular_w32_0_8bpc_c:                       176.7
+  mc_8tap_regular_w32_0_16bpc_c:                      233.2
+  mc_8tap_regular_w32_h_8bpc_c:                      2320.3
+  mc_8tap_regular_w32_h_16bpc_c:                     2259.3
+  mc_8tap_regular_w32_hv_8bpc_c:                     5179.2
+  mc_8tap_regular_w32_hv_16bpc_c:                    5094.3
+  mc_8tap_regular_w32_v_8bpc_c:                      2495.1
+  mc_8tap_regular_w32_v_16bpc_c:                     2372.4
+  mc_8tap_regular_w64_0_8bpc_c:                       589.7
+  mc_8tap_regular_w64_0_16bpc_c:                      736.0
+  mc_8tap_regular_w64_h_8bpc_c:                     13053.8
+  mc_8tap_regular_w64_h_16bpc_c:                    12488.0
+  mc_8tap_regular_w64_hv_8bpc_c:                    24416.1
+  mc_8tap_regular_w64_hv_16bpc_c:                   22087.0
+  mc_8tap_regular_w64_v_8bpc_c:                     13780.2
+  mc_8tap_regular_w64_v_16bpc_c:                    13289.1
+  mc_8tap_regular_w128_0_8bpc_c:                     1195.6
+  mc_8tap_regular_w128_0_16bpc_c:                    1775.4
+  mc_8tap_regular_w128_h_8bpc_c:                    42203.7
+  mc_8tap_regular_w128_h_16bpc_c:                   39403.9
+  mc_8tap_regular_w128_hv_8bpc_c:                   72933.3
+  mc_8tap_regular_w128_hv_16bpc_c:                  70094.8
+  mc_8tap_regular_w128_v_8bpc_c:                    44693.3
+  mc_8tap_regular_w128_v_16bpc_c:                   42128.8
+  mc_8tap_sharp_w2_0_8bpc_c:                           55.5
+  mc_8tap_sharp_w2_0_16bpc_c:                          93.4
+  mc_8tap_sharp_w2_h_8bpc_c:                          102.1
+  mc_8tap_sharp_w2_h_16bpc_c:                         105.7
+  mc_8tap_sharp_w2_hv_8bpc_c:                         245.7
+  mc_8tap_sharp_w2_hv_16bpc_c:                        281.8
+  mc_8tap_sharp_w2_v_8bpc_c:                          116.3
+  mc_8tap_sharp_w2_v_16bpc_c:                         123.2
+  mc_8tap_sharp_w4_0_8bpc_c:                           82.6
+  mc_8tap_sharp_w4_0_16bpc_c:                         111.0
+  mc_8tap_sharp_w4_h_8bpc_c:                          190.2
+  mc_8tap_sharp_w4_h_16bpc_c:                         187.8
+  mc_8tap_sharp_w4_hv_8bpc_c:                         458.3
+  mc_8tap_sharp_w4_hv_16bpc_c:                        517.2
+  mc_8tap_sharp_w4_v_8bpc_c:                          214.0
+  mc_8tap_sharp_w4_v_16bpc_c:                         218.8
+  mc_8tap_sharp_w8_0_8bpc_c:                          100.4
+  mc_8tap_sharp_w8_0_16bpc_c:                         118.2
+  mc_8tap_sharp_w8_h_8bpc_c:                          377.6
+  mc_8tap_sharp_w8_h_16bpc_c:                         397.4
+  mc_8tap_sharp_w8_hv_8bpc_c:                         874.7
+  mc_8tap_sharp_w8_hv_16bpc_c:                        902.8
+  mc_8tap_sharp_w8_v_8bpc_c:                          408.7
+  mc_8tap_sharp_w8_v_16bpc_c:                         406.8
+  mc_8tap_sharp_w16_0_8bpc_c:                         133.9
+  mc_8tap_sharp_w16_0_16bpc_c:                        149.6
+  mc_8tap_sharp_w16_h_8bpc_c:                         925.2
+  mc_8tap_sharp_w16_h_16bpc_c:                        952.2
+  mc_8tap_sharp_w16_hv_8bpc_c:                       2028.4
+  mc_8tap_sharp_w16_hv_16bpc_c:                      2092.3
+  mc_8tap_sharp_w16_v_8bpc_c:                         993.2
+  mc_8tap_sharp_w16_v_16bpc_c:                        973.2
+  mc_8tap_sharp_w32_0_8bpc_c:                         177.0
+  mc_8tap_sharp_w32_0_16bpc_c:                        233.3
+  mc_8tap_sharp_w32_h_8bpc_c:                        2342.4
+  mc_8tap_sharp_w32_h_16bpc_c:                       2383.5
+  mc_8tap_sharp_w32_hv_8bpc_c:                       5168.5
+  mc_8tap_sharp_w32_hv_16bpc_c:                      5066.0
+  mc_8tap_sharp_w32_v_8bpc_c:                        2497.2
+  mc_8tap_sharp_w32_v_16bpc_c:                       2431.8
+  mc_8tap_sharp_w64_0_8bpc_c:                         590.4
+  mc_8tap_sharp_w64_0_16bpc_c:                        736.2
+  mc_8tap_sharp_w64_h_8bpc_c:                       13216.1
+  mc_8tap_sharp_w64_h_16bpc_c:                      12487.5
+  mc_8tap_sharp_w64_hv_8bpc_c:                      24286.0
+  mc_8tap_sharp_w64_hv_16bpc_c:                     22322.1
+  mc_8tap_sharp_w64_v_8bpc_c:                       13824.9
+  mc_8tap_sharp_w64_v_16bpc_c:                      13396.3
+  mc_8tap_sharp_w128_0_8bpc_c:                       1196.1
+  mc_8tap_sharp_w128_0_16bpc_c:                      1775.7
+  mc_8tap_sharp_w128_h_8bpc_c:                      43037.5
+  mc_8tap_sharp_w128_h_16bpc_c:                     40138.8
+  mc_8tap_sharp_w128_hv_8bpc_c:                     73950.4
+  mc_8tap_sharp_w128_hv_16bpc_c:                    71829.2
+  mc_8tap_sharp_w128_v_8bpc_c:                      45592.1
+  mc_8tap_sharp_w128_v_16bpc_c:                     42917.8
+  mc_bilinear_w2_0_8bpc_c:                             52.0
+  mc_bilinear_w2_0_16bpc_c:                            84.0
+  mc_bilinear_w2_h_8bpc_c:                             48.0
+  mc_bilinear_w2_h_16bpc_c:                            49.9
+  mc_bilinear_w2_hv_8bpc_c:                            76.4
+  mc_bilinear_w2_hv_16bpc_c:                           86.9
+  mc_bilinear_w2_v_8bpc_c:                             48.2
+  mc_bilinear_w2_v_16bpc_c:                            40.4
+  mc_bilinear_w4_0_8bpc_c:                             79.7
+  mc_bilinear_w4_0_16bpc_c:                           102.3
+  mc_bilinear_w4_h_8bpc_c:                             77.6
+  mc_bilinear_w4_h_16bpc_c:                            84.7
+  mc_bilinear_w4_hv_8bpc_c:                           139.4
+  mc_bilinear_w4_hv_16bpc_c:                          144.9
+  mc_bilinear_w4_v_8bpc_c:                             83.6
+  mc_bilinear_w4_v_16bpc_c:                            71.5
+  mc_bilinear_w8_0_8bpc_c:                             97.5
+  mc_bilinear_w8_0_16bpc_c:                           106.3
+  mc_bilinear_w8_h_8bpc_c:                            153.3
+  mc_bilinear_w8_h_16bpc_c:                           154.1
+  mc_bilinear_w8_hv_8bpc_c:                           256.2
+  mc_bilinear_w8_hv_16bpc_c:                          263.4
+  mc_bilinear_w8_v_8bpc_c:                            163.8
+  mc_bilinear_w8_v_16bpc_c:                           131.7
+  mc_bilinear_w16_0_8bpc_c:                           131.4
+  mc_bilinear_w16_0_16bpc_c:                          136.0
+  mc_bilinear_w16_h_8bpc_c:                           371.2
+  mc_bilinear_w16_h_16bpc_c:                          357.2
+  mc_bilinear_w16_hv_8bpc_c:                          614.4
+  mc_bilinear_w16_hv_16bpc_c:                         608.3
+  mc_bilinear_w16_v_8bpc_c:                           399.1
+  mc_bilinear_w16_v_16bpc_c:                          311.1
+  mc_bilinear_w32_0_8bpc_c:                           174.9
+  mc_bilinear_w32_0_16bpc_c:                          218.3
+  mc_bilinear_w32_h_8bpc_c:                           926.4
+  mc_bilinear_w32_h_16bpc_c:                          872.7
+  mc_bilinear_w32_hv_8bpc_c:                         1529.3
+  mc_bilinear_w32_hv_16bpc_c:                        1528.6
+  mc_bilinear_w32_v_8bpc_c:                          1002.0
+  mc_bilinear_w32_v_16bpc_c:                          768.5
+  mc_bilinear_w64_0_8bpc_c:                           591.1
+  mc_bilinear_w64_0_16bpc_c:                          725.4
+  mc_bilinear_w64_h_8bpc_c:                          5270.4
+  mc_bilinear_w64_h_16bpc_c:                         4774.8
+  mc_bilinear_w64_hv_8bpc_c:                         8474.2
+  mc_bilinear_w64_hv_16bpc_c:                        8370.7
+  mc_bilinear_w64_v_8bpc_c:                          5646.5
+  mc_bilinear_w64_v_16bpc_c:                         4405.7
+  mc_bilinear_w128_0_8bpc_c:                         1195.5
+  mc_bilinear_w128_0_16bpc_c:                        1759.3
+  mc_bilinear_w128_h_8bpc_c:                        16370.8
+  mc_bilinear_w128_h_16bpc_c:                       14713.1
+  mc_bilinear_w128_hv_8bpc_c:                       26252.5
+  mc_bilinear_w128_hv_16bpc_c:                      25271.1
+  mc_bilinear_w128_v_8bpc_c:                        17685.7
+  mc_bilinear_w128_v_16bpc_c:                       14042.2
+  mc_scaled_8tap_regular_w2_8bpc_c:                   390.6
+  mc_scaled_8tap_regular_w2_16bpc_c:                  428.1
+  mc_scaled_8tap_regular_w2_dy1_8bpc_c:               403.1
+  mc_scaled_8tap_regular_w2_dy1_16bpc_c:              440.8
+  mc_scaled_8tap_regular_w2_dy2_8bpc_c:               515.6
+  mc_scaled_8tap_regular_w2_dy2_16bpc_c:              546.8
+  mc_scaled_8tap_regular_w4_8bpc_c:                   657.4
+  mc_scaled_8tap_regular_w4_16bpc_c:                  724.5
+  mc_scaled_8tap_regular_w4_dy1_8bpc_c:               743.5
+  mc_scaled_8tap_regular_w4_dy1_16bpc_c:              790.9
+  mc_scaled_8tap_regular_w4_dy2_8bpc_c:               936.3
+  mc_scaled_8tap_regular_w4_dy2_16bpc_c:             1002.6
+  mc_scaled_8tap_regular_w8_8bpc_c:                  1271.7
+  mc_scaled_8tap_regular_w8_16bpc_c:                 1393.7
+  mc_scaled_8tap_regular_w8_dy1_8bpc_c:              1364.7
+  mc_scaled_8tap_regular_w8_dy1_16bpc_c:             1510.7
+  mc_scaled_8tap_regular_w8_dy2_8bpc_c:              1737.9
+  mc_scaled_8tap_regular_w8_dy2_16bpc_c:             1919.9
+  mc_scaled_8tap_regular_w16_8bpc_c:                 2905.3
+  mc_scaled_8tap_regular_w16_16bpc_c:                3192.2
+  mc_scaled_8tap_regular_w16_dy1_8bpc_c:             3161.5
+  mc_scaled_8tap_regular_w16_dy1_16bpc_c:            3503.1
+  mc_scaled_8tap_regular_w16_dy2_8bpc_c:             4199.7
+  mc_scaled_8tap_regular_w16_dy2_16bpc_c:            4587.1
+  mc_scaled_8tap_regular_w32_8bpc_c:                 7279.1
+  mc_scaled_8tap_regular_w32_16bpc_c:                7907.5
+  mc_scaled_8tap_regular_w32_dy1_8bpc_c:             7633.7
+  mc_scaled_8tap_regular_w32_dy1_16bpc_c:            8528.5
+  mc_scaled_8tap_regular_w32_dy2_8bpc_c:            10194.0
+  mc_scaled_8tap_regular_w32_dy2_16bpc_c:           11175.3
+  mc_scaled_8tap_regular_w64_8bpc_c:                31667.6
+  mc_scaled_8tap_regular_w64_16bpc_c:               33617.1
+  mc_scaled_8tap_regular_w64_dy1_8bpc_c:            33663.3
+  mc_scaled_8tap_regular_w64_dy1_16bpc_c:           35915.4
+  mc_scaled_8tap_regular_w64_dy2_8bpc_c:            48211.6
+  mc_scaled_8tap_regular_w64_dy2_16bpc_c:           50877.1
+  mc_scaled_8tap_regular_w128_8bpc_c:               93535.5
+  mc_scaled_8tap_regular_w128_16bpc_c:              97354.0
+  mc_scaled_8tap_regular_w128_dy1_8bpc_c:          103165.4
+  mc_scaled_8tap_regular_w128_dy1_16bpc_c:         107483.1
+  mc_scaled_8tap_regular_w128_dy2_8bpc_c:          149883.9
+  mc_scaled_8tap_regular_w128_dy2_16bpc_c:         155450.3
+  mc_scaled_bilinear_w2_8bpc_c:                       108.4
+  mc_scaled_bilinear_w2_16bpc_c:                      119.0
+  mc_scaled_bilinear_w2_dy1_8bpc_c:                   116.0
+  mc_scaled_bilinear_w2_dy1_16bpc_c:                  130.2
+  mc_scaled_bilinear_w2_dy2_8bpc_c:                   165.2
+  mc_scaled_bilinear_w2_dy2_16bpc_c:                  172.3
+  mc_scaled_bilinear_w4_8bpc_c:                       181.2
+  mc_scaled_bilinear_w4_16bpc_c:                      198.6
+  mc_scaled_bilinear_w4_dy1_8bpc_c:                   194.2
+  mc_scaled_bilinear_w4_dy1_16bpc_c:                  206.3
+  mc_scaled_bilinear_w4_dy2_8bpc_c:                   258.2
+  mc_scaled_bilinear_w4_dy2_16bpc_c:                  288.3
+  mc_scaled_bilinear_w8_8bpc_c:                       339.9
+  mc_scaled_bilinear_w8_16bpc_c:                      346.5
+  mc_scaled_bilinear_w8_dy1_8bpc_c:                   367.4
+  mc_scaled_bilinear_w8_dy1_16bpc_c:                  387.3
+  mc_scaled_bilinear_w8_dy2_8bpc_c:                   485.1
+  mc_scaled_bilinear_w8_dy2_16bpc_c:                  529.3
+  mc_scaled_bilinear_w16_8bpc_c:                      775.2
+  mc_scaled_bilinear_w16_16bpc_c:                     751.4
+  mc_scaled_bilinear_w16_dy1_8bpc_c:                  831.9
+  mc_scaled_bilinear_w16_dy1_16bpc_c:                 826.9
+  mc_scaled_bilinear_w16_dy2_8bpc_c:                 1134.3
+  mc_scaled_bilinear_w16_dy2_16bpc_c:                1179.2
+  mc_scaled_bilinear_w32_8bpc_c:                     1986.6
+  mc_scaled_bilinear_w32_16bpc_c:                    1909.1
+  mc_scaled_bilinear_w32_dy1_8bpc_c:                 2058.5
+  mc_scaled_bilinear_w32_dy1_16bpc_c:                2008.0
+  mc_scaled_bilinear_w32_dy2_8bpc_c:                 2848.1
+  mc_scaled_bilinear_w32_dy2_16bpc_c:                2948.0
+  mc_scaled_bilinear_w64_8bpc_c:                    10591.6
+  mc_scaled_bilinear_w64_16bpc_c:                    9850.7
+  mc_scaled_bilinear_w64_dy1_8bpc_c:                10841.3
+  mc_scaled_bilinear_w64_dy1_16bpc_c:               10431.7
+  mc_scaled_bilinear_w64_dy2_8bpc_c:                16537.6
+  mc_scaled_bilinear_w64_dy2_16bpc_c:               16286.9
+  mc_scaled_bilinear_w128_8bpc_c:                   32000.5
+  mc_scaled_bilinear_w128_16bpc_c:                  29393.6
+  mc_scaled_bilinear_w128_dy1_8bpc_c:               33758.8
+  mc_scaled_bilinear_w128_dy1_16bpc_c:              32167.9
+  mc_scaled_bilinear_w128_dy2_8bpc_c:               51100.7
+  mc_scaled_bilinear_w128_dy2_16bpc_c:              50317.8
+  mct_8tap_regular_w4_0_8bpc_c:                        38.4
+  mct_8tap_regular_w4_0_16bpc_c:                       69.6
+  mct_8tap_regular_w4_h_8bpc_c:                       138.5
+  mct_8tap_regular_w4_h_16bpc_c:                      153.2
+  mct_8tap_regular_w4_hv_8bpc_c:                      362.8
+  mct_8tap_regular_w4_hv_16bpc_c:                     447.4
+  mct_8tap_regular_w4_v_8bpc_c:                       159.5
+  mct_8tap_regular_w4_v_16bpc_c:                      184.8
+  mct_8tap_regular_w8_0_8bpc_c:                       117.6
+  mct_8tap_regular_w8_0_16bpc_c:                      184.3
+  mct_8tap_regular_w8_h_8bpc_c:                       414.1
+  mct_8tap_regular_w8_h_16bpc_c:                      429.8
+  mct_8tap_regular_w8_hv_8bpc_c:                      911.4
+  mct_8tap_regular_w8_hv_16bpc_c:                     992.9
+  mct_8tap_regular_w8_v_8bpc_c:                       424.2
+  mct_8tap_regular_w8_v_16bpc_c:                      496.3
+  mct_8tap_regular_w16_0_8bpc_c:                      272.7
+  mct_8tap_regular_w16_0_16bpc_c:                     451.1
+  mct_8tap_regular_w16_h_8bpc_c:                     1124.0
+  mct_8tap_regular_w16_h_16bpc_c:                    1162.7
+  mct_8tap_regular_w16_hv_8bpc_c:                    2408.4
+  mct_8tap_regular_w16_hv_16bpc_c:                   2528.1
+  mct_8tap_regular_w16_v_8bpc_c:                     1161.5
+  mct_8tap_regular_w16_v_16bpc_c:                    1326.3
+  mct_8tap_regular_w32_0_8bpc_c:                      645.5
+  mct_8tap_regular_w32_0_16bpc_c:                    1439.5
+  mct_8tap_regular_w32_h_8bpc_c:                     4373.9
+  mct_8tap_regular_w32_h_16bpc_c:                    4635.2
+  mct_8tap_regular_w32_hv_8bpc_c:                    8582.1
+  mct_8tap_regular_w32_hv_16bpc_c:                   8589.8
+  mct_8tap_regular_w32_v_8bpc_c:                     4568.1
+  mct_8tap_regular_w32_v_16bpc_c:                    5102.7
+  mct_8tap_regular_w64_0_8bpc_c:                     2492.2
+  mct_8tap_regular_w64_0_16bpc_c:                    3281.6
+  mct_8tap_regular_w64_h_8bpc_c:                    12742.7
+  mct_8tap_regular_w64_h_16bpc_c:                   13100.6
+  mct_8tap_regular_w64_hv_8bpc_c:                   23726.1
+  mct_8tap_regular_w64_hv_16bpc_c:                  23521.1
+  mct_8tap_regular_w64_v_8bpc_c:                    13075.7
+  mct_8tap_regular_w64_v_16bpc_c:                   13978.7
+  mct_8tap_regular_w128_0_8bpc_c:                    7019.6
+  mct_8tap_regular_w128_0_16bpc_c:                   7702.0
+  mct_8tap_regular_w128_h_8bpc_c:                   35744.0
+  mct_8tap_regular_w128_h_16bpc_c:                  36242.2
+  mct_8tap_regular_w128_hv_8bpc_c:                  67119.5
+  mct_8tap_regular_w128_hv_16bpc_c:                 67017.8
+  mct_8tap_regular_w128_v_8bpc_c:                   36559.5
+  mct_8tap_regular_w128_v_16bpc_c:                  38809.7
+  mct_8tap_sharp_w4_0_8bpc_c:                          38.3
+  mct_8tap_sharp_w4_0_16bpc_c:                         69.8
+  mct_8tap_sharp_w4_h_8bpc_c:                         138.0
+  mct_8tap_sharp_w4_h_16bpc_c:                        153.1
+  mct_8tap_sharp_w4_hv_8bpc_c:                        359.5
+  mct_8tap_sharp_w4_hv_16bpc_c:                       448.7
+  mct_8tap_sharp_w4_v_8bpc_c:                         158.4
+  mct_8tap_sharp_w4_v_16bpc_c:                        182.0
+  mct_8tap_sharp_w8_0_8bpc_c:                         118.6
+  mct_8tap_sharp_w8_0_16bpc_c:                        184.1
+  mct_8tap_sharp_w8_h_8bpc_c:                         412.1
+  mct_8tap_sharp_w8_h_16bpc_c:                        415.6
+  mct_8tap_sharp_w8_hv_8bpc_c:                        908.1
+  mct_8tap_sharp_w8_hv_16bpc_c:                       992.5
+  mct_8tap_sharp_w8_v_8bpc_c:                         423.9
+  mct_8tap_sharp_w8_v_16bpc_c:                        489.1
+  mct_8tap_sharp_w16_0_8bpc_c:                        221.6
+  mct_8tap_sharp_w16_0_16bpc_c:                       457.1
+  mct_8tap_sharp_w16_h_8bpc_c:                       1120.7
+  mct_8tap_sharp_w16_h_16bpc_c:                      1125.7
+  mct_8tap_sharp_w16_hv_8bpc_c:                      2408.0
+  mct_8tap_sharp_w16_hv_16bpc_c:                     2529.1
+  mct_8tap_sharp_w16_v_8bpc_c:                       1159.1
+  mct_8tap_sharp_w16_v_16bpc_c:                      1310.0
+  mct_8tap_sharp_w32_0_8bpc_c:                        652.6
+  mct_8tap_sharp_w32_0_16bpc_c:                      1456.4
+  mct_8tap_sharp_w32_h_8bpc_c:                       4379.8
+  mct_8tap_sharp_w32_h_16bpc_c:                      4564.4
+  mct_8tap_sharp_w32_hv_8bpc_c:                      8591.0
+  mct_8tap_sharp_w32_hv_16bpc_c:                     8625.3
+  mct_8tap_sharp_w32_v_8bpc_c:                       4554.9
+  mct_8tap_sharp_w32_v_16bpc_c:                      5054.4
+  mct_8tap_sharp_w64_0_8bpc_c:                       2429.9
+  mct_8tap_sharp_w64_0_16bpc_c:                      3284.3
+  mct_8tap_sharp_w64_h_8bpc_c:                      12720.7
+  mct_8tap_sharp_w64_h_16bpc_c:                     13058.1
+  mct_8tap_sharp_w64_hv_8bpc_c:                     23733.1
+  mct_8tap_sharp_w64_hv_16bpc_c:                    23426.9
+  mct_8tap_sharp_w64_v_8bpc_c:                      13121.0
+  mct_8tap_sharp_w64_v_16bpc_c:                     13969.6
+  mct_8tap_sharp_w128_0_8bpc_c:                      6897.2
+  mct_8tap_sharp_w128_0_16bpc_c:                     7703.9
+  mct_8tap_sharp_w128_h_8bpc_c:                     35718.3
+  mct_8tap_sharp_w128_h_16bpc_c:                    36220.7
+  mct_8tap_sharp_w128_hv_8bpc_c:                    67201.1
+  mct_8tap_sharp_w128_hv_16bpc_c:                   67047.9
+  mct_8tap_sharp_w128_v_8bpc_c:                     36551.4
+  mct_8tap_sharp_w128_v_16bpc_c:                    38787.6
+  mct_bilinear_w4_0_8bpc_c:                            37.1
+  mct_bilinear_w4_0_16bpc_c:                           71.5
+  mct_bilinear_w4_h_8bpc_c:                            59.0
+  mct_bilinear_w4_h_16bpc_c:                           61.1
+  mct_bilinear_w4_hv_8bpc_c:                          103.8
+  mct_bilinear_w4_hv_16bpc_c:                         122.0
+  mct_bilinear_w4_v_8bpc_c:                            51.9
+  mct_bilinear_w4_v_16bpc_c:                           64.1
+  mct_bilinear_w8_0_8bpc_c:                            88.5
+  mct_bilinear_w8_0_16bpc_c:                          181.0
+  mct_bilinear_w8_h_8bpc_c:                           100.9
+  mct_bilinear_w8_h_16bpc_c:                          150.2
+  mct_bilinear_w8_hv_8bpc_c:                          258.3
+  mct_bilinear_w8_hv_16bpc_c:                         308.9
+  mct_bilinear_w8_v_8bpc_c:                           124.2
+  mct_bilinear_w8_v_16bpc_c:                          162.7
+  mct_bilinear_w16_0_8bpc_c:                          255.1
+  mct_bilinear_w16_0_16bpc_c:                         445.5
+  mct_bilinear_w16_h_8bpc_c:                          289.0
+  mct_bilinear_w16_h_16bpc_c:                         408.8
+  mct_bilinear_w16_hv_8bpc_c:                         658.4
+  mct_bilinear_w16_hv_16bpc_c:                        821.6
+  mct_bilinear_w16_v_8bpc_c:                          322.1
+  mct_bilinear_w16_v_16bpc_c:                         448.0
+  mct_bilinear_w32_0_8bpc_c:                          685.2
+  mct_bilinear_w32_0_16bpc_c:                        1458.6
+  mct_bilinear_w32_h_8bpc_c:                         1143.1
+  mct_bilinear_w32_h_16bpc_c:                        1556.0
+  mct_bilinear_w32_hv_8bpc_c:                        2485.6
+  mct_bilinear_w32_hv_16bpc_c:                       3142.3
+  mct_bilinear_w32_v_8bpc_c:                         1231.2
+  mct_bilinear_w32_v_16bpc_c:                        1726.1
+  mct_bilinear_w64_0_8bpc_c:                         2512.7
+  mct_bilinear_w64_0_16bpc_c:                        3283.6
+  mct_bilinear_w64_h_8bpc_c:                         3603.1
+  mct_bilinear_w64_h_16bpc_c:                        4599.2
+  mct_bilinear_w64_hv_8bpc_c:                        7612.1
+  mct_bilinear_w64_hv_16bpc_c:                       9280.7
+  mct_bilinear_w64_v_8bpc_c:                         3973.1
+  mct_bilinear_w64_v_16bpc_c:                        5065.9
+  mct_bilinear_w128_0_8bpc_c:                        7017.3
+  mct_bilinear_w128_0_16bpc_c:                       7712.0
+  mct_bilinear_w128_h_8bpc_c:                       10310.2
+  mct_bilinear_w128_h_16bpc_c:                      12456.8
+  mct_bilinear_w128_hv_8bpc_c:                      21432.9
+  mct_bilinear_w128_hv_16bpc_c:                     25011.4
+  mct_bilinear_w128_v_8bpc_c:                       10632.1
+  mct_bilinear_w128_v_16bpc_c:                      13838.6
+  mct_scaled_8tap_regular_w4_8bpc_c:                  567.5
+  mct_scaled_8tap_regular_w4_16bpc_c:                 642.7
+  mct_scaled_8tap_regular_w4_dy1_8bpc_c:              622.3
+  mct_scaled_8tap_regular_w4_dy1_16bpc_c:             661.4
+  mct_scaled_8tap_regular_w4_dy2_8bpc_c:              807.0
+  mct_scaled_8tap_regular_w4_dy2_16bpc_c:             828.7
+  mct_scaled_8tap_regular_w8_8bpc_c:                 1413.5
+  mct_scaled_8tap_regular_w8_16bpc_c:                1556.2
+  mct_scaled_8tap_regular_w8_dy1_8bpc_c:             1573.7
+  mct_scaled_8tap_regular_w8_dy1_16bpc_c:            1680.2
+  mct_scaled_8tap_regular_w8_dy2_8bpc_c:             2070.1
+  mct_scaled_8tap_regular_w8_dy2_16bpc_c:            2188.0
+  mct_scaled_8tap_regular_w16_8bpc_c:                3264.0
+  mct_scaled_8tap_regular_w16_16bpc_c:               3589.4
+  mct_scaled_8tap_regular_w16_dy1_8bpc_c:            3571.1
+  mct_scaled_8tap_regular_w16_dy1_16bpc_c:           3895.8
+  mct_scaled_8tap_regular_w16_dy2_8bpc_c:            4886.6
+  mct_scaled_8tap_regular_w16_dy2_16bpc_c:           5229.5
+  mct_scaled_8tap_regular_w32_8bpc_c:                9938.5
+  mct_scaled_8tap_regular_w32_16bpc_c:              11190.0
+  mct_scaled_8tap_regular_w32_dy1_8bpc_c:           11173.7
+  mct_scaled_8tap_regular_w32_dy1_16bpc_c:          12486.3
+  mct_scaled_8tap_regular_w32_dy2_8bpc_c:           15977.9
+  mct_scaled_8tap_regular_w32_dy2_16bpc_c:          17440.2
+  mct_scaled_8tap_regular_w64_8bpc_c:               28492.3
+  mct_scaled_8tap_regular_w64_16bpc_c:              31375.8
+  mct_scaled_8tap_regular_w64_dy1_8bpc_c:           31200.7
+  mct_scaled_8tap_regular_w64_dy1_16bpc_c:          33747.3
+  mct_scaled_8tap_regular_w64_dy2_8bpc_c:           45701.1
+  mct_scaled_8tap_regular_w64_dy2_16bpc_c:          48778.3
+  mct_scaled_8tap_regular_w128_8bpc_c:              84746.5
+  mct_scaled_8tap_regular_w128_16bpc_c:             88778.6
+  mct_scaled_8tap_regular_w128_dy1_8bpc_c:          95415.3
+  mct_scaled_8tap_regular_w128_dy1_16bpc_c:         99498.5
+  mct_scaled_8tap_regular_w128_dy2_8bpc_c:         142981.6
+  mct_scaled_8tap_regular_w128_dy2_16bpc_c:        148005.9
+  mct_scaled_bilinear_w4_8bpc_c:                      134.6
+  mct_scaled_bilinear_w4_16bpc_c:                     168.7
+  mct_scaled_bilinear_w4_dy1_8bpc_c:                  143.6
+  mct_scaled_bilinear_w4_dy1_16bpc_c:                 180.0
+  mct_scaled_bilinear_w4_dy2_8bpc_c:                  197.9
+  mct_scaled_bilinear_w4_dy2_16bpc_c:                 251.8
+  mct_scaled_bilinear_w8_8bpc_c:                      324.3
+  mct_scaled_bilinear_w8_16bpc_c:                     389.5
+  mct_scaled_bilinear_w8_dy1_8bpc_c:                  356.5
+  mct_scaled_bilinear_w8_dy1_16bpc_c:                 436.4
+  mct_scaled_bilinear_w8_dy2_8bpc_c:                  508.4
+  mct_scaled_bilinear_w8_dy2_16bpc_c:                 621.7
+  mct_scaled_bilinear_w16_8bpc_c:                     773.8
+  mct_scaled_bilinear_w16_16bpc_c:                    899.9
+  mct_scaled_bilinear_w16_dy1_8bpc_c:                 849.5
+  mct_scaled_bilinear_w16_dy1_16bpc_c:                992.9
+  mct_scaled_bilinear_w16_dy2_8bpc_c:                1233.2
+  mct_scaled_bilinear_w16_dy2_16bpc_c:               1460.2
+  mct_scaled_bilinear_w32_8bpc_c:                    2707.2
+  mct_scaled_bilinear_w32_16bpc_c:                   3105.5
+  mct_scaled_bilinear_w32_dy1_8bpc_c:                2992.3
+  mct_scaled_bilinear_w32_dy1_16bpc_c:               3458.8
+  mct_scaled_bilinear_w32_dy2_8bpc_c:                4500.3
+  mct_scaled_bilinear_w32_dy2_16bpc_c:               5267.4
+  mct_scaled_bilinear_w64_8bpc_c:                    8591.7
+  mct_scaled_bilinear_w64_16bpc_c:                  10018.4
+  mct_scaled_bilinear_w64_dy1_8bpc_c:                8966.4
+  mct_scaled_bilinear_w64_dy1_16bpc_c:              10527.5
+  mct_scaled_bilinear_w64_dy2_8bpc_c:               14434.6
+  mct_scaled_bilinear_w64_dy2_16bpc_c:              17197.0
+  mct_scaled_bilinear_w128_8bpc_c:                  25611.4
+  mct_scaled_bilinear_w128_16bpc_c:                 29426.4
+  mct_scaled_bilinear_w128_dy1_8bpc_c:              27772.9
+  mct_scaled_bilinear_w128_dy1_16bpc_c:             31989.9
+  mct_scaled_bilinear_w128_dy2_8bpc_c:              44342.4
+  mct_scaled_bilinear_w128_dy2_16bpc_c:             51507.1
+  msac_decode_bool_c:                                  17.4
+  msac_decode_bool_adapt_c:                            11.0
+  msac_decode_bool_equi_c:                             12.7
+  msac_decode_hi_tok_c:                                18.4
+  msac_decode_symbol_adapt4_c:                         19.4
+  msac_decode_symbol_adapt8_c:                         30.0
+  msac_decode_symbol_adapt16_c:                        52.8
+  pal_idx_finish_w4_c:                                 24.9
+  pal_idx_finish_w4_rvv:                               50.9 ( 0.49x)
+  pal_idx_finish_w8_c:                                 65.2
+  pal_idx_finish_w8_rvv:                               72.8 ( 0.90x)
+  pal_idx_finish_w16_c:                               205.5
+  pal_idx_finish_w16_rvv:                             101.9 ( 2.02x)
+  pal_idx_finish_w32_c:                               319.4
+  pal_idx_finish_w32_rvv:                             330.0 ( 0.97x)
+  pal_idx_finish_w64_c:                               889.9
+  pal_idx_finish_w64_rvv:                             878.2 ( 1.01x)
+  pal_pred_w4_8bpc_c:                                  21.0
+  pal_pred_w4_8bpc_rvv:                                22.6 ( 0.93x)
+  pal_pred_w4_16bpc_c:                                 26.9
+  pal_pred_w4_16bpc_rvv:                               29.1 ( 0.92x)
+  pal_pred_w8_8bpc_c:                                  85.0
+  pal_pred_w8_8bpc_rvv:                                40.9 ( 2.08x)
+  pal_pred_w8_16bpc_c:                                 72.4
+  pal_pred_w8_16bpc_rvv:                               43.7 ( 1.65x)
+  pal_pred_w16_8bpc_c:                                187.0
+  pal_pred_w16_8bpc_rvv:                              144.2 ( 1.30x)
+  pal_pred_w16_16bpc_c:                               190.2
+  pal_pred_w16_16bpc_rvv:                             145.6 ( 1.31x)
+  pal_pred_w32_8bpc_c:                                491.6
+  pal_pred_w32_8bpc_rvv:                             2902.2 ( 0.17x)
+  pal_pred_w32_16bpc_c:                               521.5
+  pal_pred_w32_16bpc_rvv:                             392.7 ( 1.33x)
+  pal_pred_w64_8bpc_c:                               1358.6
+  pal_pred_w64_8bpc_rvv:                            10015.1 ( 0.14x)
+  pal_pred_w64_16bpc_c:                              1457.7
+  pal_pred_w64_16bpc_rvv:                            1025.5 ( 1.42x)
+  resize_8bpc_c:                                   282599.5
+  resize_16bpc_c:                                  281173.0
+  save_tmvs_c:                                      26075.5
+  sgr_3x3_8bpc_c:                                  255164.1
+  sgr_3x3_10bpc_c:                                 256230.0
+  sgr_3x3_12bpc_c:                                 256069.9
+  sgr_5x5_8bpc_c:                                  199246.4
+  sgr_5x5_10bpc_c:                                 206652.6
+  sgr_5x5_12bpc_c:                                 208809.5
+  sgr_mix_8bpc_c:                                  430809.7
+  sgr_mix_10bpc_c:                                 439754.0
+  sgr_mix_12bpc_c:                                 439492.6
+  splat_mv_w1_c:                                        3.5
+  splat_mv_w2_c:                                        7.3
+  splat_mv_w4_c:                                       21.7
+  splat_mv_w8_c:                                       78.8
+  splat_mv_w16_c:                                     215.5
+  splat_mv_w32_c:                                     588.3
+  w_avg_w4_8bpc_c:                                     68.1
+  w_avg_w4_8bpc_rvv:                                   20.1 ( 3.38x)
+  w_avg_w4_16bpc_c:                                    78.4
+  w_avg_w8_8bpc_c:                                    192.2
+  w_avg_w8_8bpc_rvv:                                   66.7 ( 2.87x)
+  w_avg_w8_16bpc_c:                                   153.5
+  w_avg_w16_8bpc_c:                                   536.3
+  w_avg_w16_8bpc_rvv:                                  93.4 ( 5.74x)
+  w_avg_w16_16bpc_c:                                  435.9
+  w_avg_w32_8bpc_c:                                  2202.5
+  w_avg_w32_8bpc_rvv:                                 191.6 (11.49x)
+  w_avg_w32_16bpc_c:                                 1754.9
+  w_avg_w64_8bpc_c:                                  6046.3
+  w_avg_w64_8bpc_rvv:                                 512.5 (11.80x)
+  w_avg_w64_16bpc_c:                                 6310.2
+  w_avg_w128_8bpc_c:                                16475.9
+  w_avg_w128_8bpc_rvv:                               1421.9 (11.59x)
+  w_avg_w128_16bpc_c:                               21340.1
+  w_mask_420_w4_8bpc_c:                               130.8
+  w_mask_420_w4_8bpc_rvv:                              56.5 ( 2.31x)
+  w_mask_420_w4_16bpc_c:                              119.4
+  w_mask_420_w8_8bpc_c:                               342.2
+  w_mask_420_w8_8bpc_rvv:                              78.9 ( 4.34x)
+  w_mask_420_w8_16bpc_c:                              306.9
+  w_mask_420_w16_8bpc_c:                              951.9
+  w_mask_420_w16_8bpc_rvv:                            156.1 ( 6.10x)
+  w_mask_420_w16_16bpc_c:                             816.4
+  w_mask_420_w32_8bpc_c:                             3960.3
+  w_mask_420_w32_8bpc_rvv:                            528.1 ( 7.50x)
+  w_mask_420_w32_16bpc_c:                            3210.2
+  w_mask_420_w64_8bpc_c:                            10878.5
+  w_mask_420_w64_8bpc_rvv:                           1463.9 ( 7.43x)
+  w_mask_420_w64_16bpc_c:                            9533.1
+  w_mask_420_w128_8bpc_c:                           30246.6
+  w_mask_420_w128_8bpc_rvv:                          4112.4 ( 7.35x)
+  w_mask_420_w128_16bpc_c:                          26520.5
+  w_mask_422_w4_8bpc_c:                               132.3
+  w_mask_422_w4_8bpc_rvv:                              60.2 ( 2.20x)
+  w_mask_422_w4_16bpc_c:                              115.4
+  w_mask_422_w8_8bpc_c:                               361.9
+  w_mask_422_w8_8bpc_rvv:                              84.7 ( 4.27x)
+  w_mask_422_w8_16bpc_c:                              307.5
+  w_mask_422_w16_8bpc_c:                              980.6
+  w_mask_422_w16_8bpc_rvv:                            155.7 ( 6.30x)
+  w_mask_422_w16_16bpc_c:                             844.8
+  w_mask_422_w32_8bpc_c:                             4163.8
+  w_mask_422_w32_8bpc_rvv:                            538.4 ( 7.71x)
+  w_mask_422_w32_16bpc_c:                            3330.9
+  w_mask_422_w64_8bpc_c:                            11156.3
+  w_mask_422_w64_8bpc_rvv:                           1485.1 ( 7.51x)
+  w_mask_422_w64_16bpc_c:                           10081.3
+  w_mask_422_w128_8bpc_c:                           30979.8
+  w_mask_422_w128_8bpc_rvv:                          4180.3 ( 7.41x)
+  w_mask_422_w128_16bpc_c:                          28125.2
+  w_mask_444_w4_8bpc_c:                               114.8
+  w_mask_444_w4_8bpc_rvv:                              57.0 ( 2.01x)
+  w_mask_444_w4_16bpc_c:                              104.7
+  w_mask_444_w8_8bpc_c:                               321.4
+  w_mask_444_w8_8bpc_rvv:                              80.4 ( 4.00x)
+  w_mask_444_w8_16bpc_c:                              278.1
+  w_mask_444_w16_8bpc_c:                              884.7
+  w_mask_444_w16_8bpc_rvv:                            128.3 ( 6.89x)
+  w_mask_444_w16_16bpc_c:                             805.3
+  w_mask_444_w32_8bpc_c:                             3692.5
+  w_mask_444_w32_8bpc_rvv:                            399.4 ( 9.24x)
+  w_mask_444_w32_16bpc_c:                            5009.6
+  w_mask_444_w64_8bpc_c:                            10106.0
+  w_mask_444_w64_8bpc_rvv:                           1100.6 ( 9.18x)
+  w_mask_444_w64_16bpc_c:                           13447.2
+  w_mask_444_w128_8bpc_c:                           27827.9
+  w_mask_444_w128_8bpc_rvv:                          3086.8 ( 9.02x)
+  w_mask_444_w128_16bpc_c:                          29675.8
+  warp_8x8_8bpc_c:                                    928.6
+  warp_8x8_8bpc_rvv:                                  441.1 ( 2.10x)
+  warp_8x8_16bpc_c:                                   927.0
+  warp_8x8t_8bpc_c:                                   886.6
+  warp_8x8t_8bpc_rvv:                                 436.1 ( 2.03x)
+  warp_8x8t_16bpc_c:                                  903.3
+  wiener_5tap_8bpc_c:                              178632.1
+  wiener_5tap_10bpc_c:                             149664.9
+  wiener_5tap_12bpc_c:                             149803.1
+  wiener_7tap_8bpc_c:                              184158.4
+  wiener_7tap_10bpc_c:                             156945.5
+  wiener_7tap_12bpc_c:                             155629.2

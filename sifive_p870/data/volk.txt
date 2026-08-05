@@ -1,0 +1,1204 @@
+
+RUN_VOLK_TESTS: volk_64u_popcntpuppet_64u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1285.69 ms |    3241.2 MB/s |        - |          - |
+rvv                        |      934.97 ms |    4457.0 MB/s |    1.38x |    0.0e+00 | *
+Best aligned arch          | rvv (1.38x)
+Best unaligned arch        | rvv (1.38x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16u_byteswappuppet_16u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       68.91 ms |   15118.8 MB/s |        - |          - |
+rvv                        |       59.66 ms |   17463.1 MB/s |    1.16x |    0.0e+00 | *
+Best aligned arch          | rvv (1.16x)
+Best unaligned arch        | rvv (1.16x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32u_byteswappuppet_32u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      375.12 ms |    5554.5 MB/s |        - |          - |
+rvv                        |      231.43 ms |    9003.3 MB/s |    1.62x |    0.0e+00 | *
+Best aligned arch          | rvv (1.62x)
+Best unaligned arch        | rvv (1.62x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32u_popcntpuppet_32u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      512.02 ms |    4069.3 MB/s |        - |          - | *
+rvv                        |      898.97 ms |    2317.8 MB/s |    0.57x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_64u_byteswappuppet_64u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1203.50 ms |    3462.5 MB/s |        - |          - |
+rvv                        |      751.81 ms |    5542.8 MB/s |    1.60x |    0.0e+00 | *
+Best aligned arch          | rvv (1.60x)
+Best unaligned arch        | rvv (1.60x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_s32fc_rotator2puppet_32fc(vlen=131071, iter=1987, tol=1e-03)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     2114.33 ms |    1970.9 MB/s |        - |          - |
+rvv                        |      482.31 ms |    8640.0 MB/s |    4.38x |    9.8e-05 |
+rvvseg                     |      479.19 ms |    8696.3 MB/s |    4.41x |    9.8e-05 | *
+Best aligned arch          | rvvseg (4.41x)
+Best unaligned arch        | rvvseg (4.41x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8u_conv_k7_r2puppet_8u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |    40690.85 ms |      12.8 MB/s |        - |          - |
+rvv                        |     4187.28 ms |     124.4 MB/s |    9.72x |    0.0e+00 | *
+Best aligned arch          | rvv (9.72x)
+Best unaligned arch        | rvv (9.72x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_fm_detectpuppet_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      268.66 ms |   11633.0 MB/s |        - |          - |
+rvv                        |      155.79 ms |   20062.0 MB/s |    1.72x |    0.0e+00 | *
+Best aligned arch          | rvv (1.72x)
+Best unaligned arch        | rvv (1.72x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_s32f_deinterleave_real_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      126.85 ms |   16425.1 MB/s |        - |          - |
+rvv                        |       87.47 ms |   23820.1 MB/s |    1.45x |    0.0e+00 | *
+Best aligned arch          | rvv (1.45x)
+Best unaligned arch        | rvv (1.45x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_deinterleave_real_8i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       64.26 ms |   20266.1 MB/s |        - |          - |
+rvv                        |       50.13 ms |   25978.6 MB/s |    1.28x |    0.0e+00 | *
+Best aligned arch          | rvv (1.28x)
+Best unaligned arch        | rvv (1.28x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_deinterleave_16i_x2(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       92.66 ms |   22486.9 MB/s |        - |          - |
+rvv                        |       83.81 ms |   24860.1 MB/s |    1.11x |    0.0e+00 | *
+rvvseg                     |      124.17 ms |   16779.7 MB/s |    0.75x |    0.0e+00 |
+Best aligned arch          | rvv (1.11x)
+Best unaligned arch        | rvv (1.11x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_s32f_deinterleave_32f_x2(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1632.53 ms |    1914.4 MB/s |        - |          - |
+rvv                        |      141.62 ms |   22068.9 MB/s |   11.53x |    1.0e-07 | *
+rvvseg                     |      146.48 ms |   21337.1 MB/s |   11.15x |    1.0e-07 |
+Best aligned arch          | rvv (11.53x)
+Best unaligned arch        | rvv (11.53x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_deinterleave_real_16i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       61.89 ms |   25249.4 MB/s |        - |          - |
+rvv                        |       61.60 ms |   25370.3 MB/s |    1.00x |    0.0e+00 | *
+Best aligned arch          | rvv (1.00x)
+Best unaligned arch        | rvv (1.00x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_magnitude_16i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     2432.40 ms |     642.4 MB/s |        - |          - |
+rvv                        |      804.71 ms |    1941.9 MB/s |    3.02x |    0.0e+00 |
+rvvseg                     |      800.74 ms |    1951.5 MB/s |    3.04x |    0.0e+00 | *
+Best aligned arch          | rvvseg (3.04x)
+Best unaligned arch        | rvvseg (3.04x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_s32f_magnitude_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      808.36 ms |    2577.6 MB/s |        - |          - |
+rvv                        |      784.30 ms |    2656.6 MB/s |    1.03x |    0.0e+00 | *
+rvvseg                     |      808.69 ms |    2576.5 MB/s |    1.00x |    0.0e+00 |
+Best aligned arch          | rvv (1.03x)
+Best unaligned arch        | rvv (1.03x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_convert_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      175.31 ms |   17827.9 MB/s |        - |          - |
+rvv                        |      127.40 ms |   24532.4 MB/s |    1.38x |    0.0e+00 | *
+Best aligned arch          | rvv (1.38x)
+Best unaligned arch        | rvv (1.38x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_x2_multiply_16ic(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      171.20 ms |   18255.9 MB/s |        - |          - | *
+rvv                        |      179.76 ms |   17386.1 MB/s |    0.95x |    0.0e+00 |
+rvvseg                     |      311.08 ms |   10046.9 MB/s |    0.55x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16ic_x2_dot_prod_16ic(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     2511.98 ms |    1244.2 MB/s |        - |          - |
+rvv                        |      166.19 ms |   18805.8 MB/s |   15.11x |    0.0e+00 | *
+rvvseg                     |      273.97 ms |   11407.8 MB/s |    9.17x |    0.0e+00 |
+Best aligned arch          | rvv (15.11x)
+Best unaligned arch        | rvv (15.11x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16i_s32f_convert_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      816.61 ms |    1913.6 MB/s |        - |          - |
+rvv                        |       54.56 ms |   28641.1 MB/s |   14.97x |    1.0e-07 | *
+Best aligned arch          | rvv (14.97x)
+Best unaligned arch        | rvv (14.97x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16i_convert_8i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       16.70 ms |   46789.6 MB/s |        - |          - | *
+rvv                        |       20.19 ms |   38700.5 MB/s |    0.83x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16i_32fc_dot_prod_32fc(vlen=131071, iter=1987, tol=1e-01)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      661.75 ms |    7084.3 MB/s |        - |          - |
+rvv                        |      196.96 ms |   23802.5 MB/s |    3.36x |    5.2e-03 | *
+rvvseg                     |      521.56 ms |    8988.5 MB/s |    1.27x |    5.2e-03 |
+Best aligned arch          | rvv (3.36x)
+Best unaligned arch        | rvv (3.36x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_accumulator_s32f(vlen=131071, iter=1987, tol=2e-02)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      326.48 ms |    6382.1 MB/s |        - |          - |
+rvv                        |       44.98 ms |   46327.1 MB/s |    7.26x |    1.5e-03 | *
+Best aligned arch          | rvv (7.26x)
+Best unaligned arch        | rvv (7.26x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_add_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      157.43 ms |   19852.2 MB/s |        - |          - |
+rvv                        |      153.35 ms |   20380.6 MB/s |    1.03x |    0.0e+00 | *
+Best aligned arch          | rvv (1.03x)
+Best unaligned arch        | rvv (1.03x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_index_max_16u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      261.53 ms |    5975.2 MB/s |        - |          - |
+rvv                        |       32.67 ms |   47827.4 MB/s |    8.00x |    0.0e+00 | *
+Best aligned arch          | rvv (8.00x)
+Best unaligned arch        | rvv (8.00x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_index_max_32u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      528.00 ms |    3946.2 MB/s |        - |          - |
+rvv                        |       96.36 ms |   21622.2 MB/s |    5.48x |    0.0e+00 | *
+Best aligned arch          | rvv (5.48x)
+Best unaligned arch        | rvv (5.48x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_index_min_16u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      260.97 ms |    5988.0 MB/s |        - |          - |
+rvv                        |       32.67 ms |   47834.5 MB/s |    7.99x |    0.0e+00 | *
+Best aligned arch          | rvv (7.99x)
+Best unaligned arch        | rvv (7.99x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_index_min_32u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      527.34 ms |    3951.1 MB/s |        - |          - |
+rvv                        |       99.41 ms |   20959.0 MB/s |    5.30x |    0.0e+00 | *
+Best aligned arch          | rvv (5.30x)
+Best unaligned arch        | rvv (5.30x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_32f_multiply_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      279.06 ms |   18665.9 MB/s |        - |          - |
+rvv                        |      223.89 ms |   23265.9 MB/s |    1.25x |    0.0e+00 | *
+Best aligned arch          | rvv (1.25x)
+Best unaligned arch        | rvv (1.25x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_32f_add_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      316.16 ms |   16475.6 MB/s |        - |          - |
+rvv                        |      226.49 ms |   22998.4 MB/s |    1.40x |    0.0e+00 | *
+Best aligned arch          | rvv (1.40x)
+Best unaligned arch        | rvv (1.40x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_log2_32f(vlen=131071, iter=1987, tol=5e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     4589.33 ms |     454.0 MB/s |        - |          - |
+rvv                        |      845.81 ms |    2463.4 MB/s |    5.43x |    4.2e-06 | *
+Best aligned arch          | rvv (5.43x)
+Best unaligned arch        | rvv (5.43x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_expfast_32f(vlen=131071, iter=1987, tol=1e-01)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1885.50 ms |    1105.1 MB/s |        - |          - |
+rvv                        |       85.87 ms |   24265.7 MB/s |   21.96x |    5.6e-02 | *
+Best aligned arch          | rvv (21.96x)
+Best unaligned arch        | rvv (21.96x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_sin_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     3054.33 ms |     682.2 MB/s |        - |          - |
+polynomial                 |      879.77 ms |    2368.3 MB/s |    3.47x |    1.7e-07 | *
+rvv                        |     1476.06 ms |    1411.6 MB/s |    2.07x |    5.4e-07 |
+Best aligned arch          | polynomial (3.47x)
+Best unaligned arch        | polynomial (3.47x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_cos_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     2875.10 ms |     724.7 MB/s |        - |          - |
+polynomial                 |      903.95 ms |    2305.0 MB/s |    3.18x |    1.7e-07 | *
+rvv                        |     1449.12 ms |    1437.8 MB/s |    1.98x |    2.2e-07 |
+Best aligned arch          | polynomial (3.18x)
+Best unaligned arch        | polynomial (3.18x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_sincos_32f_x2(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     4405.76 ms |     709.4 MB/s |        - |          - |
+polynomial                 |     1103.89 ms |    2831.3 MB/s |    3.99x |    1.7e-07 | *
+Best aligned arch          | polynomial (3.99x)
+Best unaligned arch        | polynomial (3.99x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_tan_32f(vlen=131071, iter=1987, tol=1e-02)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     5980.76 ms |     348.4 MB/s |        - |          - |
+rvv                        |     1889.71 ms |    1102.6 MB/s |    3.16x |    6.2e-07 | *
+Best aligned arch          | rvv (3.16x)
+Best unaligned arch        | rvv (3.16x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_atan_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     5486.33 ms |     379.8 MB/s |        - |          - |
+polynomial                 |     1012.57 ms |    2057.7 MB/s |    5.42x |    7.7e-07 |
+rvv                        |      544.04 ms |    3829.8 MB/s |   10.08x |    7.7e-07 | *
+Best aligned arch          | rvv (10.08x)
+Best unaligned arch        | rvv (10.08x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_asin_32f(vlen=131071, iter=1987, tol=1e-05)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     2458.98 ms |     847.3 MB/s |        - |          - | *
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_acos_32f(vlen=131071, iter=1987, tol=1e-05)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     2625.09 ms |     793.7 MB/s |        - |          - | *
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_s32f_power_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |    19858.58 ms |     209.8 MB/s |        - |          - | *
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_calc_spectral_noise_floor_32f(vlen=131071, iter=1987, tol=1e-04)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1434.60 ms |    1452.4 MB/s |        - |          - |
+rvv                        |      115.05 ms |   18109.5 MB/s |   12.47x |    9.7e-07 | *
+Best aligned arch          | rvv (12.47x)
+Best unaligned arch        | rvv (12.47x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_s32f_atan2_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |    11752.97 ms |     265.9 MB/s |        - |          - |
+polynomial                 |     2663.72 ms |    1173.3 MB/s |    4.41x |    8.3e-07 |
+rvv                        |     2018.05 ms |    1548.7 MB/s |    5.82x |    8.3e-07 |
+rvvseg                     |     2000.22 ms |    1562.5 MB/s |    5.88x |    8.3e-07 | *
+Best aligned arch          | rvvseg (5.88x)
+Best unaligned arch        | rvvseg (5.88x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_conjugate_dot_prod_32fc(vlen=131071, iter=1987, tol=2e-02)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1936.65 ms |    3227.6 MB/s |        - |          - |
+block                      |      795.30 ms |    7859.6 MB/s |    2.44x |    7.9e-04 |
+rvv                        |      435.83 ms |   14342.3 MB/s |    4.44x |    2.2e-04 |
+rvvseg                     |      374.85 ms |   16675.3 MB/s |    5.17x |    2.2e-04 | *
+Best aligned arch          | rvvseg (5.17x)
+Best unaligned arch        | rvvseg (5.17x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_deinterleave_32f_x2(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      226.59 ms |   18390.6 MB/s |        - |          - |
+rvv                        |      183.28 ms |   22736.2 MB/s |    1.24x |    0.0e+00 | *
+rvvseg                     |      255.88 ms |   16285.7 MB/s |    0.89x |    0.0e+00 |
+Best aligned arch          | rvv (1.24x)
+Best unaligned arch        | rvv (1.24x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_accumulator_s32fc(vlen=131071, iter=1987, tol=3e-02)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      653.62 ms |    6375.6 MB/s |        - |          - |
+rvv                        |      112.62 ms |   37003.2 MB/s |    5.80x |    1.0e-03 | *
+Best aligned arch          | rvv (5.80x)
+Best unaligned arch        | rvv (5.80x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_deinterleave_64f_x2(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      341.09 ms |   18325.9 MB/s |        - |          - |
+rvv                        |      290.96 ms |   21483.4 MB/s |    1.17x |    0.0e+00 | *
+rvvseg                     |      345.44 ms |   18095.0 MB/s |    0.99x |    0.0e+00 |
+Best aligned arch          | rvv (1.17x)
+Best unaligned arch        | rvv (1.17x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_s32f_deinterleave_real_16i(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      165.97 ms |   15692.6 MB/s |        - |          - |
+rvv                        |      150.23 ms |   17337.0 MB/s |    1.10x |    0.0e+00 | *
+Best aligned arch          | rvv (1.10x)
+Best unaligned arch        | rvv (1.10x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_deinterleave_imag_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      167.11 ms |   18702.9 MB/s |        - |          - |
+rvv                        |      146.33 ms |   21358.1 MB/s |    1.14x |    0.0e+00 | *
+Best aligned arch          | rvv (1.14x)
+Best unaligned arch        | rvv (1.14x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_deinterleave_real_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      145.49 ms |   21481.3 MB/s |        - |          - | *
+rvv                        |      146.29 ms |   21364.7 MB/s |    0.99x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_deinterleave_real_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      230.22 ms |   18100.5 MB/s |        - |          - |
+rvv                        |      183.40 ms |   22721.2 MB/s |    1.26x |    0.0e+00 | *
+Best aligned arch          | rvv (1.26x)
+Best unaligned arch        | rvv (1.26x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_dot_prod_32fc(vlen=131071, iter=1987, tol=2e-02)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      782.08 ms |    7992.5 MB/s |        - |          - |
+sifive_u74                 |      948.05 ms |    6593.3 MB/s |    0.82x |    5.2e-04 |
+rvv                        |      408.98 ms |   15283.7 MB/s |    1.91x |    1.2e-04 | *
+rvvseg                     |      555.33 ms |   11255.9 MB/s |    1.41x |    4.7e-04 |
+Best aligned arch          | rvv (1.91x)
+Best unaligned arch        | rvv (1.91x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_32f_dot_prod_32fc(vlen=131071, iter=1987, tol=1e-02)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      654.02 ms |    7964.6 MB/s |        - |          - |
+rvv                        |      207.62 ms |   25088.7 MB/s |    3.15x |    1.3e-03 | *
+rvvseg                     |      707.75 ms |    7359.9 MB/s |    0.92x |    1.3e-03 |
+Best aligned arch          | rvv (3.15x)
+Best unaligned arch        | rvv (3.15x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_index_max_16u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      309.26 ms |    8421.6 MB/s |        - |          - |
+rvv                        |       87.17 ms |   29877.6 MB/s |    3.55x |    0.0e+00 |
+rvvseg                     |       75.23 ms |   34622.5 MB/s |    4.11x |    0.0e+00 | *
+Best aligned arch          | rvvseg (4.11x)
+Best unaligned arch        | rvvseg (4.11x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_index_max_32u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      882.54 ms |    3541.3 MB/s |        - |          - |
+rvv                        |      219.32 ms |   14250.5 MB/s |    4.02x |    0.0e+00 | *
+rvvseg                     |      243.49 ms |   12835.8 MB/s |    3.62x |    0.0e+00 |
+Best aligned arch          | rvv (4.02x)
+Best unaligned arch        | rvv (4.02x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_index_min_16u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      299.45 ms |    8697.6 MB/s |        - |          - |
+rvv                        |       81.20 ms |   32074.5 MB/s |    3.69x |    0.0e+00 |
+rvvseg                     |       72.31 ms |   36018.9 MB/s |    4.14x |    0.0e+00 | *
+Best aligned arch          | rvvseg (4.14x)
+Best unaligned arch        | rvvseg (4.14x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_index_min_32u(vlen=131071, iter=1987, tol=0e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      891.92 ms |    3504.1 MB/s |        - |          - |
+rvv                        |      221.23 ms |   14127.1 MB/s |    4.03x |    0.0e+00 | *
+rvvseg                     |      242.16 ms |   12906.3 MB/s |    3.68x |    0.0e+00 |
+Best aligned arch          | rvv (4.03x)
+Best unaligned arch        | rvv (4.03x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_s32f_magnitude_16i(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      800.54 ms |    3253.4 MB/s |        - |          - |
+rvv                        |      800.94 ms |    3251.8 MB/s |    1.00x |    0.0e+00 |
+rvvseg                     |      792.82 ms |    3285.1 MB/s |    1.01x |    0.0e+00 | *
+Best aligned arch          | rvvseg (1.01x)
+Best unaligned arch        | rvvseg (1.01x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_magnitude_32f(vlen=131071, iter=1987, tol=1e-01)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      784.19 ms |    3985.5 MB/s |        - |          - | *
+rvv                        |      784.38 ms |    3984.5 MB/s |    1.00x |    0.0e+00 |
+rvvseg                     |      784.27 ms |    3985.1 MB/s |    1.00x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_magnitude_squared_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      173.74 ms |   17988.4 MB/s |        - |          - |
+rvv                        |      167.15 ms |   18697.7 MB/s |    1.04x |    0.0e+00 | *
+rvvseg                     |      255.19 ms |   12247.1 MB/s |    0.68x |    0.0e+00 |
+Best aligned arch          | rvv (1.04x)
+Best unaligned arch        | rvv (1.04x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_add_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      383.85 ms |   16284.4 MB/s |        - |          - |
+rvv                        |      311.07 ms |   20094.3 MB/s |    1.23x |    0.0e+00 | *
+Best aligned arch          | rvv (1.23x)
+Best unaligned arch        | rvv (1.23x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_multiply_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1781.30 ms |    3509.1 MB/s |        - |          - |
+rvv                        |      361.35 ms |   17298.5 MB/s |    4.93x |    1.2e-07 | *
+rvvseg                     |      628.83 ms |    9940.2 MB/s |    2.83x |    1.2e-07 |
+Best aligned arch          | rvv (4.93x)
+Best unaligned arch        | rvv (4.93x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_multiply_conjugate_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1703.51 ms |    3669.3 MB/s |        - |          - |
+rvv                        |      360.16 ms |   17355.3 MB/s |    4.73x |    1.2e-07 | *
+rvvseg                     |      627.35 ms |    9963.7 MB/s |    2.72x |    1.2e-07 |
+Best aligned arch          | rvv (4.73x)
+Best unaligned arch        | rvv (4.73x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_divide_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     2982.27 ms |    2096.0 MB/s |        - |          - |
+rvv                        |      921.34 ms |    6784.4 MB/s |    3.24x |    2.3e-07 |
+rvvseg                     |      842.86 ms |    7416.2 MB/s |    3.54x |    2.3e-07 | *
+Best aligned arch          | rvvseg (3.54x)
+Best unaligned arch        | rvvseg (3.54x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_conjugate_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      188.35 ms |   22124.2 MB/s |        - |          - |
+rvv                        |      185.62 ms |   22450.0 MB/s |    1.01x |    0.0e+00 | *
+Best aligned arch          | rvv (1.01x)
+Best unaligned arch        | rvv (1.01x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_convert_16i(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      262.80 ms |    5946.2 MB/s |        - |          - |
+rvv                        |       61.96 ms |   25222.2 MB/s |    4.24x |    0.0e+00 | *
+Best aligned arch          | rvv (4.24x)
+Best unaligned arch        | rvv (4.24x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_convert_32i(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      300.01 ms |    6945.1 MB/s |        - |          - |
+rvv                        |       86.17 ms |   24181.2 MB/s |    3.48x |    0.0e+00 | *
+Best aligned arch          | rvv (3.48x)
+Best unaligned arch        | rvv (3.48x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_convert_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      165.19 ms |   18919.8 MB/s |        - |          - |
+rvv                        |      127.58 ms |   24497.2 MB/s |    1.29x |    0.0e+00 | *
+Best aligned arch          | rvv (1.29x)
+Best unaligned arch        | rvv (1.29x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_convert_8i(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      389.84 ms |    3340.4 MB/s |        - |          - |
+rvv                        |       61.56 ms |   21153.3 MB/s |    6.33x |    0.0e+00 | *
+Best aligned arch          | rvv (6.33x)
+Best unaligned arch        | rvv (6.33x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_convert_16ic(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      565.71 ms |    5524.7 MB/s |        - |          - |
+rvv                        |      146.30 ms |   21362.6 MB/s |    3.87x |    0.0e+00 | *
+Best aligned arch          | rvv (3.87x)
+Best unaligned arch        | rvv (3.87x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_s32f_power_spectrum_32f(vlen=131071, iter=1987, tol=2e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      994.06 ms |    3144.1 MB/s |        - |          - |
+rvv                        |      748.17 ms |    4177.4 MB/s |    1.33x |    7.9e-07 |
+rvvseg                     |      728.38 ms |    4290.8 MB/s |    1.36x |    7.9e-07 | *
+Best aligned arch          | rvvseg (1.36x)
+Best unaligned arch        | rvvseg (1.36x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_square_dist_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      230.47 ms |   22601.3 MB/s |        - |          - |
+rvv                        |      199.36 ms |   26128.2 MB/s |    1.16x |    0.0e+00 | *
+rvvseg                     |      243.93 ms |   21354.2 MB/s |    0.94x |    0.0e+00 |
+Best aligned arch          | rvv (1.16x)
+Best unaligned arch        | rvv (1.16x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_s32f_square_dist_scalar_mult_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      234.12 ms |   22248.8 MB/s |        - |          - |
+rvv                        |      218.05 ms |   23888.7 MB/s |    1.07x |    0.0e+00 | *
+rvvseg                     |      243.18 ms |   21420.3 MB/s |    0.96x |    0.0e+00 |
+Best aligned arch          | rvv (1.07x)
+Best unaligned arch        | rvv (1.07x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_divide_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      816.52 ms |    3827.7 MB/s |        - |          - | *
+rvv                        |      855.26 ms |    3654.3 MB/s |    0.95x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_dot_prod_32f(vlen=131071, iter=1987, tol=1e-02)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      343.67 ms |    9094.1 MB/s |        - |          - |
+rvv                        |      141.55 ms |   22080.3 MB/s |    2.43x |    3.2e-03 | *
+Best aligned arch          | rvv (2.43x)
+Best unaligned arch        | rvv (2.43x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_s32f_interleave_16ic(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      190.95 ms |   16367.1 MB/s |        - |          - |
+rvv                        |      167.89 ms |   18615.3 MB/s |    1.14x |    0.0e+00 |
+rvvseg                     |      153.03 ms |   20423.5 MB/s |    1.25x |    0.0e+00 | *
+Best aligned arch          | rvvseg (1.25x)
+Best unaligned arch        | rvvseg (1.25x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_interleave_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      181.07 ms |   23013.6 MB/s |        - |          - |
+rvv                        |      182.07 ms |   22888.3 MB/s |    0.99x |    0.0e+00 |
+rvvseg                     |      177.23 ms |   23512.3 MB/s |    1.02x |    0.0e+00 | *
+Best aligned arch          | rvvseg (1.02x)
+Best unaligned arch        | rvvseg (1.02x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_max_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      171.64 ms |   18208.8 MB/s |        - |          - |
+rvv                        |      153.03 ms |   20422.9 MB/s |    1.12x |    0.0e+00 | *
+Best aligned arch          | rvv (1.12x)
+Best unaligned arch        | rvv (1.12x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_min_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      171.96 ms |   18174.8 MB/s |        - |          - |
+rvv                        |      152.84 ms |   20448.5 MB/s |    1.13x |    0.0e+00 | *
+Best aligned arch          | rvv (1.13x)
+Best unaligned arch        | rvv (1.13x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_multiply_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      158.12 ms |   19765.4 MB/s |        - |          - |
+rvv                        |      154.00 ms |   20295.0 MB/s |    1.03x |    0.0e+00 | *
+Best aligned arch          | rvv (1.03x)
+Best unaligned arch        | rvv (1.03x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_64f_multiply_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      292.49 ms |   17809.0 MB/s |        - |          - |
+rvv                        |      232.04 ms |   22448.9 MB/s |    1.26x |    0.0e+00 | *
+Best aligned arch          | rvv (1.26x)
+Best unaligned arch        | rvv (1.26x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_64f_add_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      268.01 ms |   19436.0 MB/s |        - |          - |
+rvv                        |      231.73 ms |   22478.2 MB/s |    1.16x |    0.0e+00 | *
+Best aligned arch          | rvv (1.16x)
+Best unaligned arch        | rvv (1.16x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_normalize(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       63.61 ms |   16376.5 MB/s |        - |          - |
+rvv                        |       60.13 ms |   17324.2 MB/s |    1.06x |    0.0e+00 | *
+Best aligned arch          | rvv (1.06x)
+Best unaligned arch        | rvv (1.06x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_power_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     7354.45 ms |     283.3 MB/s |        - |          - | *
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_reciprocal_32f(vlen=131071, iter=1987, tol=6e-05)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      816.94 ms |    2550.5 MB/s |        - |          - | *
+rvv                        |      817.38 ms |    2549.1 MB/s |    1.00x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_sqrt_32f(vlen=131071, iter=1987, tol=1e-02)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     3872.83 ms |     538.0 MB/s |        - |          - |
+rvv                        |      759.36 ms |    2743.9 MB/s |    5.10x |    0.0e+00 | *
+Best aligned arch          | rvv (5.10x)
+Best unaligned arch        | rvv (5.10x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_invsqrt_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     4345.56 ms |     479.5 MB/s |        - |          - |
+recip_sqrt                 |     4146.62 ms |     502.5 MB/s |    1.05x |    1.3e-07 |
+Q_rsqrt                    |      779.61 ms |    2672.6 MB/s |    5.57x |    1.7e-07 |
+rvv                        |      341.60 ms |    6099.5 MB/s |   12.72x |    1.7e-07 | *
+Best aligned arch          | rvv (12.72x)
+Best unaligned arch        | rvv (12.72x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_stddev_32f(vlen=131071, iter=1987, tol=1e-02)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      343.43 ms |    6066.9 MB/s |        - |          - |
+rvv                        |       47.11 ms |   44227.5 MB/s |    7.29x |    0.0e+00 | *
+Best aligned arch          | rvv (7.29x)
+Best unaligned arch        | rvv (7.29x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_stddev_and_mean_32f_x2(vlen=131071, iter=1987, tol=1e-05)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      569.16 ms |    5491.2 MB/s |        - |          - |
+rvv                        |      110.44 ms |   28298.6 MB/s |    5.15x |    2.7e-06 | *
+Best aligned arch          | rvv (5.15x)
+Best unaligned arch        | rvv (5.15x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_subtract_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      159.16 ms |   19636.7 MB/s |        - |          - |
+rvv                        |      156.24 ms |   20003.2 MB/s |    1.02x |    0.0e+00 | *
+Best aligned arch          | rvv (1.02x)
+Best unaligned arch        | rvv (1.02x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x3_sum_of_poly_32f(vlen=131071, iter=1987, tol=1e+03)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      566.55 ms |    7355.3 MB/s |        - |          - |
+rvv                        |      230.12 ms |   18108.9 MB/s |    2.46x |    1.3e+00 | *
+Best aligned arch          | rvv (2.46x)
+Best unaligned arch        | rvv (2.46x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32i_x2_and_32i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      159.98 ms |   19536.3 MB/s |        - |          - |
+rvv                        |      155.33 ms |   20121.1 MB/s |    1.03x |    0.0e+00 | *
+Best aligned arch          | rvv (1.03x)
+Best unaligned arch        | rvv (1.03x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32i_s32f_convert_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      110.05 ms |   18933.6 MB/s |        - |          - |
+rvv                        |       87.64 ms |   23774.9 MB/s |    1.26x |    0.0e+00 | *
+Best aligned arch          | rvv (1.26x)
+Best unaligned arch        | rvv (1.26x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32i_x2_or_32i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      159.83 ms |   19554.7 MB/s |        - |          - |
+rvv                        |      155.21 ms |   20136.9 MB/s |    1.03x |    0.0e+00 | *
+Best aligned arch          | rvv (1.03x)
+Best unaligned arch        | rvv (1.03x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_dot_prod_16i(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      344.38 ms |    7562.9 MB/s |        - |          - |
+rvv                        |      139.05 ms |   18730.5 MB/s |    2.48x |    0.0e+00 | *
+Best aligned arch          | rvv (2.48x)
+Best unaligned arch        | rvv (2.48x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_64f_convert_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      188.83 ms |   16551.5 MB/s |        - |          - |
+rvv                        |      146.88 ms |   21278.3 MB/s |    1.29x |    0.0e+00 | *
+Best aligned arch          | rvv (1.29x)
+Best unaligned arch        | rvv (1.29x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_64f_x2_max_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      342.00 ms |   18277.1 MB/s |        - |          - |
+rvv                        |      314.77 ms |   19858.2 MB/s |    1.09x |    0.0e+00 | *
+Best aligned arch          | rvv (1.09x)
+Best unaligned arch        | rvv (1.09x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_64f_x2_min_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      343.15 ms |   18216.1 MB/s |        - |          - |
+rvv                        |      316.41 ms |   19755.5 MB/s |    1.08x |    0.0e+00 | *
+Best aligned arch          | rvv (1.08x)
+Best unaligned arch        | rvv (1.08x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_64f_x2_multiply_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      342.00 ms |   18277.3 MB/s |        - |          - |
+rvv                        |      339.55 ms |   18408.9 MB/s |    1.01x |    0.0e+00 | *
+Best aligned arch          | rvv (1.01x)
+Best unaligned arch        | rvv (1.01x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_64f_x2_add_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      343.11 ms |   18218.0 MB/s |        - |          - |
+rvv                        |      340.31 ms |   18367.6 MB/s |    1.01x |    0.0e+00 | *
+Best aligned arch          | rvv (1.01x)
+Best unaligned arch        | rvv (1.01x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_64f_x2_dot_prod_64f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      400.84 ms |   15594.0 MB/s |        - |          - |
+rvv                        |      307.53 ms |   20325.6 MB/s |    1.30x |    2.7e-13 | *
+Best aligned arch          | rvv (1.30x)
+Best unaligned arch        | rvv (1.30x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8ic_deinterleave_16i_x2(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       74.38 ms |   21008.7 MB/s |        - |          - |
+rvv                        |       60.03 ms |   26032.2 MB/s |    1.24x |    0.0e+00 | *
+Best aligned arch          | rvv (1.24x)
+Best unaligned arch        | rvv (1.24x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8ic_s32f_deinterleave_32f_x2(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      200.60 ms |   12983.3 MB/s |        - |          - |
+rvv                        |      136.51 ms |   19079.3 MB/s |    1.47x |    0.0e+00 | *
+Best aligned arch          | rvv (1.47x)
+Best unaligned arch        | rvv (1.47x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8ic_deinterleave_real_16i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       35.52 ms |   29327.4 MB/s |        - |          - |
+rvv                        |       30.01 ms |   34715.5 MB/s |    1.18x |    0.0e+00 | *
+Best aligned arch          | rvv (1.18x)
+Best unaligned arch        | rvv (1.18x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8ic_s32f_deinterleave_real_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      121.07 ms |   12907.5 MB/s |        - |          - |
+rvv                        |       68.94 ms |   22667.1 MB/s |    1.76x |    0.0e+00 | *
+Best aligned arch          | rvv (1.76x)
+Best unaligned arch        | rvv (1.76x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8ic_deinterleave_real_8i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       17.51 ms |   44628.6 MB/s |        - |          - | *
+rvv                        |       19.38 ms |   40307.0 MB/s |    0.90x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8ic_x2_multiply_conjugate_16ic(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1946.92 ms |    1070.2 MB/s |        - |          - |
+rvv                        |      161.84 ms |   12874.1 MB/s |   12.03x |    0.0e+00 |
+rvvseg                     |      109.15 ms |   19089.8 MB/s |   17.84x |    0.0e+00 | *
+Best aligned arch          | rvvseg (17.84x)
+Best unaligned arch        | rvvseg (17.84x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8ic_x2_s32f_multiply_conjugate_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1769.59 ms |    1766.2 MB/s |        - |          - |
+rvv                        |      323.89 ms |    9649.4 MB/s |    5.46x |    0.0e+00 |
+rvvseg                     |      229.37 ms |   13625.8 MB/s |    7.71x |    0.0e+00 | *
+Best aligned arch          | rvvseg (7.71x)
+Best unaligned arch        | rvvseg (7.71x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8i_convert_16i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       21.12 ms |   36998.2 MB/s |        - |          - |
+rvv                        |       19.62 ms |   39823.4 MB/s |    1.08x |    0.0e+00 | *
+Best aligned arch          | rvv (1.08x)
+Best unaligned arch        | rvv (1.08x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8i_s32f_convert_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       49.66 ms |   26223.0 MB/s |        - |          - | *
+rvv                        |       55.33 ms |   23534.5 MB/s |    0.90x |    0.0e+00 |
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8i_x2_add_saturated_8i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       44.83 ms |   17429.6 MB/s |        - |          - |
+rvv                        |       19.27 ms |   40542.8 MB/s |    2.33x |    0.0e+00 | *
+Best aligned arch          | rvv (2.33x)
+Best unaligned arch        | rvv (2.33x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8u_x2_add_saturated_8u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       19.75 ms |   39569.7 MB/s |        - |          - |
+rvv                        |       19.32 ms |   40446.4 MB/s |    1.02x |    0.0e+00 | *
+Best aligned arch          | rvv (1.02x)
+Best unaligned arch        | rvv (1.02x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16i_x2_add_saturated_16i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      179.01 ms |    8729.4 MB/s |        - |          - |
+rvv                        |       72.19 ms |   21645.7 MB/s |    2.48x |    0.0e+00 | *
+Best aligned arch          | rvv (2.48x)
+Best unaligned arch        | rvv (2.48x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_16u_x2_add_saturated_16u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |       79.59 ms |   19634.3 MB/s |        - |          - |
+rvv                        |       72.47 ms |   21563.4 MB/s |    1.10x |    0.0e+00 | *
+Best aligned arch          | rvv (1.10x)
+Best unaligned arch        | rvv (1.10x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_s32fc_multiply2_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1203.39 ms |    3462.9 MB/s |        - |          - | *
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_multiply_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      110.24 ms |   18900.9 MB/s |        - |          - |
+sifive_u74                 |      500.81 ms |    4160.4 MB/s |    0.22x |    0.0e+00 |
+rvv                        |       97.52 ms |   21365.0 MB/s |    1.13x |    0.0e+00 | *
+Best aligned arch          | rvv (1.13x)
+Best unaligned arch        | rvv (1.13x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_add_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      109.39 ms |   19047.5 MB/s |        - |          - |
+rvv                        |       97.85 ms |   21292.9 MB/s |    1.12x |    0.0e+00 | *
+Best aligned arch          | rvv (1.12x)
+Best unaligned arch        | rvv (1.12x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_binary_slicer_32i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      147.80 ms |   14097.4 MB/s |        - |          - |
+generic_branchless         |      146.18 ms |   14253.5 MB/s |    1.01x |    0.0e+00 |
+rvv                        |       94.24 ms |   22110.2 MB/s |    1.57x |    0.0e+00 | *
+Best aligned arch          | rvv (1.57x)
+Best unaligned arch        | rvv (1.57x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_binary_slicer_8i(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      113.93 ms |   11430.5 MB/s |        - |          - |
+generic_branchless         |      120.75 ms |   10784.9 MB/s |    0.94x |    0.0e+00 |
+rvv                        |       57.59 ms |   22613.3 MB/s |    1.98x |    0.0e+00 | *
+Best aligned arch          | rvv (1.98x)
+Best unaligned arch        | rvv (1.98x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32u_reverse_32u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      778.17 ms |    2677.6 MB/s |        - |          - |
+byte_shuffle               |     1105.08 ms |    1885.5 MB/s |    0.70x |    0.0e+00 |
+lut                        |      645.73 ms |    3226.7 MB/s |    1.21x |    0.0e+00 |
+2001magic                  |      919.45 ms |    2266.1 MB/s |    0.85x |    0.0e+00 |
+1972magic                  |     1223.43 ms |    1703.1 MB/s |    0.64x |    0.0e+00 |
+bintree_permute_top_down   |      737.42 ms |    2825.5 MB/s |    1.06x |    0.0e+00 |
+bintree_permute_bottom_up  |      775.93 ms |    2685.3 MB/s |    1.00x |    0.0e+00 |
+rvv                        |      285.85 ms |    7289.1 MB/s |    2.72x |    0.0e+00 | *
+Best aligned arch          | rvv (2.72x)
+Best unaligned arch        | rvv (2.72x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_tanh_32f(vlen=131071, iter=1987, tol=1e-02)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     7741.41 ms |     269.1 MB/s |        - |          - |
+series                     |     1639.67 ms |    1270.7 MB/s |    4.72x |    2.9e-07 |
+rvv                        |      819.17 ms |    2543.5 MB/s |    9.45x |    2.9e-07 | *
+Best aligned arch          | rvv (9.45x)
+Best unaligned arch        | rvv (9.45x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_x2_s32fc_multiply_conjugate_add2_32fc(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     2037.49 ms |    3067.9 MB/s |        - |          - |
+rvv                        |      548.42 ms |   11397.8 MB/s |    3.72x |    0.0e+00 | *
+rvvseg                     |      611.84 ms |   10216.3 MB/s |    3.33x |    0.0e+00 |
+Best aligned arch          | rvv (3.72x)
+Best unaligned arch        | rvv (3.72x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_exp_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1967.93 ms |    1058.8 MB/s |        - |          - |
+rvv                        |      824.71 ms |    2526.4 MB/s |    2.39x |    1.2e-07 | *
+Best aligned arch          | rvv (2.39x)
+Best unaligned arch        | rvv (2.39x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_x2_powpuppet_32f(vlen=131071, iter=1987, tol=1e-02)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     5090.73 ms |     613.9 MB/s |        - |          - |
+rvv                        |     1953.16 ms |    1600.2 MB/s |    2.61x |    1.9e-03 | *
+Best aligned arch          | rvv (2.61x)
+Best unaligned arch        | rvv (2.61x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_mod_rangepuppet_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1657.30 ms |    1257.2 MB/s |        - |          - |
+rvv                        |      828.63 ms |    2514.5 MB/s |    2.00x |    0.0e+00 | *
+Best aligned arch          | rvv (2.00x)
+Best unaligned arch        | rvv (2.00x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_8u_x3_encodepolarpuppet_8u(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |     1733.87 ms |     600.8 MB/s |        - |          - |
+rvv                        |     1204.30 ms |     865.1 MB/s |    1.44x |    0.0e+00 | *
+rvvseg                     |     1292.69 ms |     805.9 MB/s |    1.34x |    0.0e+00 |
+Best aligned arch          | rvv (1.44x)
+Best unaligned arch        | rvv (1.44x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_8u_polarbutterflypuppet_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |    61291.22 ms |      38.2 MB/s |        - |          - |
+rvv                        |     7948.01 ms |     294.9 MB/s |    7.71x |    0.0e+00 | *
+rvvseg                     |     8133.28 ms |     288.2 MB/s |    7.54x |    0.0e+00 |
+Best aligned arch          | rvv (7.71x)
+Best unaligned arch        | rvv (7.71x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32fc_s32f_power_spectral_densitypuppet_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      782.28 ms |    3995.2 MB/s |        - |          - | *
+Best aligned arch          | generic
+Best unaligned arch        | generic
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_clamppuppet_32f(vlen=131071, iter=1987, tol=1e-06)
+arch                       |           time |     throughput |  speedup |    max_rel |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      260.97 ms |    7984.1 MB/s |        - |          - |
+rvv                        |       92.33 ms |   22566.6 MB/s |    2.83x |    0.0e+00 | *
+Best aligned arch          | rvv (2.83x)
+Best unaligned arch        | rvv (2.83x)
+----------------------------------------------------------------------------------------
+
+RUN_VOLK_TESTS: volk_32f_s32f_convertpuppet_8u(vlen=131071, iter=1987, tol=1e+00)
+arch                       |           time |     throughput |  speedup |    max_abs |
+---------------------------+----------------+----------------+----------+------------+
+generic                    |      408.30 ms |    3189.4 MB/s |        - |          - |
+rvv                        |       65.22 ms |   19968.3 MB/s |    6.26x |    0.0e+00 | *
+Best aligned arch          | rvv (6.26x)
+Best unaligned arch        | rvv (6.26x)
+----------------------------------------------------------------------------------------
+
+Session summary (128 kernels):
+  Average speedup vs generic: 3.29x
+  Max speedup vs generic: 21.96x (volk_32f_expfast_32f)
+Creating "/home/evb2-test/.volk"...
+Writing /home/evb2-test/.volk/volk_config...

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>SiFive P870 uarch-tool benchmark</title>
+		<link rel="stylesheet" href="../uPlot/dist/uPlot.min.css">
+		<link rel="stylesheet" href="../base.css">
+	</head>
+	<body class="base">
+	<div id="main"><header><h1>SiFive P870 (Lanxin LX500, Epic Semi Contrail AIx) uarch-tool benchmarks</h1></header></div>
+	<script>let module = {};</script>
+	<script src="../templates/uarch-tool.js"></script>
+
+<pre>
+VLEN: 128
+
+Detect all1s tail/mask policy with simple code snippet:
+Tail agnostic policy: all1s
+Mask agnostic policy: all1s
+Is vl always set to min(AVL,VLMAX): yes
+    Note: spec allows ceil(AVL/2)&lt;=vl&lt;=VLMAX for VLMAX&lt;AVL&lt;2*VLMAX
+</pre>
+
+
+<pre>
+Measures overhead of reinterpreting a mask as a vector:
+A) reinterpret:       7.0018000 cycles/iter
+B) don't reinterpret: 6.9998000 cycles/iter
+</pre>
+
+<ul>
+<li>There seems to be no overhead in reinterpreting a mask register.</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+compiled with default -O2, but -march=rv64gcbv_zvbb_zicond -mno-strict-align
+command: 7zz b -mmt1
+
+7-Zip (z) 26.01 (riscv64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-04-27
+ 64-bit locale=en_US.UTF-8 Threads:32 OPEN_MAX:4096
+
+ mt1
+Compiler:  ver:13.3.0 GCC 13.3.0
+Linux : 6.18.3+ : #4 SMP PREEMPT_DYNAMIC Mon May 18 10:59:17 UTC 2026 : riscv64
+PageSize:4KB HPS:2MB THPS:2MB THP:madvise hwcap:20112D
+riscv64
+ (LP)
+
+1T CPU Freq (MHz):  1978  1981  1977  1981  1981  1981  1981
+
+RAM size:  128734 MB (LP),  # CPU hardware threads:  32
+RAM usage:    437 MB (LP),  # Benchmark threads:      1
+
+                       Compressing  |                  Decompressing
+Dict     Speed Usage    R/U Rating  |      Speed Usage    R/U Rating
+         KiB/s     %   MIPS   MIPS  |      KiB/s     %   MIPS   MIPS
+
+22:       3956   100   3866   3849  |      34329   100   2934   2931
+23:       3481   100   3549   3547  |      33294   100   2887   2882
+24:       3198   100   3441   3439  |      32547   100   2862   2857
+25:       3025   100   3455   3455  |      31952   100   2848   2844
+----------------------------------  | ------------------------------
+Avr:      3415   100   3578   3572  |      33030   100   2883   2879
+Tot:             100   3230   3225

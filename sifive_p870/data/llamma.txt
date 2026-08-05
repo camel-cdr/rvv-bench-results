@@ -1,0 +1,11 @@
+Note: IIRC llama-bench wasn't compiled with RVV enabled
+
+evb2-test@evb2-test:~/llama.cpp$ ./build/bin/llama-bench -m ~/llama-2-7b.Q4_0.gguf -d 0,512,2048,8196
+| model                          |       size |     params | backend    | threads |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | --------------: | -------------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |      32 |           pp512 |         37.11 ± 0.00 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |      32 |           tg128 |          7.75 ± 0.01 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |      32 |    pp512 @ d512 |         35.92 ± 0.00 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |      32 |    tg128 @ d512 |          7.35 ± 0.00 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |      32 |   pp512 @ d2048 |         32.48 ± 0.11 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |      32 |   tg128 @ d2048 |          6.72 ± 0.03 |
