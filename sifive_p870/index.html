@@ -9636,7 +9636,7 @@ Having a slow LMUL=2 register dependent permutes is very unfortunate.
 </div>
 
 
-<p>Below are measurements for the scalar instructions, however they weren't measured without register interleaving, and might thus be closer to latency than throughput:</p>
+<p>Note: the floating-point registers weren't suitably initialized, hece the numbers are inacurate (see e.g. fsqrt.s/d) and stores don't store to different addresses, so they are serialized. Otherwise, this attempts to measure instruction throughput.</p>
 
 <div class="tblCont tblConts">
 
