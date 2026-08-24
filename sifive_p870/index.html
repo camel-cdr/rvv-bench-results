@@ -16,7 +16,7 @@
 <p>
 The <a href="https://www.epicsemi.com/products/contrail/compute/contrail-aix/">Epic Semi Contrail AIx</a> server contains 32 RVA23 RISC-V performance cores and 16 separate RISC-V cores with a larger vector length and matrix extension.
 It seems to use the <a href="https://www.lanxincomputing.com/news-detail.html?id=86">Lanxin LX500 SOC</a> (compare picture to <a href="data/epic-semi-lx500.jpg">Epic Semi slides</a>), of which the 32 performance cores are very likely SiFive P870s, see below.
-Lanxin shared an early <a href="https://www.lanxincomputing.com/news-detail.html?id=86">15.27/GHz SPECint2006</a> estimate run and a frequency of <a href="data/lx500_freq.jpg">2.7 GHz</a>, though <a href="https://www.sifive.com/press/risc-v-in-the-datacenter-bigsky-development-server">the latest SiFive post says it's only 2 GHz</a>.
+Lanxin shared an early <a href="https://www.lanxincomputing.com/news-detail.html?id=86">15.27/GHz SPECint2006</a> estimate run and a frequency of <a href="data/lx500_freq.jpg">2.7 GHz</a>, though <a href="https://www.sifive.com/development-platforms/sifive-bigsky-sf-2u870-datacenter">the latest SiFive post says it's only 2.2 GHz</a>.
 </p>
 
 <center><img src="data/epic-semi-server.jpg" width="75%"></center>
@@ -28,7 +28,7 @@ We managed to run rvv-bench, the <a href="data/dav1d.txt">dav1d</a>/<a href="dat
 </p>
 <p>
 Note that the pre-installed compilers were rather old, though I don't recall the exact version.
-The devboard locked the 2 GHz, potentially the final system may reach a slightly higher frequency.
+The devboard locked the 2 GHz, while the final system probably reaches a higher frequency, see second paragraph above.
 </p>
 
 <p>
