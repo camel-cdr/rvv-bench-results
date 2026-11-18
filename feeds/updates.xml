@@ -79,8 +79,16 @@
       <item>
       <title>SiFive P870 (Lanxin LX500, Epic Semi Contrail AIx)</title>
          <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-10</guid>
-         <description><![CDATA[<p>Thanks to Epic Semi, we were able to run rvv-bench on their RISC-V server at RISC-V Summit Europe, for more detail read the new <a href="https://camel-cdr.github.io/rvv-bench-results/sifive_p870/index.html>the P870 page</a>.</p>]]></description>
+         <description><![CDATA[<p>Thanks to Epic Semi, we were able to run rvv-bench on their RISC-V server at RISC-V Summit Europe, for more detail read the new <a href="https://camel-cdr.github.io/rvv-bench-results/sifive_p870/index.html">the P870 page</a>.</p>]]></description>
          <pubDate>Sat, 05 Aug 2026 23:45 GMT</pubDate>
+      </item>
+
+
+      <item>
+      <title>QingKe3V (CH32V407/CH32V467), first MCU with embedded RVV</title>
+         <guid>https://camel-cdr.github.io/rvv-bench-results/index.html#rss-update-11</guid>
+         <description><![CDATA[<p>We now have a page for <a href="https://camel-cdr.github.io/rvv-bench-results/QingKe3V/index.html">the QingKe3V MUC</a>, which supports the embedded integer RVV subset with VLEN=64.</p>]]></description>
+         <pubDate>Sat, 18 Nov 2026 23:28 GMT</pubDate>
       </item>
 
    </channel>
